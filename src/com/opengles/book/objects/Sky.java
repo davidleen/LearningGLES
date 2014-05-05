@@ -24,7 +24,7 @@ public class Sky  extends AbstractSimpleObject{
 
 	public Sky(Context context) {
 		super(context);
-		createData(1000);
+		createData(50);
 		 
 	}
 
@@ -64,12 +64,12 @@ public class Sky  extends AbstractSimpleObject{
 		short[] indics = new short[totalCount*2*3];
 
 		float x, y, z;
-		float pieceofImageS = 1.0f / rowCount ;
-		float pieceofImageT = 1.0f / columnCount;
+		float pieceofImageT = 1.0f / rowCount ;
+		float pieceofImageS = 1.0f / columnCount;
 		 
 		Log.d(TAG, "totalCount:" + totalCount);
 		int position = 0, indexPosition = 0;
-		for (int i = 0; i < rowCount; i++)
+		for (int i = rowCount-1; i>=0; i--)
 		{
 			float rowAngle = (float) (i * angleSpanInRadian  );
 			float sinRow = (float) Math.sin(rowAngle);
@@ -93,8 +93,8 @@ public class Sky  extends AbstractSimpleObject{
 				attributes[position++] = z * r;
  
 				// �������
-				float s =   i * pieceofImageS;  
-				float t =   j* pieceofImageT  ; // 日景位置t
+				float s =  j  * pieceofImageS ;  
+				float t =  i * pieceofImageT   ; // 日景位置t
 				attributes[position++] = s;
 				attributes[position++] = t;
  

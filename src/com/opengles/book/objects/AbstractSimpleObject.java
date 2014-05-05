@@ -127,7 +127,7 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 			 //指定使用某套shader程序
 	   	 GLES20.glUseProgram(mProgram); 
 	   	 //绑定纹理
-	       
+	   	 GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 	        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
 	        //将最终变换矩阵传入shader程序
 	        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, MatrixState.getFinalMatrix(), 0); 

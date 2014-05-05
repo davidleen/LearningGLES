@@ -14,6 +14,7 @@ import com.opengles.book.framework.impl.GLScreen;
 import com.opengles.book.galaxy.ObjectDrawable;
  
 import com.opengles.book.objects.Mountion;
+import com.opengles.book.objects.Sky;
 import com.opengles.book.screen.treeOnDesert.Desert;
 import com.opengles.book.screen.treeOnDesert.TreeGroup;
 
@@ -28,7 +29,7 @@ public class GrayMapScreen extends GLScreen{
 	
 	public static final int UNIT_SIZE=1;
 	
-	 
+	private ObjectDrawable sky;
 	private ObjectDrawable mountion;
 	private float lastX;
 	private float lastY;
@@ -42,6 +43,7 @@ public class GrayMapScreen extends GLScreen{
 		super(game);
 		 
 		 mountion=new Mountion(game.getContext() );
+		 sky=new Sky(game.getContext());
 		//desert=new AbstractSimpleObject1(game.getContext(), 100, 100 );
 	}
 
@@ -109,6 +111,8 @@ public class GrayMapScreen extends GLScreen{
  		            MatrixState.translate(0, -2, 0);
  		           if(mountion!=null)
  		        	  mountion.draw();
+ 		      	if(sky!=null)
+ 		      		sky.draw();
  		           MatrixState.popMatrix();
  		            
 	}
@@ -118,7 +122,9 @@ public class GrayMapScreen extends GLScreen{
 		 
 		if(mountion!=null)
 			mountion.unBind();
-		 
+		
+		if(sky!=null)
+			sky.unBind();
 	}
 
 	@Override
@@ -133,7 +139,7 @@ public class GrayMapScreen extends GLScreen{
 		//计算GLSurfaceView的宽高比
 		float ratio = (float) width / height;
 		 //调用此方法计算产生透视投影矩阵
-		MatrixState.setProject(-ratio, ratio, -1, 1, 1,  100);
+		MatrixState.setProject(-ratio, ratio, -1, 1, 1,  1000);
 
 		 //调用此方法产生摄像机9参数位置矩阵
 
@@ -149,8 +155,11 @@ public class GrayMapScreen extends GLScreen{
 		 
 		if(mountion!=null)
 			mountion.bind();
+		if(sky!=null)
+			sky.bind();
 		 
 		}
+	
 
 	@Override
 	public void dispose() {

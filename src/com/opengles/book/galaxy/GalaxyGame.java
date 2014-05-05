@@ -9,6 +9,7 @@ import com.opengles.book.framework.Screen;
 import com.opengles.book.framework.impl.GLGame;
 import com.opengles.book.screen.GalaxyScreen;
 import com.opengles.book.screen.GrayMapScreen;
+import com.opengles.book.screen.Reflect_BasketBall_Screen;
 import com.opengles.book.screen.TreeOnDesertScreen;
 
 public class GalaxyGame extends GLGame {
@@ -19,7 +20,9 @@ public class GalaxyGame extends GLGame {
 	//	return   new GalaxyScreen(this) ;
         //return new TuziScreen(this)  ;
 	//	return new TreeOnDesertScreen(this);
-		return new GrayMapScreen(this);
+		//return new GrayMapScreen(this);
+		//
+		return new Reflect_BasketBall_Screen(this);
 	}
 
 	@Override
