@@ -8,6 +8,7 @@ import com.opengles.book.framework.gl.FPSCounter;
 import com.opengles.book.framework.impl.GLScreen;
 import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.objects.RectangleObject;
+import com.opengles.book.objects.SphereObject;
 
 public   class Reflect_BasketBall_Screen extends GLScreen {
 
@@ -16,7 +17,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 	ObjectDrawable basketBallReflected;
 	ObjectDrawable floorTransparent;
 	 
- 
+	private float ballY=5;
 	FPSCounter counter;
 	 
 
@@ -29,7 +30,9 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 
 		counter = new FPSCounter();
 
-		 floor=new RectangleObject(game.getContext(), "basketball_reflect/mdb.png",8, 8);
+		 floor=new RectangleObject(game.getContext(), "basketball_reflect/mdb.png",12, 12);
+		 basketBall=new SphereObject(game.getContext(), "basketball_reflect/basketball.png", 2)	;
+		 floorTransparent=new RectangleObject(game.getContext(), "basketball_reflect/mdbtm.png",12, 12);
 	}
 
 	@Override
@@ -43,15 +46,36 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 	@Override
 	public void present(float deltaTime) {
 	//	counter.logFrame();
-
+		
 		// 清除颜色
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT
 				| GLES20.GL_COLOR_BUFFER_BIT);
+		
+		
 		 MatrixState.pushMatrix();
-         MatrixState.translate(0, -2, 0);
-		 
-		floor.draw();
-		  MatrixState.popMatrix();
+         MatrixState.translate(0, -2, 0); 
+         //绘制反射面地板
+		  floor.draw();
+		//绘制镜像体
+		 MatrixState.pushMatrix();
+		 MatrixState.translate(0, -ballY, 0); 
+		 basketBall.draw();
+		 MatrixState.popMatrix();
+		 //绘制半透明地板
+		//开启混合
+         GLES20.glEnable(GLES20.GL_BLEND);
+         //设置混合因子
+         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+         floorTransparent.draw();
+         GLES20.glDisable(GLES20.GL_BLEND);
+		
+         MatrixState.pushMatrix();
+		 MatrixState.translate(0,  ballY, 0); 
+		  basketBall.draw();
+		 MatrixState.popMatrix();
+		
+		 MatrixState.popMatrix();
+		
 	}
 
 	@Override
@@ -59,9 +83,11 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		 
 		
 		floor.unBind();
+		basketBall.unBind();
+		floorTransparent.unBind();
 		//bezierObject.unBind();
 		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
-		GLES20.glDisable(GLES20.GL_CULL_FACE);
+//		GLES20.glDisable(GLES20.GL_CULL_FACE);
 
 	}
 
@@ -70,8 +96,8 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-//		GLES20.glEnable(GLES20.GL_CULL_FACE);
+		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+ 
 		int width = glGame.getGLGraphics().getWidth();
 		int height = glGame.getGLGraphics().getHeight();
 		GLES20.glViewport(0, 0, width, height);
@@ -91,7 +117,8 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		// 初始化变换矩阵
 		MatrixState.setInitStack();
 		floor.bind();
-	 
+		basketBall.bind();
+		floorTransparent.bind();
 	 
 	}
 
