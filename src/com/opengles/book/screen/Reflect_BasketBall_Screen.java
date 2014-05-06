@@ -1,25 +1,13 @@
 package com.opengles.book.screen;
 
-import java.util.List;
-
-import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.opengl.GLES20;
 
-import com.opengles.book.LightSources;
 import com.opengles.book.MatrixState;
 import com.opengles.book.framework.Game;
-import com.opengles.book.framework.Input.TouchEvent;
 import com.opengles.book.framework.gl.FPSCounter;
 import com.opengles.book.framework.impl.GLScreen;
-import com.opengles.book.galaxy.Celestial;
-import com.opengles.book.galaxy.CloudWithVbo;
-import com.opengles.book.galaxy.EarthWithVbo;
-import com.opengles.book.galaxy.MoonWithVbo;
 import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.objects.RectangleObject;
-import com.opengles.book.objects.Sky;
-import com.opengles.book.screen.treeOnDesert.Desert;
 
 public   class Reflect_BasketBall_Screen extends GLScreen {
 

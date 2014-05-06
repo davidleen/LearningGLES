@@ -1,12 +1,9 @@
 package com.opengles.book.screen;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import android.opengl.GLES20;
 
-import com.opengles.book.LightSources;
 import com.opengles.book.MatrixState;
 import com.opengles.book.framework.Game;
 import com.opengles.book.framework.Input.TouchEvent;
@@ -15,8 +12,6 @@ import com.opengles.book.galaxy.ObjectDrawable;
  
 import com.opengles.book.objects.Mountion;
 import com.opengles.book.objects.Sky;
-import com.opengles.book.screen.treeOnDesert.Desert;
-import com.opengles.book.screen.treeOnDesert.TreeGroup;
 
 /**
  * 
