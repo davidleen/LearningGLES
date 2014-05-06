@@ -106,6 +106,7 @@ public class GrayMapScreen extends GLScreen{
 		// 清除颜色
 				GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT
 						| GLES20.GL_COLOR_BUFFER_BIT);
+
 				//绘制沙漠
  				 MatrixState.pushMatrix();
  		            MatrixState.translate(0, -2, 0);

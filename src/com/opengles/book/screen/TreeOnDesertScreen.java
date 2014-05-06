@@ -12,7 +12,8 @@ import com.opengles.book.framework.Game;
 import com.opengles.book.framework.Input.TouchEvent;
 import com.opengles.book.framework.impl.GLScreen;
 import com.opengles.book.galaxy.ObjectDrawable;
- 
+
+import com.opengles.book.objects.RectangleObject;
 import com.opengles.book.screen.treeOnDesert.Desert;
 import com.opengles.book.screen.treeOnDesert.TreeGroup;
 
@@ -41,19 +42,20 @@ public class TreeOnDesertScreen extends GLScreen{
 	public TreeOnDesertScreen(Game game) {
 		super(game);
 		 group=new TreeGroup(game.getContext());
-		desert=new Desert(game.getContext(),100 , 100);
-		//desert=new AbstractSimpleObject1(game.getContext(), 100, 100 );
+	 //	desert=new Desert(game.getContext(),100 , 100);
+            desert=new RectangleObject(game.getContext(),"tree_on_desert/desert.bmp",100 , 100);
+
 	}
 
 	@Override
 	public void update(float deltaTime) {
-		List<TouchEvent> touchs = glGame.getInput().getTouchEvents();
+		List<TouchEvent> touchEvents = glGame.getInput().getTouchEvents();
 		 
 		
 		float offsetX=0;
 		float offsetY=0;
 
-		for (TouchEvent touch : touchs)
+		for (TouchEvent touch : touchEvents)
 		{
 			switch(touch.type)
 			{
@@ -130,7 +132,7 @@ public class TreeOnDesertScreen extends GLScreen{
  		            group.draw();
  		            MatrixState.popMatrix();
  		            
- 		           //开启混合
+ 		           //关闭混合
  		            GLES20.glDisable(GLES20.GL_BLEND);
 				
 	}

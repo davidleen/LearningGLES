@@ -27,14 +27,14 @@ public class RectangleObject extends AbstractSimpleObject{
 	{
 		vertexData=new float[]
 		        {
-		        	-width/2*UNIT_SIZE,0,-height/2*UNIT_SIZE,
+		        	-width*UNIT_SIZE,0,-height*UNIT_SIZE,
 		        	0,0,
-		        	 width/2*UNIT_SIZE,0,-height/2*UNIT_SIZE,
+		        	 width*UNIT_SIZE,0,-height*UNIT_SIZE,
 		        	1,0,
-		        	 width/2*UNIT_SIZE,0, height/2*UNIT_SIZE,
+		        	 width*UNIT_SIZE,0, height*UNIT_SIZE,
 		        	1,1,
 		        	
-		        	-width/2*UNIT_SIZE,0, height/2*UNIT_SIZE,
+		        	-width*UNIT_SIZE,0, height*UNIT_SIZE,
 		        	0,1 
 		        };
 		
