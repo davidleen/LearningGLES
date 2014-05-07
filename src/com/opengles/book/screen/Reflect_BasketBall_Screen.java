@@ -1,6 +1,7 @@
 package com.opengles.book.screen;
 
 import android.opengl.GLES20;
+import android.util.Log;
 
 import com.opengles.book.MatrixState;
 import com.opengles.book.framework.Game;
@@ -16,8 +17,9 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 	ObjectDrawable floor;
 	ObjectDrawable basketBallReflected;
 	ObjectDrawable floorTransparent;
+	BallController controller;
 	 
-	private float ballY=5;
+	 
 	FPSCounter counter;
 	 
 
@@ -29,16 +31,22 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 
 
 		counter = new FPSCounter();
-
+		 
 		 floor=new RectangleObject(game.getContext(), "basketball_reflect/mdb.png",12, 12);
 		 basketBall=new SphereObject(game.getContext(), "basketball_reflect/basketball.png", 2)	;
 		 floorTransparent=new RectangleObject(game.getContext(), "basketball_reflect/mdbtm.png",12, 12);
+	
+		 controller=new BallController(10);
 	}
 
 	@Override
 	public void update(float deltaTime) {
 
 		  glGame.getInput().getTouchEvents();
+		  
+		  
+		  controller.update(deltaTime);
+		  
 		 
 
 	}
@@ -51,6 +59,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT
 				| GLES20.GL_COLOR_BUFFER_BIT);
 		
+		float y=controller.getY();
 		
 		 MatrixState.pushMatrix();
          MatrixState.translate(0, -2, 0); 
@@ -58,7 +67,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		  floor.draw();
 		//绘制镜像体
 		 MatrixState.pushMatrix();
-		 MatrixState.translate(0, -ballY, 0); 
+		 MatrixState.translate(0, -y, 0); 
 		 basketBall.draw();
 		 MatrixState.popMatrix();
 		 //绘制半透明地板
@@ -70,7 +79,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
          GLES20.glDisable(GLES20.GL_BLEND);
 		
          MatrixState.pushMatrix();
-		 MatrixState.translate(0,  ballY, 0); 
+		 MatrixState.translate(0,  y, 0); 
 		  basketBall.draw();
 		 MatrixState.popMatrix();
 		
@@ -127,6 +136,63 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 
 	}
 
-	 
+	 class BallController
+	 {
+		 private static final float G=9.8f;
+		 private static final float RESILIENCE=0.8f;
+		 private float  y;
+		 public BallController(float y)
+		 {
+			 this.y=y;
+			 startY=y;
+			 
+		 }
+		 
+		 private float timeSum;
+		 private float vy=10;
+		 private float startY;
+		 public void update(float timeCollapsed)
+		 {
+			 if(y==0 ) return ;
+			//此轮运动时间增加
+			 timeSum+=timeCollapsed;
+				//根据此轮起始Y坐标、此轮运动时间、此轮起始速度计算当前位置
+				float tempCurrY=startY-0.5f*G*timeSum*timeSum+vy*timeSum;
+				
+				Log.d("tag", "vy  tempCurrY:"+tempCurrY);
+				if(tempCurrY<=0)
+				{//若当前位置低于地面则碰到地面反弹
+					//反弹后起始位置为0
+					startY=0;		
+					//反弹后起始速度
+					vy=-(vy-G*timeSum)*RESILIENCE;
+					//反弹后此轮运动时间清0
+					timeSum=0;
+					//若速度小于阈值则停止运动
+					Log.d("tag", "vy:"+vy);
+					if(vy<0.35f)
+					{
+						y=0;
+						 
+					}
+				}
+				else
+				{//若没有碰到地面则正常运动
+					y=tempCurrY;
+				}
+				 
+				 
+				 
+				 
+			  
+		 }
+		 
+		 public float getY()
+		 {
+			 return y;
+		 }
+		 
+		 
+	 }
 
 }
