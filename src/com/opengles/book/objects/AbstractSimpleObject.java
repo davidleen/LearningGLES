@@ -13,6 +13,7 @@ import com.opengles.book.ShaderUtil;
 import com.opengles.book.galaxy.ObjectDrawable;
 
 	import android.content.Context;
+import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.util.Log;
 
@@ -70,11 +71,21 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 		public void bind() {
 			 
 			//加载纹理。
-			String fileName=getBitmapFileName();
+			
 			try {
-				textureId = ShaderUtil.loadTextureWithUtils(context.getAssets().open(fileName),isMixMap());
+				
+				Bitmap bitmap=getBitmap() ;
+				if(bitmap!=null)
+				{
+					textureId = ShaderUtil.loadTextureWithUtils(bitmap,isMixMap());
+					bitmap.recycle();
+				}
+				else
+				{
+				String fileName=getBitmapFileName();
+				textureId = ShaderUtil.loadTextureWithUtils(context.getAssets().open(fileName),isMixMap());}
 			} catch (IOException e) {
-				 throw new RuntimeException("unable load texture "+fileName,e);
+				 throw new RuntimeException("unable load texture "  ,e);
 				 
 			}
 			vboIds = new int[2];
@@ -114,6 +125,16 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 		 * @return
 		 */
 		protected abstract String getBitmapFileName();
+		
+		
+		/**
+		 * 获取纹理 图片
+		 */
+		
+		protected   Bitmap getBitmap()
+		{
+			return null;
+		}
 		@Override
 		public void unBind() {
 			//移除纹理

@@ -1,15 +1,19 @@
 package com.opengles.book.screen;
 
+import java.util.List;
+
 import android.opengl.GLES20;
 import android.util.Log;
 
 import com.opengles.book.MatrixState;
 import com.opengles.book.framework.Game;
+import com.opengles.book.framework.Input.TouchEvent;
 import com.opengles.book.framework.gl.FPSCounter;
 import com.opengles.book.framework.impl.GLScreen;
 import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.objects.RectangleObject;
 import com.opengles.book.objects.SphereObject;
+import com.opengles.book.utils.FontUtil;
 
 public   class Reflect_BasketBall_Screen extends GLScreen {
 
@@ -19,7 +23,8 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 	ObjectDrawable floorTransparent;
 	BallController controller;
 	 
-	 
+	//诗词背景绘画
+	ObjectDrawable poets;
 	FPSCounter counter;
 	 
 
@@ -35,15 +40,30 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		 floor=new RectangleObject(game.getContext(), "basketball_reflect/mdb.png",12, 12);
 		 basketBall=new SphereObject(game.getContext(), "basketball_reflect/basketball.png", 2)	;
 		 floorTransparent=new RectangleObject(game.getContext(), "basketball_reflect/mdbtm.png",12, 12);
-	
+		 poets= new RectangleObject(game.getContext(), FontUtil.generateWLT(FontUtil.content, 512, 512), 5, 5);
 		 controller=new BallController(10);
 	}
 
 	@Override
 	public void update(float deltaTime) {
 
-		  glGame.getInput().getTouchEvents();
+		List<TouchEvent> events=  glGame.getInput().getTouchEvents();
 		  
+		for (TouchEvent touch : events)
+		{
+			switch(touch.type)
+			{
+			case TouchEvent.TOUCH_DOWN: 
+				controller.addVy(1);
+				break;
+			 
+				 
+			}
+			
+
+			 
+		}
+		
 		  
 		  controller.update(deltaTime);
 		  
@@ -84,6 +104,16 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		 MatrixState.popMatrix();
 		
 		 MatrixState.popMatrix();
+		 
+
+         MatrixState.pushMatrix();
+         MatrixState.translate(-12,  0, -5); 
+		 MatrixState.rotate(90, 1, 0, 0) ; 
+		 
+		 poets.draw();
+		 MatrixState.popMatrix();
+		
+		 
 		
 	}
 
@@ -94,6 +124,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		floor.unBind();
 		basketBall.unBind();
 		floorTransparent.unBind();
+		poets.unBind();
 		//bezierObject.unBind();
 		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 //		GLES20.glDisable(GLES20.GL_CULL_FACE);
@@ -128,6 +159,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		floor.bind();
 		basketBall.bind();
 		floorTransparent.bind();
+		poets.bind();
 	 
 	}
 
@@ -148,7 +180,12 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 			 
 		 }
 		 
-		 private float timeSum;
+		 public void addVy(float i) {
+			 vy+=i;
+			
+		}
+
+		private float timeSum;
 		 private float vy=10;
 		 private float startY;
 		 public void update(float timeCollapsed)

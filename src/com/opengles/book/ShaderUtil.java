@@ -160,12 +160,23 @@ public class ShaderUtil {
 	
 	public static int loadTextureWithUtils(InputStream is) 
 	{
-		return loadTextureWithUtils(is,false);
+		 return loadTextureWithUtils(is,false);
 	}
 	// /
 		// Load texture from resource
 		//
-		public static int loadTextureWithUtils(InputStream is,boolean isMipMap)
+	public static int loadTextureWithUtils(InputStream is,boolean isMipMap)
+	{
+		
+		Bitmap bitmap;
+		bitmap = BitmapFactory.decodeStream(is);
+		
+		int textureId= loadTextureWithUtils(bitmap,false);
+		bitmap.recycle();
+		return textureId;
+	}
+
+		public static int loadTextureWithUtils(Bitmap bitmap,boolean isMipMap)
 		{
 			int[] textureId = new int[1];
 
@@ -199,10 +210,9 @@ public class ShaderUtil {
 			GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,
 					GLES20.GL_REPEAT);
 			
-			Bitmap bitmap;
-			bitmap = BitmapFactory.decodeStream(is);
+			 
 			GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-			bitmap.recycle();
+			 
 			 //自动生成Mipmap纹理
 			if(isMipMap)
 	        GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);

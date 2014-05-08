@@ -1,6 +1,7 @@
 package com.opengles.book.objects;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 /**
  * 平面的通用对象
@@ -13,11 +14,20 @@ public class RectangleObject extends AbstractSimpleObject{
 	private static final int UNIT_SIZE=1;
 	
 	private String textureFileName;
+	Bitmap bitmap;
 	float[] vertexData;
 	short[] indexData;
 	public RectangleObject(Context context, String textureFileName,int width,int height) {
 		super(context);
 		 this.textureFileName=textureFileName;
+		 initData(width, height);
+		 
+		 
+	}
+	
+	public RectangleObject(Context context, Bitmap bitmap,int width,int height) {
+		super(context);
+		 this.bitmap=bitmap;
 		 initData(width, height);
 		 
 		 
@@ -60,6 +70,12 @@ public class RectangleObject extends AbstractSimpleObject{
 	protected String getBitmapFileName() {
 		 
 		return textureFileName;
+	}
+
+	@Override
+	protected Bitmap getBitmap() {
+		 
+		return bitmap;
 	}
 	
 	
