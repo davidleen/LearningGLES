@@ -1,5 +1,9 @@
 package com.opengles.book.objects;
 
+import java.io.IOException;
+
+import com.opengles.book.ShaderUtil;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 
@@ -8,30 +12,41 @@ import android.graphics.Bitmap;
  * @author Administrator
  *
  */
-public class RectangleObject extends AbstractSimpleObject{
+public    class RectangleObject extends AbstractSimpleObject{
 
 	
 	private static final int UNIT_SIZE=1;
-	
-	private String textureFileName;
-	Bitmap bitmap;
+	int textureId;
+	 
 	float[] vertexData;
 	short[] indexData;
 	public RectangleObject(Context context, String textureFileName,int width,int height) {
 		super(context);
-		 this.textureFileName=textureFileName;
+		  
 		 initData(width, height);
 		 
+			textureId = ShaderUtil.loadTextureWithUtils(context,textureFileName ,false);
+		 
+		  
 		 
 	}
 	
 	public RectangleObject(Context context, Bitmap bitmap,int width,int height) {
 		super(context);
-		 this.bitmap=bitmap;
+		 
 		 initData(width, height);
+		 textureId = ShaderUtil.loadTextureWithUtils(bitmap,false); 
+	   
+		}
+	
+	public RectangleObject(Context context, int width,int height) {
+		super(context);
 		 
-		 
-	}
+		 initData(width, height);
+		 textureId =-1;
+	   
+		}
+	
 	
 	private void initData(int width,int height)
 	{
@@ -66,17 +81,21 @@ public class RectangleObject extends AbstractSimpleObject{
 		 
 		return indexData;
 	}
-	@Override
-	protected String getBitmapFileName() {
-		 
-		return textureFileName;
-	}
+
+	 
 
 	@Override
-	protected Bitmap getBitmap() {
+	protected int getTextureId() {
 		 
-		return bitmap;
+		return textureId;
 	}
+	 
+
+	 
+
+	 
+
+	 
 	
 	
 	

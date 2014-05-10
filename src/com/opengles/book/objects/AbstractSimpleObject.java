@@ -54,7 +54,7 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
     
     int textureId;
     int[] vboIds;
-    private Context context;
+     
     int indexLength;
 
 
@@ -70,24 +70,7 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 		@Override
 		public void bind() {
 			 
-			//加载纹理。
-			
-			try {
-				
-				Bitmap bitmap=getBitmap() ;
-				if(bitmap!=null)
-				{
-					textureId = ShaderUtil.loadTextureWithUtils(bitmap,isMixMap());
-					bitmap.recycle();
-				}
-				else
-				{
-				String fileName=getBitmapFileName();
-				textureId = ShaderUtil.loadTextureWithUtils(context.getAssets().open(fileName),isMixMap());}
-			} catch (IOException e) {
-				 throw new RuntimeException("unable load texture "  ,e);
-				 
-			}
+			 
 			vboIds = new int[2];
 
 			GLES20.glGenBuffers(2, vboIds, 0);
@@ -120,24 +103,11 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 		 */
 		protected abstract short[] getIndexData() ;
 
-		/**
-		 * 获取纹理地图路径
-		 * @return
-		 */
-		protected abstract String getBitmapFileName();
-		
-		
-		/**
-		 * 获取纹理 图片
-		 */
-		
-		protected   Bitmap getBitmap()
-		{
-			return null;
-		}
+		 
 		@Override
 		public void unBind() {
 			//移除纹理
+			if(textureId!=-1)
 			GLES20.glDeleteTextures(1, new int[]{textureId},0);
 			GLES20.glDeleteBuffers(2, vboIds, 0);
 			
@@ -148,6 +118,9 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 			 //指定使用某套shader程序
 	   	 GLES20.glUseProgram(mProgram); 
 	   	 //绑定纹理
+	   	 int newTextureId=getTextureId();
+	   	 if(newTextureId!=-1)
+	   	 textureId=newTextureId;
 	   	 GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 	        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
 	        //将最终变换矩阵传入shader程序
@@ -226,8 +199,7 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 	    
 	    public AbstractSimpleObject(Context  context )
 	    {    	
-	    	this.context=context;
-	    	 
+	     
 	    	//初始化shader        
 	    	initShader(context);
 	    }
@@ -256,9 +228,16 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 	    }
 	    
 	    
-	    public boolean isMixMap()
-	    {
-	    	return false;
-	    }
+	   
+	    
+	    /**
+	     * 获取纹理id
+	     * @return
+	     */
+	    protected  abstract int getTextureId();
+	    
+	    
+	    
+	  
 	 
 }

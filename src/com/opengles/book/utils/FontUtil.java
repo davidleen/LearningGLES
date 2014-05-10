@@ -2,15 +2,26 @@ package com.opengles.book.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 
 public class FontUtil 
 {
-	static int cIndex=0;
+	private  static int cIndex=0;
 	static final float textSize=40;
 	static int R=255;
 	static int G=255;
 	static int B=255;
+	
+	
+	static Paint paint=new Paint();
+	
+	static{
+	paint.setARGB(255, R, G, B);
+	paint.setTextSize(textSize);
+	paint.setTypeface(null);
+	paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+	}
 	public static Bitmap generateWLT(String[] str,int width,int height)
 	{
 		Paint paint=new Paint();
@@ -20,6 +31,7 @@ public class FontUtil
 		paint.setFlags(Paint.ANTI_ALIAS_FLAG);
 		Bitmap bmTemp=Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 		Canvas canvasTemp = new Canvas(bmTemp);
+		//canvasTemp.drawColor(Color.TRANSPARENT);
 		for(int i=0;i<str.length;i++)
 		{
 			canvasTemp.drawText(str[i], 0, textSize*i+(i-1)*5, paint);
@@ -42,10 +54,13 @@ public class FontUtil
 		"谁能书閤下，白首太玄经。",
 	};
 	//获得数组的方法
-	public static String[] getContent(int length,String[] content)
-	{
-		String[] result=new String[length+1];
-		for(int i=0;i<=length;i++)
+	public static String[] getContent(  String[] content)
+	{	
+		
+		int length= cIndex+1 ;
+		 
+		String[] result=new String[length ];
+		for(int i=0;i< length;i++)
 		{
 			result[i]=content[i];
 		}
@@ -57,5 +72,22 @@ public class FontUtil
 		R=(int)(255*Math.random());
 		G=(int)(255*Math.random());
 		B=(int)(255*Math.random());
+	}
+	public static final void increaseIndex()
+	{
+		
+		 cIndex++ ;
+		 if(cIndex>=content.length)
+			 cIndex=0;
+		 
+	}
+	public static void drawText(Canvas canvasTemp, String[] content) {
+	
+		paint.setARGB(255, R, G, B);
+		for(int i=0;i<content.length;i++)
+		{
+			canvasTemp.drawText(content[i], 0, textSize*i+(i-1)*5, paint);
+		}
+		 
 	}
 }

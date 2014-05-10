@@ -1,6 +1,8 @@
 package com.opengles.book.objects;
  
 
+import com.opengles.book.ShaderUtil;
+
 import android.content.Context;
  
 
@@ -17,10 +19,12 @@ public class SphereObject extends AbstractSimpleObject{
 	private String textureFileName;
 	float[] vertexData;
 	short[] indexData;
+	int textureId=-1;
 	public SphereObject(Context context, String textureFileName,int radius) {
 		super(context);
 		 this.textureFileName=textureFileName;
 		 initData(radius);
+		 textureId=ShaderUtil.loadTextureWithUtils(context, textureFileName, false);
 		 
 		 
 	}
@@ -45,10 +49,12 @@ public class SphereObject extends AbstractSimpleObject{
 		 
 		return indexData;
 	}
+	 
+
 	@Override
-	protected String getBitmapFileName() {
+	protected int getTextureId() {
 		 
-		return textureFileName;
+		return textureId;
 	}
 	
 	

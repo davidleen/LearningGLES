@@ -11,6 +11,7 @@ import com.opengles.book.framework.Input.TouchEvent;
 import com.opengles.book.framework.gl.FPSCounter;
 import com.opengles.book.framework.impl.GLScreen;
 import com.opengles.book.galaxy.ObjectDrawable;
+import com.opengles.book.objects.PoetPanel;
 import com.opengles.book.objects.RectangleObject;
 import com.opengles.book.objects.SphereObject;
 import com.opengles.book.utils.FontUtil;
@@ -24,7 +25,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 	BallController controller;
 	 
 	//诗词背景绘画
-	ObjectDrawable poets;
+	PoetPanel poets;
 	FPSCounter counter;
 	 
 
@@ -40,7 +41,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		 floor=new RectangleObject(game.getContext(), "basketball_reflect/mdb.png",12, 12);
 		 basketBall=new SphereObject(game.getContext(), "basketball_reflect/basketball.png", 2)	;
 		 floorTransparent=new RectangleObject(game.getContext(), "basketball_reflect/mdbtm.png",12, 12);
-		 poets= new RectangleObject(game.getContext(), FontUtil.generateWLT(FontUtil.content, 512, 512), 5, 5);
+		 poets= new PoetPanel(game.getContext(), 5, 5);
 		 controller=new BallController(10);
 	}
 
@@ -66,6 +67,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		
 		  
 		  controller.update(deltaTime);
+		  poets.onUpdate(deltaTime);
 		  
 		 
 
@@ -108,9 +110,14 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 
          MatrixState.pushMatrix();
          MatrixState.translate(-12,  0, -5); 
-		 MatrixState.rotate(90, 1, 0, 0) ; 
+		 MatrixState.rotate(60, 1, 0, 0) ; 
 		 
-		 poets.draw();
+		 
+ 		 GLES20.glEnable(GLES20.GL_BLEND); 
+ 		//设置混合因子
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+        poets.draw();
+ 		 GLES20.glDisable(GLES20.GL_BLEND);
 		 MatrixState.popMatrix();
 		
 		 

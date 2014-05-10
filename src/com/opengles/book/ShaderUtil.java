@@ -13,6 +13,7 @@ import org.apache.http.protocol.HTTP;
 
  
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -165,15 +166,33 @@ public class ShaderUtil {
 	// /
 		// Load texture from resource
 		//
+	
+	public static int loadTextureWithUtils(Context context, String assertFileName,boolean isMipMap)
+	{
+		
+		 
+		try {
+			 
+		    return loadTextureWithUtils(context.getAssets().open(assertFileName),false);
+			 
+		} catch (IOException e) {
+			 throw new RuntimeException("unable load bitmap "+ assertFileName ,e);
+		}
+		
+		
+	}
+	
 	public static int loadTextureWithUtils(InputStream is,boolean isMipMap)
 	{
 		
-		Bitmap bitmap;
-		bitmap = BitmapFactory.decodeStream(is);
+//		Bitmap bitmap;
+//		bitmap = BitmapFactory.decodeStream(is);
+//		
+//		int textureId= loadTextureWithUtils(bitmap,false);
+//		bitmap.recycle();
+//		return textureId;
 		
-		int textureId= loadTextureWithUtils(bitmap,false);
-		bitmap.recycle();
-		return textureId;
+		return loadTextureWithUtils(BitmapFactory.decodeStream(is), isMipMap);
 	}
 
 		public static int loadTextureWithUtils(Bitmap bitmap,boolean isMipMap)
@@ -182,7 +201,7 @@ public class ShaderUtil {
 
 			GLES20.glGenTextures(1, textureId, 0);
 			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId[0]);
-			
+			Log.d(TAG, "textureId:"+textureId[0]);
 			
 			if(isMipMap)
 			{
@@ -215,7 +234,7 @@ public class ShaderUtil {
 			 
 			 //自动生成Mipmap纹理
 			if(isMipMap)
-	        GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
+	         GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
 			
 
 			return textureId[0];

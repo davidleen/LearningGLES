@@ -23,11 +23,15 @@ public class TreeForDraw extends AbstractSimpleObject
 	private String path="tree_on_desert/";
 	 float[]   vertexData;
 	 short[]  indexData;
+	 static int  textureId=-1;
     public TreeForDraw(Context context)
     {
     	super(context);
     	 
     	initVertexData();
+    	//三
+    	if(textureId==-1)
+    		textureId=ShaderUtil.loadTextureWithUtils(context, path+"tree.png", false);
     	 
     }
     //初始化顶点数据的方法
@@ -70,10 +74,11 @@ public class TreeForDraw extends AbstractSimpleObject
 		 
 		return indexData;
 	}
+	 
 	@Override
-	protected String getBitmapFileName() {
+	protected int getTextureId() {
 		 
-		return path+"tree.png";
+		return textureId;
 	}
     
     

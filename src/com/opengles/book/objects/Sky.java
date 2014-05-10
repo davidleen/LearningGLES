@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.opengles.book.BuildConfig;
 import com.opengles.book.FloatUtils;
+import com.opengles.book.ShaderUtil;
 
 import android.content.Context;
 import android.util.Log;
@@ -22,10 +23,12 @@ public class Sky  extends AbstractSimpleObject{
 	private int angleSpanIndegree=5;
 	public String path="sky/";
 
+	int textureId=-1;
 	public Sky(Context context) {
 		super(context);
 		createData(50);
-		 
+		
+		textureId=ShaderUtil.loadTextureWithUtils(context, path+"sky.png", false); 
 	}
 
 	@Override
@@ -40,12 +43,7 @@ public class Sky  extends AbstractSimpleObject{
 		return indexData;
 	}
 
-	@Override
-	protected String getBitmapFileName() {
-		 
-		return path+"sky.png";
-	}
-
+	 
 	
 	
 	public void createData(float r)
@@ -134,9 +132,11 @@ public class Sky  extends AbstractSimpleObject{
 
 	}
 	
+	 
+
 	@Override
-	public boolean isMixMap()
-	{
-		return false;
+	protected int getTextureId() {
+		 
+		return textureId;
 	}
 }

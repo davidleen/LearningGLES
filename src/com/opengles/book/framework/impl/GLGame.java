@@ -51,8 +51,10 @@ public abstract class GLGame extends Activity implements Game, Renderer {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		glView = new GLSurfaceView(this);
-		glView.setEGLContextClientVersion(2); // ����ʹ��OPENGL ES2.0
+		glView.setEGLContextClientVersion(2); //  OPENGL ES2.0
 		glView.setRenderer(this);
+		//默认
+		glView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);//设置渲染模式为主动渲染 
 		setContentView(glView);
 		glGraphics = new GLGraphics(glView);
 		fileIO = new AndroidFileIO(getAssets());
