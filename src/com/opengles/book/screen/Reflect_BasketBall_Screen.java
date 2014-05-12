@@ -119,6 +119,15 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
         poets.draw();
  		 GLES20.glDisable(GLES20.GL_BLEND);
 		 MatrixState.popMatrix();
+		 
+		 
+		 //下述代码 为此视角场景服务
+		 GLES20.glEnable(GLES20.GL_SCISSOR_TEST);
+		 
+		 
+		 
+		 
+		 GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
 		
 		 
 		
