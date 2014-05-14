@@ -28,13 +28,13 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 	PoetPanel poets;
 	FPSCounter counter;
 	 
-
+	float  ratio;
 
 
 	public Reflect_BasketBall_Screen(Game game) {
 		super(game);
 		 
-
+			
 
 		counter = new FPSCounter();
 		 
@@ -77,6 +77,13 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 	public void present(float deltaTime) {
 	//	counter.logFrame();
 		
+		
+		 //调用此方法计算产生透视投影矩阵
+        MatrixState.setProject(-ratio, ratio, -1, 1, 1, 100);
+        //调用此方法产生摄像机9参数位置矩阵
+        MatrixState.setCamera(0.0f,7.0f,7.0f,0,0f,0,0,1,0);
+		//设置屏幕背景色RGBA
+        GLES20.glClearColor(0f,0f,0f,1.0f);  
 		// 清除颜色
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT
 				| GLES20.GL_COLOR_BUFFER_BIT);
@@ -105,7 +112,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		  basketBall.draw();
 		 MatrixState.popMatrix();
 		
-		 MatrixState.popMatrix();
+		 
 		 
 
          MatrixState.pushMatrix();
@@ -124,12 +131,28 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		 //下述代码 为此视角场景服务
 		 GLES20.glEnable(GLES20.GL_SCISSOR_TEST);
 		 
-		 
-		 
+		//设置区域
+     	 GLES20.glScissor(1280-200,480-200,200,200);  
+     	//设置屏幕背景色RGBA
+         GLES20.glClearColor(1f,1f,1f,1.0f);  
+         //清除颜色缓存于深度缓存
+         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);          
+		 float scissorRatio=1;
+         
+         //调用此方法计算产生透视投影矩阵
+         MatrixState.setProject(-ratio, ratio, -1, 1, 3, 100);
+         //调用此方法产生摄像机9参数位置矩阵
+         MatrixState.setCamera(0  ,0f,10.0f,0,y,0,0,1,0);
+         
+         MatrixState.pushMatrix();
+		  MatrixState.translate(6,  y, 0); 
+		  basketBall.draw();
+		 MatrixState.popMatrix();
+         
 		 
 		 GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
 		
-		 
+		 MatrixState.popMatrix();
 		
 	}
 
@@ -158,11 +181,8 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		int height = glGame.getGLGraphics().getHeight();
 		GLES20.glViewport(0, 0, width, height);
 
-		float ratio = (float) width / height;
-		 //调用此方法计算产生透视投影矩阵
-        MatrixState.setProject(-ratio, ratio, -1, 1, 1, 100);
-        //调用此方法产生摄像机9参数位置矩阵
-        MatrixState.setCamera(0.0f,7.0f,7.0f,0,0f,0,0,1,0);
+		  ratio = (float) width / height;
+		
 
 
 //		LightSources.setSunLightPosition(100, 1, 0);

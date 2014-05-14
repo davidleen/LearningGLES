@@ -28,6 +28,7 @@ public class TreeOnDesertScreen extends GLScreen{
 	
 	 private TreeGroup group;
 	private ObjectDrawable desert;
+	private ObjectDrawable maskView;//alpha测试用纹理矩形
 	private float lastX;
 	private float lastY;
 	private static int cameraRadias=20;
@@ -35,13 +36,16 @@ public class TreeOnDesertScreen extends GLScreen{
 	private float cameraYDegree=MIN_CAMERA_Y_DEGREE;
 	private static float MIN_CAMERA_Y_DEGREE=3;
 	private static float MAX_CAMERA_Y_DEGREE=15;
+	float ratio;
 
 	public TreeOnDesertScreen(Game game) {
 		super(game);
 		 group=new TreeGroup(game.getContext());
 	 //	desert=new Desert(game.getContext(),100 , 100);
             desert=new RectangleObject(game.getContext(),"tree_on_desert/desert.bmp",100 , 100);
-
+            RectangleObject   object=new RectangleObject(game.getContext(), "tree_on_desert/mask.png", 1, 1);
+            object.addAlphaTest(0.6f);
+            maskView=object;
 	}
 
 	@Override
@@ -109,6 +113,15 @@ public class TreeOnDesertScreen extends GLScreen{
 		// 清除颜色
 				GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT
 						| GLES20.GL_COLOR_BUFFER_BIT);
+				
+				 //调用此方法计算产生透视投影矩阵
+				MatrixState.setProject(-ratio, ratio, -1, 1, 1,  100);
+
+				 //调用此方法产生摄像机9参数位置矩阵 
+				resetCamera();
+				
+				
+				
 				//绘制沙漠
  				 MatrixState.pushMatrix();
  		            MatrixState.translate(0, -2, 0);
@@ -131,6 +144,27 @@ public class TreeOnDesertScreen extends GLScreen{
  		            
  		           //关闭混合
  		            GLES20.glDisable(GLES20.GL_BLEND);
+ 		            
+ 		            
+ 		            
+ 		            
+ 		            
+// 		            //绘制视窗
+ 		           //清除深度缓冲
+ 		            GLES20.glClear( GLES20.GL_DEPTH_BUFFER_BIT);
+ 					MatrixState.pushMatrix();
+ 					//调用此方法计算产生平行投影矩阵
+ 					 MatrixState.setProjectOrtho(-1f, 1f, -1f, 1f,1, 100);
+ 					//调用此方法产生摄像机9参数位置矩阵
+ 					MatrixState.setCamera(0, 10, 0, 0f, 0f, 0f, 0f, 0.0f,  1.0f);			
+ 					
+	 					 
+	 					//MatrixState.translate(3, 0, 0);
+	 					//   MatrixState.rotate(90, 1, 0, 0);
+	 					 
+	 				 maskView.draw();//绘制alpha测试用矩形
+	 					 
+					MatrixState.popMatrix();
 				
 	}
 
@@ -141,6 +175,8 @@ public class TreeOnDesertScreen extends GLScreen{
 	 	desert.unBind();
 		if(group!=null)
 		group.unBind();
+		if(maskView!=null)
+			maskView.unBind();
 	}
 
 	@Override
@@ -153,19 +189,9 @@ public class TreeOnDesertScreen extends GLScreen{
 		int height = glGame.getGLGraphics().getHeight();
 		GLES20.glViewport(0, 0, width, height);
 		//计算GLSurfaceView的宽高比
-		float ratio = (float) width / height;
-		 //调用此方法计算产生透视投影矩阵
-		MatrixState.setProject(-ratio, ratio, -1, 1, 1,  100);
-
-		 //调用此方法产生摄像机9参数位置矩阵
-
-		resetCamera();
-//		// ����̫���ƹ�ĳ�ʼλ��
-//		LightSources.setSunLightPosition(1000, 1, 0);
-//		// 设置 三种光线
-//		LightSources.setAmbient(0.15f, 0.15f, 0.15f, 1f);
-//		LightSources.setDiffuse(0.5f, 0.5f, 0.25f, 1f);
-//		LightSources.setSpecLight(0.3f, 0.3f, 0.15f, 1f);
+		 ratio = (float) width / height;
+		
+ 
 		// 初始化变换矩阵
 		MatrixState.setInitStack();
 		 
@@ -179,7 +205,11 @@ public class TreeOnDesertScreen extends GLScreen{
         //给树按照离视点的距离排序 
         Collections.sort( group.alist); 
 		}
+		
+		if(maskView!=null)
+			maskView.bind();
 		}
+	
 
 	@Override
 	public void dispose() {

@@ -49,9 +49,12 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
     String mFragmentShader;//片元着色器
      
 	
+    int alphaThreadHoldHandler;
 
 	 
     
+    //透明度检测的阀值 （0-1）
+    private float alphaThreadHold=1f;
     int textureId;
     int[] vboIds;
      
@@ -124,9 +127,13 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 	   	 GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 	        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
 	        //将最终变换矩阵传入shader程序
-	        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, MatrixState.getFinalMatrix(), 0); 
+	        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, MatrixState.getFinalMatrix(), 0);
+	        //注入透明阀值
+	        GLES20.glUniform1f( alphaThreadHoldHandler,alphaThreadHold); 
 	        
+	         //Log.d(TAG, "alphaThreadHold:"+alphaThreadHold);
 	        
+	      
 	        // 启用位置向量数据
 			GLES20.glEnableVertexAttribArray(maPositionHandle);
 			// 启用法向量数据
@@ -222,7 +229,8 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 	        //获取程序中总变换矩阵引用id
 	        muMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");  
 	    
-
+	        //获取透明度阀值的引用id
+	        alphaThreadHoldHandler = GLES20.glGetUniformLocation(mProgram, "alphaThreadHold");  
 		 
 	    
 	    }
@@ -238,6 +246,15 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 	    
 	    
 	    
+	    
+	    /**
+	     * 添加透明度检测  小于该值的片元将被丢弃
+	     * @param alphaThreadHold
+	     */
+	    public void addAlphaTest(float alphaThreadHold)
+	    {
+	    	this.alphaThreadHold=alphaThreadHold;
+	    }
 	  
 	 
 }
