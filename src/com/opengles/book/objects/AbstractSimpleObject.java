@@ -54,7 +54,7 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 	 
     
     //透明度检测的阀值 （0-1）
-    private float alphaThreadHold=1f;
+    private float alphaThreadHold=0f;
     int textureId;
     int[] vboIds;
      

@@ -9,6 +9,7 @@ import com.opengles.book.MatrixState;
 import com.opengles.book.framework.Game;
 import com.opengles.book.framework.Input.TouchEvent;
 import com.opengles.book.framework.gl.FPSCounter;
+import com.opengles.book.framework.gl.LookAtCamera;
 import com.opengles.book.framework.impl.GLScreen;
 import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.objects.PoetPanel;
@@ -23,6 +24,9 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 	ObjectDrawable basketBallReflected;
 	ObjectDrawable floorTransparent;
 	BallController controller;
+	
+	LookAtCamera camera;
+	
 	 
 	//诗词背景绘画
 	PoetPanel poets;
@@ -43,7 +47,11 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		 floorTransparent=new RectangleObject(game.getContext(), "basketball_reflect/mdbtm.png",12, 12);
 		 poets= new PoetPanel(game.getContext(), 5, 5);
 		 controller=new BallController(10);
+		 
+		 
+		
 	}
+	
 
 	@Override
 	public void update(float deltaTime) {
@@ -77,11 +85,13 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 	public void present(float deltaTime) {
 	//	counter.logFrame();
 		
+		//调用此方法计算产生透视投影矩阵与相机
+		camera.setMatrices();
 		
-		 //调用此方法计算产生透视投影矩阵
-        MatrixState.setProject(-ratio, ratio, -1, 1, 1, 100);
-        //调用此方法产生摄像机9参数位置矩阵
-        MatrixState.setCamera(0.0f,7.0f,7.0f,0,0f,0,0,1,0);
+//		  
+//        MatrixState.setFrustumProject(-ratio, ratio, -1, 1, 1, 100);
+//         
+//        MatrixState.setCamera(0.0f,7.0f,7.0f,0,0f,0,0,1,0);
 		//设置屏幕背景色RGBA
         GLES20.glClearColor(0f,0f,0f,1.0f);  
 		// 清除颜色
@@ -92,13 +102,32 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		
 		 MatrixState.pushMatrix();
          MatrixState.translate(0, -2, 0); 
-         //绘制反射面地板
+         
+		  
+		  //添加模板测试  镜像体在反射面板外 将被丢弃。
+         //warn   no work on some type gpu  need to confirm/
+		  GLES20.glClear(GLES20.GL_STENCIL_BUFFER_BIT);
+		  GLES20.glEnable(GLES20.GL_STENCIL_TEST);
+		  //设置模板测试参数
+		  GLES20.glStencilFunc(GLES20.GL_ALWAYS, 1, 1);
+		  //设置模板测试后的操作
+		  GLES20.glStencilOp(GLES20.GL_KEEP, GLES20.GL_KEEP, GLES20.GL_REPLACE);
+		  
+		  //绘制反射面地板
 		  floor.draw();
+		  //设置模板测试参数
+		  GLES20.glStencilFunc(GLES20.GL_EQUAL, 1, 1);
+		  //设置模板测试后的操作
+		  GLES20.glStencilOp(GLES20.GL_KEEP, GLES20.GL_KEEP, GLES20.GL_KEEP);
+		  
 		//绘制镜像体
 		 MatrixState.pushMatrix();
 		 MatrixState.translate(0, -y, 0); 
 		 basketBall.draw();
 		 MatrixState.popMatrix();
+		 
+		 //关闭模板测试。
+		 GLES20.glDisable(GLES20.GL_STENCIL_TEST);
 		 //绘制半透明地板
 		//开启混合
          GLES20.glEnable(GLES20.GL_BLEND);
@@ -140,7 +169,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		 float scissorRatio=1;
          
          //调用此方法计算产生透视投影矩阵
-         MatrixState.setProject(-ratio, ratio, -1, 1, 3, 100);
+         MatrixState.setFrustumProject(-ratio, ratio, -1, 1, 3, 100);
          //调用此方法产生摄像机9参数位置矩阵
          MatrixState.setCamera(0  ,0f,10.0f,0,y,0,0,1,0);
          
@@ -182,7 +211,11 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		GLES20.glViewport(0, 0, width, height);
 
 		  ratio = (float) width / height;
-		
+		  camera=new LookAtCamera(2, 1/ratio,1, 100);
+		  camera.setPosition(0.0f,10.0f,10f);
+		  camera.setUp(0,1,0);
+		  camera.setLookAt(0f,1,0f) ;
+		  
 
 
 //		LightSources.setSunLightPosition(100, 1, 0);

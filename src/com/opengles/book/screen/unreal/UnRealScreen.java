@@ -132,7 +132,7 @@ public   class UnRealScreen extends GLScreen {
 		 
 		float ratio = (float) width / height;
 		 
-		MatrixState.setProject(-ratio, ratio, -1, 1, 3,  110);
+		MatrixState.setFrustumProject(-ratio, ratio, -1, 1, 3,  110);
 
 	 
 

@@ -32,14 +32,14 @@ public class MatrixState
 		}
 	};
 	public static Pool<float[]> pool = new Pool<float[]>(factory, 100);
-	private static float[] mProjMatrix = getNewMatrix();// 4x4���� ͶӰ��
-	private static float[] mVMatrix = getNewMatrix();// �����λ�ó���9�������
-	private static float[] mMVPMatrix = getNewMatrix();// ��������õ��ܱ任����
-	static float[] mMMatrix = getNewMatrix();// ����������ƶ���ת����
+	private static float[] mProjMatrix = getNewMatrix();// //4x4矩阵 投影用
+	private static float[] mVMatrix = getNewMatrix();////摄像机位置朝向9参数矩阵   
+	private static float[] mMVPMatrix = getNewMatrix();//获取具体物体的总变换矩阵
+	static float[] mMMatrix = getNewMatrix();
+	  //保护变换矩阵的栈
+	public static Stack<float[]> mStack = new Stack<float[]>(); 
 
-	public static Stack<float[]> mStack = new Stack<float[]>();// �����任�����ջ
-
-	private static float[] currMatrix;// ��ǰ�任����
+	private static float[] currMatrix;//当前变换矩阵
 
 	public static void setInitStack()// ��ȡ���任��ʼ����
 	{
@@ -78,7 +78,7 @@ public class MatrixState
 
 	}
 
-	public static void popMatrix()// �����任����
+	public static void popMatrix()// 弹出矩阵
 	{
 
 		pool.free(currMatrix);
@@ -137,7 +137,7 @@ public class MatrixState
 	}
 
 	  //设置透视投影参数
-	public static void setProject
+	public static void setFrustumProject
 			(
 					float left,		//near面的left
 			    	float right,    //near面的right
@@ -151,7 +151,7 @@ public class MatrixState
 	}
 	
 	 //设置正交投影参数
-    public static void setProjectOrtho
+    public static void setOrthoProject
     (
     	float left,		//near面的left
     	float right,    //near面的right

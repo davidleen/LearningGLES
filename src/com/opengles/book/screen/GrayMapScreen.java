@@ -135,7 +135,7 @@ public class GrayMapScreen extends GLScreen{
 		//计算GLSurfaceView的宽高比
 		float ratio = (float) width / height;
 		 //调用此方法计算产生透视投影矩阵
-		MatrixState.setProject(-ratio, ratio, -1, 1, 1,  1000);
+		MatrixState.setFrustumProject(-ratio, ratio, -1, 1, 1,  1000);
 
 		 //调用此方法产生摄像机9参数位置矩阵
 

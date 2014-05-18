@@ -132,11 +132,11 @@ public   class TuziScreen extends GLScreen {
 		// ����GLSurfaceView�Ŀ�߱�
 		float ratio = (float) width / height;
 		// // ���ô˷����������͸��ͶӰ����
-		MatrixState.setProject(-ratio, ratio, -1, 1, 5,  110);
+		MatrixState.setFrustumProject(-ratio, ratio, -1, 1, 2,  110);
 
 		// ���ô˷������������9����λ�þ���
 
-		MatrixState.setCamera(0, 0, 40f, 0f, 0f, 1f, 0f, 1.0f, 40f);
+		MatrixState.setCamera(0, 0, 40f, 0f, 0f, 1f, 0f, 1.0f,  0f);
 		// ����̫���ƹ�ĳ�ʼλ��
 		LightSources.setSunLightPosition(1000, 1, 0);
 		// 设置 三种光线

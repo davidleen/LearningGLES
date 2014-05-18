@@ -115,7 +115,7 @@ public class TreeOnDesertScreen extends GLScreen{
 						| GLES20.GL_COLOR_BUFFER_BIT);
 				
 				 //调用此方法计算产生透视投影矩阵
-				MatrixState.setProject(-ratio, ratio, -1, 1, 1,  100);
+				MatrixState.setFrustumProject(-ratio, ratio, -1, 1, 1,  100);
 
 				 //调用此方法产生摄像机9参数位置矩阵 
 				resetCamera();
@@ -154,7 +154,7 @@ public class TreeOnDesertScreen extends GLScreen{
  		            GLES20.glClear( GLES20.GL_DEPTH_BUFFER_BIT);
  					MatrixState.pushMatrix();
  					//调用此方法计算产生平行投影矩阵
- 					 MatrixState.setProjectOrtho(-1f, 1f, -1f, 1f,1, 100);
+ 					 MatrixState.setOrthoProject(-1f, 1f, -1f, 1f,1, 100);
  					//调用此方法产生摄像机9参数位置矩阵
  					MatrixState.setCamera(0, 10, 0, 0f, 0f, 0f, 0f, 0.0f,  1.0f);			
  					

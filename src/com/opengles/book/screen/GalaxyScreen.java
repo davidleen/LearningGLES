@@ -181,7 +181,7 @@ public   class GalaxyScreen extends GLScreen {
 		// ����GLSurfaceView�Ŀ�߱�
 		float ratio = (float) width / height;
 		// // ���ô˷����������͸��ͶӰ����
-		MatrixState.setProject(-ratio, ratio, -1, 1, 4,  80);
+		MatrixState.setFrustumProject(-ratio, ratio, -1, 1, 4,  80);
 
 		// ���ô˷������������9����λ�þ���
 
