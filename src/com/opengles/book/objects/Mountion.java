@@ -49,7 +49,8 @@ public class Mountion  implements ObjectDrawable
     String mVertexShader;//顶点着色器
     String mFragmentShader;//片元着色器
      
-	
+	int clipPlaneHandle;//裁剪平面的引用id
+	float[] clipEquation=new  float[]{1,0,0,1};
 
 	 
     
@@ -131,7 +132,7 @@ public class Mountion  implements ObjectDrawable
 			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, rock_texId);
 			GLES20.glUniform1i(sTextureGrassHandle, 0);//使用0号纹理
 	        GLES20.glUniform1i(sTextureRockHandle, 1); //使用1号纹理
-	        
+	        GLES20.glUniform4f(clipPlaneHandle, clipEquation[0], clipEquation[1], clipEquation[2], clipEquation[3]);
 	        //邦定过程纹理参数
 	    	 
 	    	GLES20.glUniform1f(landStartYHandle, 0);
@@ -244,6 +245,8 @@ public class Mountion  implements ObjectDrawable
 			landYSpanHandle=GLES20.glGetUniformLocation(mProgram, "landYSpan");	
 		 
 	    
+			clipPlaneHandle=GLES20.glGetUniformLocation(mProgram, "u_clipPlane");
+			
 	    }
 	    
 	String path="gray_map/";

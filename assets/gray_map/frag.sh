@@ -5,12 +5,14 @@ uniform sampler2D sTextureRock;//岩石纹理内容数据
 varying float currY;//高度位置
 uniform float landStartY;							//过程纹理起始Y坐标
 uniform float landYSpan;							//过程纹理跨度
+
+varying float u_clipDist;     //传递给片元的裁剪信息。
 void main()                         
 {           
    
+   if(u_clipDist<0.0) discard;  //如果裁剪信息小于0 则丢弃片元
    		 
-   		 
-   		  vec4 gColor=texture2D(sTextureGrass, vTextureCoord); 	//从草皮纹理中采样出颜色
+   vec4 gColor=texture2D(sTextureGrass, vTextureCoord); 	//从草皮纹理中采样出颜色
    vec4 rColor=texture2D(sTextureRock, vTextureCoord); 	//从岩石纹理中采样出颜色
    vec4 finalColor;									//最终颜色
    if(currY<landStartY){			

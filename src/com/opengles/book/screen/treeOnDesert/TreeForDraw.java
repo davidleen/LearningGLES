@@ -23,7 +23,7 @@ public class TreeForDraw extends AbstractSimpleObject
 	private String path="tree_on_desert/";
 	 float[]   vertexData;
 	 short[]  indexData;
-	 static int  textureId=-1;
+	   int  textureId=-1;
     public TreeForDraw(Context context)
     {
     	super(context);

@@ -98,8 +98,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT
 				| GLES20.GL_COLOR_BUFFER_BIT);
 		
-		float y=controller.getY();
-		
+		float y=controller.getY(); 
 		 MatrixState.pushMatrix();
          MatrixState.translate(0, -2, 0); 
          
