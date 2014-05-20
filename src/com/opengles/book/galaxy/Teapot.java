@@ -15,6 +15,7 @@ import com.opengles.book.ShaderUtil;
  * 
  * @author davidleen29
  * @create : 2014-1-7 下午9:22:33
+ * @deprecated
  * @{ 茶壶}
  */
 public class Teapot implements ObjectDrawable {

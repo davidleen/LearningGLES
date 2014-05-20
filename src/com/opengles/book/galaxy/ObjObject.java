@@ -267,9 +267,9 @@ public class ObjObject implements ObjectDrawable {
 	/**
 	 * 加载纹理
 	 * 
+	 *
 	 * @param context
-	 * @param path
-	 * @param fileName
+	 * @param model
 	 * @throws IOException
 	 */
 	public void createTexture(Context context, ObjModel model)
