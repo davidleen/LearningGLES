@@ -11,6 +11,7 @@ import com.opengles.book.framework.Input.TouchEvent;
 import com.opengles.book.framework.gl.FPSCounter;
 import com.opengles.book.framework.gl.LookAtCamera;
 import com.opengles.book.framework.impl.GLScreen;
+import com.opengles.book.galaxy.CameraController;
 import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.objects.PoetPanel;
 import com.opengles.book.objects.RectangleObject;
@@ -27,7 +28,8 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 	
 	LookAtCamera camera;
 	
-	 
+	CameraController cameraController; 
+	
 	//诗词背景绘画
 	PoetPanel poets;
 	FPSCounter counter;
@@ -48,7 +50,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		 poets= new PoetPanel(game.getContext(), 5, 5);
 		 controller=new BallController(10);
 		 
-		 
+		
 		
 	}
 	
@@ -58,6 +60,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 
 		List<TouchEvent> events=  glGame.getInput().getTouchEvents();
 		  
+		cameraController.onTouchEvent(events);
 		for (TouchEvent touch : events)
 		{
 			switch(touch.type)
@@ -214,6 +217,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		  camera.setPosition(0.0f,10.0f,10f);
 		  camera.setUp(0,1,0);
 		  camera.setLookAt(0f,1,0f) ;
+		  cameraController=new CameraController(camera, glGame.getGLGraphics());
 		  
 
 

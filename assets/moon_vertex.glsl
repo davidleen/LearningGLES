@@ -64,8 +64,8 @@ void calculateLight(in vec3 normal,in vec3 aPosition, inout vec4 ambientLightTem
 //计算雾因子的方法
 float computeFogFactor(){
    float fogDistance = length(cameraPosition-(uMMatrix*vec4(mPositionLoc,1)).xyz);//顶点到摄像机的距离
-   const float end = 45.0;//雾结束位置 该距离 为片元到摄像机的距离。
-   const float start = 35.0;//雾开始位置   
+   const float end = 80.0;//雾结束位置 该距离 为片元到摄像机的距离。
+   const float start = 40.0;//雾开始位置   
    float tmpFactor = 1.0-smoothstep(start,end,fogDistance);//计算雾因子
    return tmpFactor;  
 }
@@ -97,8 +97,7 @@ float computeFogFactor(){
   	  vFogFactor = computeFogFactor();
 	
 	
-	 //计算雾因子
-   vFogFactor = computeFogFactor();
+	  
 	
 
 }

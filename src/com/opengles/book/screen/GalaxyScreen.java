@@ -11,7 +11,9 @@ import com.opengles.book.MatrixState;
 import com.opengles.book.framework.Game;
 import com.opengles.book.framework.Input.TouchEvent;
 import com.opengles.book.framework.gl.FPSCounter;
+import com.opengles.book.framework.gl.LookAtCamera;
 import com.opengles.book.framework.impl.GLScreen;
+import com.opengles.book.galaxy.CameraController;
 import com.opengles.book.galaxy.Celestial;
 import com.opengles.book.galaxy.CloudWithVbo;
 import com.opengles.book.galaxy.EarthWithVbo;
@@ -33,9 +35,12 @@ public   class GalaxyScreen extends GLScreen {
 	private int sunAng = 0;
 	private int moonRotateDegress = 0;
 
-	private float mPreviousX;//
+	 
+	
+	private LookAtCamera camera;
+	private CameraController cameraController;
 
-	float yAngle;
+	 float yAngle=10;
 
 	public GalaxyScreen(Game game) {
 		super(game);
@@ -53,20 +58,10 @@ public   class GalaxyScreen extends GLScreen {
 	public void update(float deltaTime) {
 
 		List<TouchEvent> touchs = glGame.getInput().getTouchEvents();
-		// float dx;
 
-		for (TouchEvent touch : touchs)
-		{
-			if (touch.type == TouchEvent.TOUCH_DRAGGED)
-			{
-				// dx = touch.x - mPreviousX;
+			cameraController.onTouchEvent(touchs);
 
-				yAngle += (touch.x - mPreviousX);
-
-			}
-
-			mPreviousX = touch.x;
-		}
+	 
 
 		timeCollapsed += deltaTime;
 		if (timeCollapsed >= 0.1f)
@@ -101,6 +96,8 @@ public   class GalaxyScreen extends GLScreen {
 	public void present(float deltaTime) {
 	//	counter.logFrame();
 
+		
+		camera.setMatrices();
 		// 清除颜色
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT
 				| GLES20.GL_COLOR_BUFFER_BIT);
@@ -178,15 +175,16 @@ public   class GalaxyScreen extends GLScreen {
 		int width = glGame.getGLGraphics().getWidth();
 		int height = glGame.getGLGraphics().getHeight();
 		GLES20.glViewport(0, 0, width, height);
-		// ����GLSurfaceView�Ŀ�߱�
+		 
 		float ratio = (float) width / height;
-		// // ���ô˷����������͸��ͶӰ����
-		MatrixState.setFrustumProject(-ratio, ratio, -1, 1, 4,  80);
-
-		// ���ô˷������������9����λ�þ���
-
-		MatrixState.setCamera(0, 0, 40f, 0f, 0f, 1f, 0f, 1.0f, 40f);
-		// ����̫���ƹ�ĳ�ʼλ��
+		
+		camera=new LookAtCamera(2,1/ratio,4,300);
+		 camera.setPosition(0.0f,0.0f,40f);
+		  camera.setUp(0,1,0);
+		  camera.setLookAt(0f,0,0f) ;
+		cameraController=new CameraController(camera, glGame.getGLGraphics());
+		
+		 
 		LightSources.setSunLightPosition(100, 1, 0);
 		// 设置 三种光线
 		LightSources.setAmbient(0.15f, 0.15f, 0.15f, 1f);

@@ -27,7 +27,7 @@ public class CameraController {
     {
         this.camera=camera;
         this.graphics = graphics;
-        rectangle=new Rectangle(0,800,300,300);
+        rectangle=new Rectangle(0,0,graphics.getWidth(),graphics.getHeight());
 
     }
 
@@ -42,29 +42,64 @@ public class CameraController {
                 {
 
                     float relativeX=x-rectangle.lowerLeft.x;
-                    float relativeY=x-rectangle.lowerLeft.y;
-                    int xIndex=(int)(relativeX/100);
-                    int yIndex=(int)(relativeY/100);
-                    int index=xIndex*3+yIndex;
+                    float relativeY=y-rectangle.lowerLeft.y;
+                    int xIndex=(int)(relativeX/(rectangle.width/3.0f));
+                    int yIndex=(int)(relativeY/(rectangle.height/3.0f));
+                    int index=yIndex*3+xIndex;
                     switch (touchEvent.type)
                     {
                         case Input.TouchEvent.TOUCH_DOWN:
 
 
-                           switch ( index)
-                           {
-
-
-                               case 0: camera.getPosition().sub(1,0,0);break;  //左平移
-                               case 2: camera.getPosition().add(1,0,0);break;  //右平移
-                               case 4: camera.getPosition().rotate(5,0,1,0);break;  //左旋转
-                               case 6: camera.getPosition().rotate(-5,0,1,0);break;  //左旋转
-                           }
+                          
 
 
 
                             break;
                         case Input.TouchEvent.TOUCH_DRAGGED:
+                        	
+                        	 switch ( index)
+                             {
+
+
+                                 case 0: //左平移
+                                	 camera.getPosition().sub(1,0,0);
+                                 camera.getLookAt().sub(1, 0, 0);
+                                 break;  
+                                 case 2: //右平移
+                                	 camera.getPosition().add(1,0,0);
+                                 camera.getLookAt().add(1, 0, 0);
+                                 break;  
+                                 
+                                 case 1: //上平移
+                                	 camera.getPosition().add(0,1,0);
+                                 camera.getLookAt().add(0, 1, 0);
+                                 break; 
+                                 
+                                 case 7: //下平移
+                                	 camera.getPosition().sub(0,1,0);
+                                 camera.getLookAt().sub(0, 1, 0);
+                                 
+                                 
+                                 break; 
+                                 
+                                 
+                                 case 3: //前进
+                                	 camera.getPosition().sub(0,0,1);
+                                	 camera.getLookAt().sub(0, 0, 1);
+                                	 break;
+                                 case 5: //后退
+                                	 camera.getPosition().add(0,0,1);
+                                	 camera.getLookAt().add(0, 0, 1);
+                                 break; 
+                                 
+                                 
+                                 case 6: //右旋转
+                                	 
+                                	 camera.getPosition().rotate(5,0,1,0);break;  //左旋转
+                                 case 8://左旋转
+                                	 camera.getPosition().rotate(-5,0,1,0);break;  //左旋转
+                             }
                             break;
                         case Input.TouchEvent.TOUCH_UP:
                             break;
