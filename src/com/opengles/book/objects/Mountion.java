@@ -220,9 +220,9 @@ public class Mountion  implements ObjectDrawable
 	    public void initShader(Context mv)
 	    {
 	    	//加载顶点着色器的脚本内容
-	        mVertexShader=ShaderUtil.loadFromAssetsFile(path+"vertex.sh", mv.getResources());
+	        mVertexShader=ShaderUtil.loadFromAssetsFile(path+"vertex.glsl", mv.getResources());
 	        //加载片元着色器的脚本内容
-	        mFragmentShader=ShaderUtil.loadFromAssetsFile(path+"frag.sh", mv.getResources());  
+	        mFragmentShader=ShaderUtil.loadFromAssetsFile(path+"frag.glsl", mv.getResources());
 	        //基于顶点着色器与片元着色器创建程序
 	        mProgram = ShaderUtil.createProgram(mVertexShader, mFragmentShader);
 	        //获取程序中顶点位置属性引用id  

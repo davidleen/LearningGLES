@@ -47,6 +47,8 @@ public class LookAtCamera  extends Camera3D{
 	public void setPosition(float x, float y, float z)
 	{
 		position.set(x,y,z);
+
+
 	}
 	
 	public void setUp(float x, float y, float z)
