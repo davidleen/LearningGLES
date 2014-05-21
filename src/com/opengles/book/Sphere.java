@@ -10,7 +10,7 @@ import com.opengles.book.R;
 /**
  * 球体
  * 
- * @author 138191
+ * @author davidleen29
  * 
  */
 public class Sphere {

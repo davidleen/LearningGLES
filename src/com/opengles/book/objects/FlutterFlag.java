@@ -13,15 +13,15 @@ import android.opengl.GLES20;
 import android.util.Log;
  
 /**
- * 
+ * 红旗飘动
  * @author davidleen29 
- * @create : 2014-4-25 下午11:44:25
- * @{  简单对象  shader 都是固定的   抽取公用方法和属性。}
+ * 
+ *  
  */
-public abstract class AbstractSimpleObject  implements ObjectDrawable {
+public   class FlutterFlag  implements ObjectDrawable {
 
 	
-	protected String TAG=AbstractSimpleObject.this.getClass().getName();
+	protected String TAG=FlutterFlag.this.getClass().getName();
 	
 	
 	 
@@ -43,16 +43,30 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
     String mFragmentShader;//片元着色器
      
 	
-    int alphaThreadHoldHandler;
+    final float WIDTH_SPAN=3.3f;//2.8f;//横向长度总跨度
 
 	 
     
-    //透明度检测的阀值 （0-1）
-    private float alphaThreadHold=0f;
+   
     int textureId;
     int[] vboIds;
      
     int indexLength;
+
+
+
+
+	private int maStartAngleHandle;
+
+
+
+
+	private int muWidthSpanHandle;
+
+
+
+
+	public float currStartAngle=0;
 
 
 
@@ -92,13 +106,42 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 		 * 获取顶点数据（位置，纹理）
 		 * @return
 		 */
-		protected abstract float[] getVertexData() ;
+		protected   float[] getVertexData()
+		{
+			float width=2; float height=2;
+			int UNIT_SIZE=1;
+		float[]	vertexData=new float[]
+			        {
+			        	-width*UNIT_SIZE,-height*UNIT_SIZE,0,
+			        	0,0,
+			        	 width*UNIT_SIZE,-height*UNIT_SIZE,0,
+			        	1,0,
+			        	 width*UNIT_SIZE, height*UNIT_SIZE,0,
+			        	1,1,
+			        	
+			        	-width*UNIT_SIZE, height*UNIT_SIZE,0,
+			        	0,1 
+			        };
+			
+		return vertexData;
+			
+		} 
 		
 		/**
 		 * 获取顶点索引数据
 		 * @return
 		 */
-		protected abstract short[] getIndexData() ;
+		protected   short[] getIndexData() 
+		{
+			
+			
+			short[] indexData=new short[]{
+					
+					0,1,2,2,3,	0
+						
+				};
+			return indexData;
+		}
 
 		 
 		@Override
@@ -114,20 +157,22 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 		public void draw() {
 			 //指定使用某套shader程序
 	   	 GLES20.glUseProgram(mProgram); 
-	   	 //绑定纹理
-	   	 int newTextureId=getTextureId();
-	   	 if(newTextureId!=-1)
-	   	 textureId=newTextureId;
+	   	  
+	   	 
 	   	 GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 	      GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
 	        //将最终变换矩阵传入shader程序
 	        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, MatrixState.getFinalMatrix(), 0);
-	        //注入透明阀值
-	        GLES20.glUniform1f( alphaThreadHoldHandler,alphaThreadHold); 
-	        
+	         
 	         //Log.d(TAG, "alphaThreadHold:"+alphaThreadHold);
 	        
-	      
+	        //将本帧起始角度传入shader程序
+	         GLES20.glUniform1f(maStartAngleHandle, currStartAngle);
+	         //将横向长度总跨度传入shader程序
+	         GLES20.glUniform1f(muWidthSpanHandle, WIDTH_SPAN);  
+	         
+	        
+	        
 	        // 启用位置向量数据
 			GLES20.glEnableVertexAttribArray(maPositionHandle);
 			// 启用法向量数据
@@ -198,11 +243,13 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 		 
 		
 	    
-	    public AbstractSimpleObject(Context  context )
+	    public FlutterFlag(Context  context )
 	    {    	
 	     
 	    	//初始化shader        
 	    	initShader(context);
+	    	textureId = ShaderUtil.loadTextureWithUtils(context,"sky/sky.png" ,false);
+			 
 	    }
 	    
 	    
@@ -211,9 +258,9 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 	    public void initShader(Context mv)
 	    {
 	    	//加载顶点着色器的脚本内容
-	        mVertexShader=ShaderUtil.loadFromAssetsFile("abstract_simple_object/vertex.glsl", mv.getResources());
+	        mVertexShader=ShaderUtil.loadFromAssetsFile("flutteringflag/vertex.glsl", mv.getResources());
 	        //加载片元着色器的脚本内容
-	        mFragmentShader=ShaderUtil.loadFromAssetsFile("abstract_simple_object/frag.glsl", mv.getResources());
+	        mFragmentShader=ShaderUtil.loadFromAssetsFile("flutteringflag/frag.glsl", mv.getResources());
 	        //基于顶点着色器与片元着色器创建程序
 	        mProgram = ShaderUtil.createProgram(mVertexShader, mFragmentShader);
 	        //获取程序中顶点位置属性引用id  
@@ -222,33 +269,21 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 	        maTexCoorHandle= GLES20.glGetAttribLocation(mProgram, "aTexCoor");
 	        //获取程序中总变换矩阵引用id
 	        muMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");  
-	    
-	        //获取透明度阀值的引用id
-	        alphaThreadHoldHandler = GLES20.glGetUniformLocation(mProgram, "alphaThreadHold");  
-		 
-	    
+	     
+	        maStartAngleHandle=GLES20.glGetUniformLocation(mProgram, "u_startAngle");  
+	        //获取横向长度总跨度引用
+	        muWidthSpanHandle=GLES20.glGetUniformLocation(mProgram, "uWidthSpan");  
 	    }
 	    
 	    
 	   
 	    
-	    /**
-	     * 获取纹理id
-	     * @return
-	     */
-	    protected  abstract int getTextureId();
 	    
 	    
 	    
 	    
-	    /**
-	     * 添加透明度检测  小于该值的片元将被丢弃
-	     * @param alphaThreadHold
-	     */
-	    public void addAlphaTest(float alphaThreadHold)
-	    {
-	    	this.alphaThreadHold=alphaThreadHold;
-	    }
+	    
+	    
 	  
 	 
 }

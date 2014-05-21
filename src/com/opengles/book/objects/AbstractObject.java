@@ -18,10 +18,10 @@ import android.util.Log;
  * @create : 2014-4-25 下午11:44:25
  * @{  简单对象  shader 都是固定的   抽取公用方法和属性。}
  */
-public abstract class AbstractSimpleObject  implements ObjectDrawable {
+public abstract class AbstractObject  implements ObjectDrawable {
 
 	
-	protected String TAG=AbstractSimpleObject.this.getClass().getName();
+	protected String TAG=AbstractObject.this.getClass().getName();
 	
 	
 	 
@@ -198,7 +198,7 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 		 
 		
 	    
-	    public AbstractSimpleObject(Context  context )
+	    public AbstractObject(Context  context )
 	    {    	
 	     
 	    	//初始化shader        

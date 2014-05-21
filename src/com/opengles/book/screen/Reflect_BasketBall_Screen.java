@@ -13,6 +13,7 @@ import com.opengles.book.framework.gl.LookAtCamera;
 import com.opengles.book.framework.impl.GLScreen;
 import com.opengles.book.galaxy.CameraController;
 import com.opengles.book.galaxy.ObjectDrawable;
+import com.opengles.book.objects.FlutterFlag;
 import com.opengles.book.objects.PoetPanel;
 import com.opengles.book.objects.RectangleObject;
 import com.opengles.book.objects.SphereObject;
@@ -25,6 +26,8 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 	ObjectDrawable basketBallReflected;
 	ObjectDrawable floorTransparent;
 	BallController controller;
+	
+	FlutterFlag flag;
 	
 	LookAtCamera camera;
 	
@@ -50,11 +53,11 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		 poets= new PoetPanel(game.getContext(), 5, 5);
 		 controller=new BallController(10);
 		 
-		
+		 flag=new FlutterFlag(game.getContext());
 		
 	}
 	
-
+    private float timeCollopased;
 	@Override
 	public void update(float deltaTime) {
 
@@ -80,7 +83,12 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		  controller.update(deltaTime);
 		  poets.onUpdate(deltaTime);
 		  
-		 
+		  timeCollopased+=deltaTime;
+		  if(timeCollopased>0.5)
+		  {
+			  flag.currStartAngle+=(float) (Math.PI/16);
+			  timeCollopased-=0.5;
+		  }
 
 	}
 
@@ -101,11 +109,14 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT
 				| GLES20.GL_COLOR_BUFFER_BIT);
 		
+		
+		
+		
 		float y=controller.getY(); 
 		 MatrixState.pushMatrix();
          MatrixState.translate(0, -2, 0); 
          
-		  
+        
 		  //添加模板测试  镜像体在反射面板外 将被丢弃。
          //warn   no work on some type gpu  need to confirm/
 		  GLES20.glClear(GLES20.GL_STENCIL_BUFFER_BIT);
@@ -117,6 +128,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		  
 		  //绘制反射面地板
 		  floor.draw();
+		 
 		  //设置模板测试参数
 		  GLES20.glStencilFunc(GLES20.GL_EQUAL, 1, 1);
 		  //设置模板测试后的操作
@@ -185,6 +197,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		
 		 MatrixState.popMatrix();
 		
+		 flag.draw();
 	}
 
 	@Override
@@ -195,6 +208,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		basketBall.unBind();
 		floorTransparent.unBind();
 		poets.unBind();
+		flag.unBind();
 		//bezierObject.unBind();
 		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 //		GLES20.glDisable(GLES20.GL_CULL_FACE);
@@ -232,6 +246,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		basketBall.bind();
 		floorTransparent.bind();
 		poets.bind();
+		flag.bind();
 	 
 	}
 
@@ -278,7 +293,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 					//反弹后此轮运动时间清0
 					timeSum=0;
 					//若速度小于阈值则停止运动
-					Log.d("tag", "vy:"+vy);
+					//Log.d("tag", "vy:"+vy);
 					if(vy<0.35f)
 					{
 						y=0;
