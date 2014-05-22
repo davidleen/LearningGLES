@@ -84,10 +84,10 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		  poets.onUpdate(deltaTime);
 		  
 		  timeCollopased+=deltaTime;
-		  if(timeCollopased>0.5)
+		  if(timeCollopased>0.1)
 		  {
 			  flag.currStartAngle+=(float) (Math.PI/16);
-			  timeCollopased-=0.5;
+			  timeCollopased-=0.1;
 		  }
 
 	}
@@ -169,35 +169,39 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
         poets.draw();
  		 GLES20.glDisable(GLES20.GL_BLEND);
 		 MatrixState.popMatrix();
-		 
+
+
+
+        flag.draw();
+
 		 
 		 //下述代码 为此视角场景服务
 		 GLES20.glEnable(GLES20.GL_SCISSOR_TEST);
-		 
+
 		//设置区域
-     	 GLES20.glScissor(1280-200,480-200,200,200);  
+     	 GLES20.glScissor(1280-200,480-200,200,200);
      	//设置屏幕背景色RGBA
-         GLES20.glClearColor(1f,1f,1f,1.0f);  
+         GLES20.glClearColor(1f,1f,1f,1.0f);
          //清除颜色缓存于深度缓存
-         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);          
+         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 		 float scissorRatio=1;
-         
+
          //调用此方法计算产生透视投影矩阵
          MatrixState.setFrustumProject(-ratio, ratio, -1, 1, 3, 100);
          //调用此方法产生摄像机9参数位置矩阵
          MatrixState.setCamera(0  ,0f,10.0f,0,y,0,0,1,0);
-         
+
          MatrixState.pushMatrix();
-		  MatrixState.translate(6,  y, 0); 
+		  MatrixState.translate(6,  y, 0);
 		  basketBall.draw();
 		 MatrixState.popMatrix();
-         
-		 
+
+
 		 GLES20.glDisable(GLES20.GL_SCISSOR_TEST);
 		
 		 MatrixState.popMatrix();
 		
-		 flag.draw();
+
 	}
 
 	@Override

@@ -43,7 +43,7 @@ public   class FlutterFlag  implements ObjectDrawable {
     String mFragmentShader;//片元着色器
      
 	
-    final float WIDTH_SPAN=3.3f;//2.8f;//横向长度总跨度
+    final float WIDTH_SPAN=2f;//2.8f;//横向长度总跨度
 
 	 
     
@@ -108,7 +108,7 @@ public   class FlutterFlag  implements ObjectDrawable {
 		 */
 		protected   float[] getVertexData()
 		{
-			float width=2; float height=2;
+			float width=5; float height=5;
 			int UNIT_SIZE=1;
 		float[]	vertexData=new float[]
 			        {

@@ -117,9 +117,9 @@ public abstract class AbstractObject  implements ObjectDrawable {
 	   	 //绑定纹理
 	   	 int newTextureId=getTextureId();
 	   	 if(newTextureId!=-1)
-	   	 textureId=newTextureId;
+	   	    textureId=newTextureId;
 	   	 GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-	      GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+	     GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
 	        //将最终变换矩阵传入shader程序
 	        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, MatrixState.getFinalMatrix(), 0);
 	        //注入透明阀值
