@@ -84,10 +84,10 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		  poets.onUpdate(deltaTime);
 		  
 		  timeCollopased+=deltaTime;
-		  if(timeCollopased>0.1)
+		  if(timeCollopased>0.02)
 		  {
 			  flag.currStartAngle+=(float) (Math.PI/16);
-			  timeCollopased-=0.1;
+			  timeCollopased-=0.02;
 		  }
 
 	}
@@ -108,7 +108,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 		// 清除颜色
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT
 				| GLES20.GL_COLOR_BUFFER_BIT);
-		
+		 
 		
 		
 		

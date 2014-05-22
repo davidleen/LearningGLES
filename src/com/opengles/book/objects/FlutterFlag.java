@@ -27,11 +27,11 @@ public   class FlutterFlag  implements ObjectDrawable {
 	 
 	
 	protected static final int VERTEX_POS_SIZE = 3;// xyz
-	//protected static final int VERTEX_NORMAL_SIZE = 3;// xyz
+	 protected static final int VERTEX_NORMAL_SIZE = 3;// xyz
 	protected static final int VERTEX_TEXCOORD0_SIZE = 2;// s t
 
 	protected static final int STRIP_SIZE = (VERTEX_POS_SIZE
-			//+ VERTEX_NORMAL_SIZE
+			 + VERTEX_NORMAL_SIZE
 			+ VERTEX_TEXCOORD0_SIZE)
 			* FloatUtils.RATIO_FLOATTOBYTE;
 	
@@ -43,7 +43,7 @@ public   class FlutterFlag  implements ObjectDrawable {
     String mFragmentShader;//片元着色器
      
 	
-    final float WIDTH_SPAN=2f;//2.8f;//横向长度总跨度
+    final float WIDTH_SPAN=10f;//2.8f;//横向长度总跨度
 
 	 
     
@@ -102,28 +102,17 @@ public   class FlutterFlag  implements ObjectDrawable {
 			
 		}
 
+		
+		 
 		/**
 		 * 获取顶点数据（位置，纹理）
 		 * @return
 		 */
 		protected   float[] getVertexData()
 		{
-			float width=5; float height=5;
-			int UNIT_SIZE=1;
-		float[]	vertexData=new float[]
-			        {
-			        	-width*UNIT_SIZE,-height*UNIT_SIZE,0,
-			        	0,0,
-			        	 width*UNIT_SIZE,-height*UNIT_SIZE,0,
-			        	1,0,
-			        	 width*UNIT_SIZE, height*UNIT_SIZE,0,
-			        	1,1,
-			        	
-			        	-width*UNIT_SIZE, height*UNIT_SIZE,0,
-			        	0,1 
-			        };
 			
-		return vertexData;
+			
+			return vetextData;
 			
 		} 
 		
@@ -135,11 +124,7 @@ public   class FlutterFlag  implements ObjectDrawable {
 		{
 			
 			
-			short[] indexData=new short[]{
-					
-					0,1,2,2,3,	0
-						
-				};
+		 
 			return indexData;
 		}
 
@@ -208,7 +193,7 @@ public   class FlutterFlag  implements ObjectDrawable {
 //							offset
 //					);
 //
-//			offset += VERTEX_NORMAL_SIZE * FloatUtils.RATIO_FLOATTOBYTE;
+ 		offset += VERTEX_NORMAL_SIZE * FloatUtils.RATIO_FLOATTOBYTE;
 
 			GLES20.glVertexAttribPointer
 					(
@@ -248,8 +233,93 @@ public   class FlutterFlag  implements ObjectDrawable {
 	     
 	    	//初始化shader        
 	    	initShader(context);
+	    	initData();
 	    	textureId = ShaderUtil.loadTextureWithUtils(context,"sky/sky.png" ,false);
 			 
+	    }
+	    
+	    
+	    
+	    float[] vetextData;
+	    short[] indexData;
+	    private void initData()
+	    {
+	    	int rowCount=(int)WIDTH_SPAN;
+			int columnCount=(int)WIDTH_SPAN;
+			int totalCount = rowCount * columnCount;
+			int triangleCount = totalCount*2 ; // 一个方形// 2个三角形 
+			int indicesCount = triangleCount * 3;// 一个三角形3个点
+			
+			int 	stride =STRIP_SIZE;
+			 
+			float[]	attributes = new float[totalCount
+					* stride];
+			short[]	indics = new short[indicesCount];
+
+			float x, y, z;
+			float pieceofImageS = 1.0f / rowCount  ;
+			float pieceofImageT = 1.0f / columnCount ; 
+			 
+			int position = 0, indexPosition = 0;
+			for (int i = 0; i < rowCount; i++)
+			{
+				 
+
+				float s  =i * pieceofImageS; 
+				x=i;
+				 z=0;
+				for (int j = 0; j < columnCount; j++)
+				{
+				         y=j;  
+
+					attributes[position++] = x ;
+					attributes[position++] = y  ;
+					attributes[position++] = z ;
+					// // 法向量值
+					  attributes[position++] =x;
+					  attributes[position++] =y;
+					  attributes[position++] =z;
+					 
+					
+					float t =  j * pieceofImageT ;  
+					attributes[position++] = s; 
+					attributes[position++] = t; 
+				 
+					 
+
+				}
+			}
+
+			for (int i = 0; i < rowCount -1 ; i++)
+			{
+
+				for (int j = 0; j < columnCount  -1; j++)
+				{
+
+					// 划分四边形 变成2个三角形
+					// v1_____v3
+					// /| |
+					// v0|_____|v2
+					short v0 = (short) (i * columnCount + j);  
+					short v1 = (short) ((i + 1) * columnCount + j);
+					short v2 = (short) (i * columnCount + j + 1);
+					short v3 = (short) ((i + 1) * columnCount + j + 1);
+					indics[indexPosition++] = v0;
+					indics[indexPosition++] = v1;
+					indics[indexPosition++] = v3;
+
+					indics[indexPosition++] = v0;
+					indics[indexPosition++] = v3;
+					indics[indexPosition++] = v2;
+					 
+
+				}
+			}
+			 
+			
+			vetextData=attributes;
+			indexData=indics;
+	    	
 	    }
 	    
 	    
