@@ -90,9 +90,9 @@ public class Sky  extends AbstractSimpleObject{
 				attributes[position++] = y * r;
 				attributes[position++] = z * r;
  
-				// �������
+
 				float s =  j  * pieceofImageS ;  
-				float t =  i * pieceofImageT   ; // 日景位置t
+				float t =  i * pieceofImageT   ;
 				attributes[position++] = s;
 				attributes[position++] = t;
  

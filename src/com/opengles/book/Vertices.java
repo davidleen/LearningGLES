@@ -182,9 +182,8 @@ public class Vertices {
 	public void draw(int primitiveType, int offset, int numVertices) {
 
 		if (indices != null) {
-			indices.position(offset);
 			GLES20.glDrawElements(primitiveType, numVertices,
-					GLES20.GL_UNSIGNED_SHORT, indices);
+					GLES20.GL_UNSIGNED_SHORT, offset);
 		} else {
 			GLES20.glDrawArrays(primitiveType, offset, numVertices);
 		}

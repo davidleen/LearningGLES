@@ -27,11 +27,11 @@ public abstract class AbstractObject  implements ObjectDrawable {
 	 
 	
 	protected static final int VERTEX_POS_SIZE = 3;// xyz
-	//protected static final int VERTEX_NORMAL_SIZE = 3;// xyz
+	protected static final int VERTEX_NORMAL_SIZE = 3;// xyz
 	protected static final int VERTEX_TEXCOORD0_SIZE = 2;// s t
 
 	protected static final int STRIP_SIZE = (VERTEX_POS_SIZE
-			//+ VERTEX_NORMAL_SIZE
+			 + VERTEX_NORMAL_SIZE
 			+ VERTEX_TEXCOORD0_SIZE)
 			* FloatUtils.RATIO_FLOATTOBYTE;
 	
@@ -47,8 +47,7 @@ public abstract class AbstractObject  implements ObjectDrawable {
 
 	 
     
-    //透明度检测的阀值 （0-1）
-    private float alphaThreadHold=0f;
+
     int textureId;
     int[] vboIds;
      
@@ -122,8 +121,8 @@ public abstract class AbstractObject  implements ObjectDrawable {
 	     GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
 	        //将最终变换矩阵传入shader程序
 	        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, MatrixState.getFinalMatrix(), 0);
-	        //注入透明阀值
-	        GLES20.glUniform1f( alphaThreadHoldHandler,alphaThreadHold); 
+
+
 	        
 	         //Log.d(TAG, "alphaThreadHold:"+alphaThreadHold);
 	        
@@ -241,14 +240,7 @@ public abstract class AbstractObject  implements ObjectDrawable {
 	    
 	    
 	    
-	    /**
-	     * 添加透明度检测  小于该值的片元将被丢弃
-	     * @param alphaThreadHold
-	     */
-	    public void addAlphaTest(float alphaThreadHold)
-	    {
-	    	this.alphaThreadHold=alphaThreadHold;
-	    }
+
 	  
 	 
 }
