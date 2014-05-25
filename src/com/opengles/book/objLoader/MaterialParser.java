@@ -34,7 +34,8 @@ public class MaterialParser {
         BufferedReader reader = new BufferedReader(isr);
 
 
-        while ((line = reader.readLine()) != null) {
+        while ((line = reader.readLine() ) != null) {
+        	line=line.trim();
             if (line.startsWith("newmtl")) {
                 if (currentMtl != null)
                     materials.add(currentMtl);
@@ -49,9 +50,11 @@ public class MaterialParser {
             } else if (line.startsWith("Ks")) {
                 String[] str = line.split(SPLIT_EXPRESSION);
                 currentMtl.setSpecularColor(Float.parseFloat(str[1]), Float.parseFloat(str[2]), Float.parseFloat(str[3]));
-            } else if (line.startsWith("Tr") || line.startsWith("d")) {
+            } else if (line.startsWith("Tr")  ) {
                 String[] str = line.split(SPLIT_EXPRESSION);
-                currentMtl.setAlpha(Float.parseFloat(str[1]));
+                float alpha=Float.parseFloat(str[1]);
+                if(alpha>0.01)
+                 currentMtl.setAlpha(alpha);
             } 
             else if ( line.startsWith("d")) {
                 String[] str = line.split(SPLIT_EXPRESSION);
@@ -63,9 +66,10 @@ public class MaterialParser {
             } else if (line.startsWith("illum")) {
                 String[] str = line.split(SPLIT_EXPRESSION);
                 currentMtl.setIllum(Integer.parseInt(str[1]));
-            } else if (line.startsWith("map_Ka")||line.startsWith("map_Kd")||line.startsWith("map_bump")) {
+            } else if (line.startsWith("map_Ka")||line.startsWith("map_Kd")||line.startsWith("map_bump")||line.startsWith("map_Ke")) {
                 String[] str = line.split(SPLIT_EXPRESSION);
-                currentMtl.setTextureFile(str[1]);
+                if(str!=null&& str.length>1)
+                	currentMtl.setTextureFile(str[1]);
             }
         }
 

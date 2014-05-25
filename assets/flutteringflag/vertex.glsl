@@ -14,13 +14,13 @@ void main()
     
     //计算X向波浪          	
      float currentAngle=u_startAngle+ (aPosition.x-uStartPosition) / uWidthSpan *uHeightSpan;
-     float tx=sin(currentAngle )*0.1;
+     float tx=sin( currentAngle ) *0.1;
      
      
       //计算Y向波浪
       
         currentAngle=u_startAngle+ (aPosition.y-uStartPosition) / uWidthSpan *uHeightSpan;
-     float ty=sin(currentAngle )*0.1;
+     float ty=sin( currentAngle  ) *0.1;
      
         gl_Position=uMVPMatrix * vec4(aPosition.x,aPosition.y,tx+ty,1);
      //   gl_Position=uMVPMatrix * vec4(aPosition.xyz,1);

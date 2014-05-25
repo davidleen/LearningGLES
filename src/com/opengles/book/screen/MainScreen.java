@@ -86,7 +86,7 @@ menu.setListener(new MenuClickListner() {
 				public void onClick(MenuObject object) {
 					 
 					//切换screen 
-					glGame.setScreen(new TuziScreen(glGame));
+					glGame.setScreen(new OjObjectScreen(glGame));
 				}
 			});
 			menus.add(menu);

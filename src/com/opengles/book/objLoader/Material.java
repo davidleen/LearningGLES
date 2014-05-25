@@ -16,7 +16,8 @@ import java.util.ArrayList;
  */
 public class Material {
 
-    /**
+    public static final String DEFAULT_PNG = "default.png";
+	/**
      * 材料名称
      */
     String name;
@@ -67,27 +68,35 @@ public class Material {
          diffuseColor=new float[]{0.5f, 0.5f, 0.25f};
          specularColor=new float[]{0.3f, 0.3f, 0.15f};
          alpha=1;
+         textureFile=DEFAULT_PNG;
 
     }
 
     public void setAmbientColor(float v, float v1, float v2) {
+    	if(v>0||v1>0||v2>0) 
+    	{
         ambientColor[0]=v;
         ambientColor[1]=v1;
-        ambientColor[2]=v2;
+        ambientColor[2]=v2;}
     }
 
     public void setDiffuseColor(float v, float v1, float v2) {
-
+    	if(v>0||v1>0||v2>0) 
+    	{
         diffuseColor[0]=v;
         diffuseColor[1]=v1;
         diffuseColor[2]=v2;
+    	}
 
     }
 
     public void setSpecularColor(float v, float v1, float v2) {
+    	if(v>0||v1>0||v2>0) 
+    	{
         specularColor[0]=v;
         specularColor[1]=v1;
         specularColor[2]=v2;
+    	}
     }
 
     public void setAlpha(float alpha) {

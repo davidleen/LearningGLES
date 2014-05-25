@@ -71,10 +71,10 @@ public class ObjObject implements ObjectDrawable {
 
 		// 创建program
 		String mVertexShader = ShaderUtil.loadFromAssetsFile(
-				"teapot_vertex.glsl",
+				"objObject/teapot_vertex.glsl",
 				context.getResources());
 		String mFragmentShader = ShaderUtil.loadFromAssetsFile(
-				"teapot_frag.glsl",
+				"objObject/teapot_frag.glsl",
 				context.getResources());
 		mProgram = ShaderUtil.createProgram(mVertexShader, mFragmentShader);
 
@@ -115,7 +115,7 @@ public class ObjObject implements ObjectDrawable {
 		try {
 			createTexture(context, model);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			 
 			e.printStackTrace();
 		}
 
@@ -216,22 +216,13 @@ public class ObjObject implements ObjectDrawable {
 		int size = partList.size();
 		for (int i = 0; i < size; i++) {
 			ObjModelPart part = partList.get(i);
+			if(part.length<=0) continue;
 			Material material = part.material;
-			// LightSources.setAmbient(material.ambientColor[0],material.ambientColor[1],material.ambientColor[2],material.alpha);
-			// LightSources.setDiffuse(material.diffuseColor[0],material.diffuseColor[1],material.diffuseColor[2],material.alpha);
-			// LightSources.setSpecLight(material.specularColor[0],material.specularColor[1],material.specularColor[2],material.alpha);
+ 			 LightSources.setAmbient(material.ambientColor[0],material.ambientColor[1],material.ambientColor[2],material.alpha);
+ 			 LightSources.setDiffuse(material.diffuseColor[0],material.diffuseColor[1],material.diffuseColor[2],material.alpha);
+ 			 LightSources.setSpecLight(material.specularColor[0],material.specularColor[1],material.specularColor[2],material.alpha);
 
-			// 注入环境光光数据
-			// GLES20.glUniform4fv(mabientLightHandler, 1,
-			// part.material.getAmbientBuffer());
-			//
-			// 注入散射光数据
-			// GLES20.glUniform4fv(mDiffuseLightHandler, 1,
-			// part.material.getDiffuseBuffer());
-			//
-			// // 注入镜面光数据
-			// GLES20.glUniform4fv(mSpecLightHandler, 1,
-			// part.material.getSpecularBuffer());
+			 
 
 			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getTextureId(model.path,material.textureFile));
 			// 注入环境光光数据
@@ -278,9 +269,17 @@ public class ObjObject implements ObjectDrawable {
 
 		for (ObjModelPart part : model.parts)
 		{
-			if(part.material.textureFile==null) continue;
+			
 			String totalFileName = model.path + part.material.textureFile;
-			int textureId = ShaderUtil.loadTextureWithUtils(context.getAssets()
+			int textureId;
+			if(part.material.textureFile.equals(Material.DEFAULT_PNG)) 
+			{
+				 textureId = ShaderUtil.loadTextureWithUtils(context.getAssets()
+							.open("objObject/default.png"));
+			}
+			else
+				
+			  textureId = ShaderUtil.loadTextureWithUtils(context.getAssets()
 					.open(totalFileName));
 			textureMap.put(totalFileName, textureId);
 

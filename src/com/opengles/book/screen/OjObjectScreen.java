@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * 产生兔子的界面
  */
-public   class TuziScreen extends GLScreen {
+public   class OjObjectScreen extends GLScreen {
 
 
 	ObjectDrawable center;
@@ -35,7 +35,7 @@ public   class TuziScreen extends GLScreen {
     float xAngle;
     int sunAng=0;
 
-	public TuziScreen(Game game) {
+	public OjObjectScreen(Game game) {
 		super(game);
 
 		center = getCenterDrawable(game.getContext());
@@ -115,7 +115,7 @@ public   class TuziScreen extends GLScreen {
 	public void pause() {
 
 		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
-		GLES20.glDisable(GLES20.GL_CULL_FACE);
+		//GLES20.glDisable(GLES20.GL_CULL_FACE);
 
 	}
 
@@ -125,14 +125,14 @@ public   class TuziScreen extends GLScreen {
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-		GLES20.glEnable(GLES20.GL_CULL_FACE);
+		//GLES20.glEnable(GLES20.GL_CULL_FACE);
 		int width = glGame.getGLGraphics().getWidth();
 		int height = glGame.getGLGraphics().getHeight();
 		GLES20.glViewport(0, 0, width, height);
 		// ����GLSurfaceView�Ŀ�߱�
 		float ratio = (float) width / height;
 		// // ���ô˷����������͸��ͶӰ����
-		MatrixState.setFrustumProject(-ratio, ratio, -1, 1, 2,  110);
+		MatrixState.setFrustumProject(-ratio, ratio, -1, 1, 1,  110);
 
 		// ���ô˷������������9����λ�þ���
 
@@ -160,9 +160,10 @@ public   class TuziScreen extends GLScreen {
 	protected   ObjectDrawable getCenterDrawable(Context context)
     {
 
-        return  new ObjObject(context,"tz/","tz.obj");
-        
-       //return  new ObjObject(context,"","banana.obj");
+		// return  new ObjObject(context,"tz/","tz.obj");
+		//  return  new ObjObject(context,"cuboid/","cuboid.obj");
+		  //  return  new ObjObject(context,"","banana.obj");
+		 return  new ObjObject(context,"","teapot.obj");
     }
 
 }

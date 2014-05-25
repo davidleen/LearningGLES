@@ -9,7 +9,7 @@ import com.opengles.book.screen.GrayMapScreen;
 import com.opengles.book.screen.MainScreen;
 import com.opengles.book.screen.Reflect_BasketBall_Screen;
 import com.opengles.book.screen.TreeOnDesertScreen;
-import com.opengles.book.screen.TuziScreen;
+import com.opengles.book.screen.OjObjectScreen;
 
 import android.app.Activity;
 import android.app.ListActivity;
@@ -47,7 +47,7 @@ public class MainActivity extends ListActivity {
 
 		datas.add(info);
 
-		info = new MenuInfo("兔子（Obj）", TuziScreen.class.getName());
+		info = new MenuInfo("兔子（Obj）", OjObjectScreen.class.getName());
 
 		datas.add(info);
 
