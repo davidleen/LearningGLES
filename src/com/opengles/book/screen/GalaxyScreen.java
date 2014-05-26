@@ -190,8 +190,7 @@ public   class GalaxyScreen extends GLScreen {
 		LightSources.setAmbient(0.15f, 0.15f, 0.15f, 1f);
 		LightSources.setDiffuse(0.5f, 0.5f, 0.25f, 1f);
 		LightSources.setSpecLight(0.3f, 0.3f, 0.15f, 1f);
-		// 初始化变换矩阵
-		MatrixState.setInitStack();
+
 
 		moon.bind();
 		center.bind();

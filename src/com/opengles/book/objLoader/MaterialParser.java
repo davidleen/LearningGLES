@@ -17,17 +17,20 @@ public class MaterialParser {
 
     public static final String SPLIT_EXPRESSION = "[ ]+";
 
-    public static Material.MaterialList loadFile(Context context,String path, String fileName) throws IOException {
+    public static Material.MaterialList loadFile(Context context,String path, String fileName)  {
 
     	
     	 
         Material.MaterialList materials = new Material.MaterialList();
         String line;
         Material currentMtl = null;
+        try
+        {
+         InputStream in = null;
 
-        InputStream in = null;
 
-        in = context.getResources().getAssets().open(path+fileName);
+             in = context.getResources().getAssets().open(path+fileName);
+
 
         InputStreamReader isr = new InputStreamReader(in);
 
@@ -74,10 +77,14 @@ public class MaterialParser {
         }
 
         
-        if (currentMtl != null)
-            materials.add(currentMtl);
-        reader.close();
-        
+            if (currentMtl != null)
+                materials.add(currentMtl);
+            reader.close();
+        }catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+
         return materials;
 
     }

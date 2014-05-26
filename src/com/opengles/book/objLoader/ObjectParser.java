@@ -110,7 +110,9 @@ public class ObjectParser {
             short[] indexData = new short[triangleCount * VERTEX_COUNT_OF_TRIANGLE];
             int indicsDataStep = 0;
             for (Group group : groups) {
-            	
+
+
+                if(group.triangles.size()<=0) continue;
             	 
 
 
@@ -185,6 +187,7 @@ public class ObjectParser {
                     }
                 }
                 objModelPart.length=indicsDataStep-objModelPart.index;
+
                 objModelParts.add(objModelPart);
             }
             int totalSize = vertexDataList.size();

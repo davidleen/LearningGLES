@@ -152,7 +152,6 @@ public class ObjObject implements ObjectDrawable {
 	@Override
 	public void draw() {
 		GLES20.glUseProgram(mProgram);
-
 		// 启用位置向量数据
 		GLES20.glEnableVertexAttribArray(VERTEX_POS_INDEX);
 		// 启用法向量数据

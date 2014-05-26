@@ -16,6 +16,8 @@ import java.util.ArrayList;
  */
 public class Material {
 
+    private static final Material DefaultMaterial=new Material();
+
     public static final String DEFAULT_PNG = "default.png";
 	/**
      * 材料名称
@@ -155,7 +157,8 @@ public class Material {
             }
             
             Log.e("Test", "==== no found material by name:"+name);
-            return null;
+            //User default Material
+            return DefaultMaterial;
 
         }
 
