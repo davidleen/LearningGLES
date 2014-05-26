@@ -32,15 +32,17 @@ public   class OjObjectScreen extends GLScreen {
     private CameraController cameraController;
     LookAtCamera  camera;
 
+    private boolean isBinding=false;
+
     private List<ObjectDrawable> objects;
 
 	public OjObjectScreen(Game game) {
 		super(game);
         objects=new ArrayList<ObjectDrawable>();
-         objects.add(new ObjObject(game.getContext(),"","teapot.obj"));
-//        objects.add(new ObjObject(game.getContext(), "tz/","tz.obj"));
-        //  objects.add(new ObjObject(game.getContext(),"cuboid/","cuboid.obj"));
-             objects.add(new ObjObject(game.getContext(),"","shot.obj"));
+        objects.add(new ObjObject(game.getContext(),"","teapot.obj"));
+        objects.add(new ObjObject(game.getContext(), "tz/","tz.obj"));
+          objects.add(new ObjObject(game.getContext(),"cuboid/","cuboid.obj"));
+          objects.add(new ObjObject(game.getContext(),"","shot.obj"));
            objects.add(new ObjObject(game.getContext(),"","cube.obj"));
         objects.add(new ObjObject(game.getContext(),"","invader.obj"));
        currentObjectIndex=0;
@@ -74,13 +76,15 @@ public   class OjObjectScreen extends GLScreen {
         }
 
         timeCollapsedForObject+=deltaTime;
-        if (timeCollapsedForObject >=5f)
+        if (timeCollapsedForObject >=5f&&!isBinding)
         {
-            timeCollapsedForObject -= 5f;
+            isBinding=true;
             objects.get(currentObjectIndex).unBind();
            currentObjectIndex++;
             currentObjectIndex%=objects.size();
             objects.get(currentObjectIndex).bind();
+            timeCollapsedForObject  = 0f;
+            isBinding=false;
 
         }
 
@@ -143,8 +147,9 @@ public   class OjObjectScreen extends GLScreen {
 		LightSources.setAmbient(0.15f, 0.15f, 0.15f, 1f);
 		LightSources.setDiffuse(0.5f, 0.5f, 0.25f, 1f);
 		LightSources.setSpecLight(0.3f, 0.3f, 0.15f, 1f);
-
+        isBinding=true;
         objects.get(currentObjectIndex).bind();
+        isBinding=false ;
 
 
 	}

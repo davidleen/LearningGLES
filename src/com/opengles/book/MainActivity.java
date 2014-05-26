@@ -47,7 +47,7 @@ public class MainActivity extends ListActivity {
 
 		datas.add(info);
 
-		info = new MenuInfo("兔子（Obj）", OjObjectScreen.class.getName());
+		info = new MenuInfo("Obj文件解析展示", OjObjectScreen.class.getName());
 
 		datas.add(info);
 
