@@ -36,10 +36,10 @@ public class ObjObject implements ObjectDrawable {
 			+ VERTEX_NORMAL_SIZE
 			+ VERTEX_TEXTURE_CORD_SIZE)
 			* FloatUtils.RATIO_FLOATTOBYTE;
-	String TAG = "Teapot";
+	String TAG = ObjObject.this.getClass().getName();
 
 	int mProgram;// 着色器id
-	int muMVPMatrixHandle;// �ܱ任��������id
+	int muMVPMatrixHandle;//总变换矩阵handler
 	int mUMatrixHandle; // 物体变换矩阵句柄
 
 	int muLightLocationSun;
@@ -71,10 +71,10 @@ public class ObjObject implements ObjectDrawable {
 
 		// 创建program
 		String mVertexShader = ShaderUtil.loadFromAssetsFile(
-				"objObject/teapot_vertex.glsl",
+				getVertexFileName(),
 				context.getResources());
 		String mFragmentShader = ShaderUtil.loadFromAssetsFile(
-				"objObject/teapot_frag.glsl",
+				getFragmentFileName(),
 				context.getResources());
 		mProgram = ShaderUtil.createProgram(mVertexShader, mFragmentShader);
 
@@ -107,7 +107,12 @@ public class ObjObject implements ObjectDrawable {
 				"lightSpecular");
 		mabientLightHandler = GLES20.glGetUniformLocation(mProgram,
 				"abientLight");
+		
+		
+		onCreate(mProgram);
 	}
+
+	
 
 	@Override
 	public void bind() {
@@ -139,6 +144,9 @@ public class ObjObject implements ObjectDrawable {
 				MatrixState.cameraFB);
 
 		GLES20.glUseProgram(0);
+		
+		
+		onBind(mProgram);
 
 	}
 
@@ -146,7 +154,7 @@ public class ObjObject implements ObjectDrawable {
 	public void unBind() {
 		GLES20.glDeleteBuffers(2, vboIds, 0);
 		deleteTexture();
-
+		onUnBind(mProgram);
 	}
 
 	@Override
@@ -209,6 +217,9 @@ public class ObjObject implements ObjectDrawable {
 		// 注入太阳光位置 光线会转动
 		GLES20.glUniform3fv(muLightLocationSun, 1,
 				LightSources.lightPositionFBSun);
+		
+		
+		onDraw(mProgram);
 
 		List<ObjModelPart> partList = model.parts;
 
@@ -278,8 +289,7 @@ public class ObjObject implements ObjectDrawable {
 			}
 			else
 				
-			  textureId = ShaderUtil.loadTextureWithUtils(context.getAssets()
-					.open(totalFileName));
+			  textureId = ShaderUtil.loadTextureWithUtils(context, totalFileName,false );
 			textureMap.put(totalFileName, textureId);
 
 		}
@@ -311,4 +321,46 @@ public class ObjObject implements ObjectDrawable {
 		return result;
 	}
 
+	
+	
+	protected void onBind(int mProgram)
+	{
+		//let sub class do any more  for bind;
+	}
+	
+	protected void onUnBind(int mProgram)
+	{
+		
+		//let sub class do any more  for unbind;
+		
+	}
+	
+	
+	protected void onDraw(int mProgram)
+	{
+		//let sub class do any more  for bind to the value;
+	}
+	
+	protected void onCreate(int mProgram)
+	{
+		//let sub class do any more  for get handler ;
+	}
+	
+	 
+	
+	/**
+	 * @return
+	 */
+	protected String getFragmentFileName() {
+		return "objObject/frag.glsl";
+	}
+
+	/**
+	 * @return
+	 */
+	protected String getVertexFileName() {
+		return "objObject/vertex.glsl";
+	}
+	
+	
 }

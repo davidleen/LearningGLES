@@ -11,12 +11,14 @@ import com.opengles.book.framework.impl.GLScreen;
 import com.opengles.book.galaxy.CameraController;
 import com.opengles.book.galaxy.ObjObject;
 import com.opengles.book.galaxy.ObjectDrawable;
+import com.opengles.book.objects.TwistCubiod;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 产生兔子的界面
+ *  a screen for generate various object by  .obj file
  */
 public   class OjObjectScreen extends GLScreen {
 
@@ -39,12 +41,13 @@ public   class OjObjectScreen extends GLScreen {
 	public OjObjectScreen(Game game) {
 		super(game);
         objects=new ArrayList<ObjectDrawable>();
-        objects.add(new ObjObject(game.getContext(),"","teapot.obj"));
-        objects.add(new ObjObject(game.getContext(), "tz/","tz.obj"));
-          objects.add(new ObjObject(game.getContext(),"cuboid/","cuboid.obj"));
-          objects.add(new ObjObject(game.getContext(),"","shot.obj"));
-           objects.add(new ObjObject(game.getContext(),"","cube.obj"));
-        objects.add(new ObjObject(game.getContext(),"","invader.obj"));
+//        objects.add(new ObjObject(game.getContext(),"","teapot.obj"));
+   //     objects.add(new ObjObject(game.getContext(), "tz/","tz.obj"));
+        //   objects.add(new ObjObject(game.getContext(),"cuboid"+File.separator,"cuboid.obj"));
+           objects.add(new TwistCubiod(game.getContext() ));
+//          objects.add(new ObjObject(game.getContext(),"","shot.obj"));
+//           objects.add(new ObjObject(game.getContext(),"","cube.obj"));
+//        objects.add(new ObjObject(game.getContext(),"","invader.obj"));
        currentObjectIndex=0;
 
 
@@ -76,7 +79,7 @@ public   class OjObjectScreen extends GLScreen {
         }
 
         timeCollapsedForObject+=deltaTime;
-        if (timeCollapsedForObject >=5f&&!isBinding)
+        if (objects.size()>1&&timeCollapsedForObject >=5f&&!isBinding)
         {
             isBinding=true;
             objects.get(currentObjectIndex).unBind();
@@ -133,7 +136,7 @@ public   class OjObjectScreen extends GLScreen {
 		int width = glGame.getGLGraphics().getWidth();
 		int height = glGame.getGLGraphics().getHeight();
 		GLES20.glViewport(0, 0, width, height);
-		// ����GLSurfaceView�Ŀ�߱�
+		 
 		float ratio = (float) width / height;
 
         camera=new LookAtCamera(2,1/ratio,1,300);

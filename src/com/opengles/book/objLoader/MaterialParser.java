@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -72,7 +73,7 @@ public class MaterialParser {
             } else if (line.startsWith("map_Ka")||line.startsWith("map_Kd")||line.startsWith("map_bump")||line.startsWith("map_Ke")) {
                 String[] str = line.split(SPLIT_EXPRESSION);
                 if(str!=null&& str.length>1)
-                	currentMtl.setTextureFile(str[1]);
+                	currentMtl.setTextureFile(str[1].replace("\\", File.separator));
             }
         }
 
