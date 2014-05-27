@@ -30,6 +30,7 @@ public class ObjectParser {
         Material.MaterialList materialList = null;
 
 
+        AABB boundary=new AABB();
         Group part = new Group(new Material("defalult"));
         groups.add(part);
 
@@ -40,15 +41,20 @@ public class ObjectParser {
            BufferedReader br= openFile(context,path,fileName);
 
             String readString = null;
+            float x,y,z;
             while ((readString = br.readLine()) != null) {
                 String[] stringArray = readString.split(SPLIT_CHARS);
                 String prefix = stringArray[0].trim();
 
                 if (prefix.equalsIgnoreCase("v")) {
                     // 顶点。
-                    positions.add(Float.parseFloat(stringArray[1]));
-                    positions.add(Float.parseFloat(stringArray[2]));
-                    positions.add(Float.parseFloat(stringArray[3]));
+                     x=Float.parseFloat(stringArray[1]);
+                   y=Float.parseFloat(stringArray[2]);
+                   z=Float.parseFloat(stringArray[3]);
+                    boundary.update(x,y,z);
+                    positions.add(x);
+                    positions.add(y);
+                    positions.add(z);
 
                 } else if (prefix.equalsIgnoreCase("vt")) {
                     // 纹理
@@ -203,8 +209,8 @@ public class ObjectParser {
             normals.clear();
             textures.clear();
 
-
             ObjModel objModel = new ObjModel();
+            objModel.boundary=boundary;
             objModel.path=path;
             objModel.vertexData = vertexData;
             objModel.indexData=indexData;
@@ -214,11 +220,12 @@ public class ObjectParser {
 
 
         } catch (IOException e) {
-            e.printStackTrace();
+           throw new RuntimeException("analysis error on .obj" +  path + fileName+
+                   " file");
         }
 
 
-        return null;
+
     }
 
 

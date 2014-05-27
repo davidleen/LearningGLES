@@ -5,7 +5,6 @@ package com.opengles.book.framework.gl;
 import com.opengles.book.MatrixState;
 import com.opengles.book.math.Vector3;
 
-import android.opengl.GLU;
 
  
 
@@ -61,6 +60,11 @@ public class LookAtCamera  extends Camera3D{
 	{
 		lookAt.set(x,y,z);
 	}
+
+    public void setLookAt(Vector3 lookAt)
+    {
+        this.lookAt.set(lookAt);
+    }
 	
 	public void setMatrices( ) { 
 		MatrixState.setFrustumProject( -fieldOfView/2,fieldOfView/2, -fieldOfView*aspectRatio/2, fieldOfView*aspectRatio/2, near, far); 

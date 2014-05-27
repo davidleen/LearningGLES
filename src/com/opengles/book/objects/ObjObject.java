@@ -1,13 +1,11 @@
-package com.opengles.book.galaxy;
+package com.opengles.book.objects;
 
 import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
 import com.opengles.book.*;
-import com.opengles.book.objLoader.Material;
-import com.opengles.book.objLoader.ObjModel;
-import com.opengles.book.objLoader.ObjModelPart;
-import com.opengles.book.objLoader.ObjectParser;
+import com.opengles.book.galaxy.ObjectDrawable;
+import com.opengles.book.objLoader.*;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -51,7 +49,7 @@ public class ObjObject implements ObjectDrawable {
 	int mCameraPositionHandler;// 相机位置
 
 	// int textureId;
-	ObjModel model;
+	protected ObjModel model;
 	int[] vboIds;
 
 	private Context context;
@@ -372,5 +370,9 @@ public class ObjObject implements ObjectDrawable {
     @Override
     public void update(float deltaTime) {
 
+    }
+
+    public AABB getBoundary() {
+        return model.boundary;
     }
 }

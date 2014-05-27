@@ -1,6 +1,5 @@
 package com.opengles.book.objLoader;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -16,34 +15,7 @@ public class ObjModel {
     public List<ObjModelPart> parts;
     public short[] indexData;
 
+    public AABB boundary;
 
-//    public void setParts(List<ObjModelPart> parts)
-//    {
-//        this.parts=parts;
-//        int length=0;
-//        for(ObjModelPart part:parts)
-//        {
-//            length+=part.indexData.length;
-//
-//
-//        }
-//        indexData=new short[length];
-//        int index=0;
-//        for(ObjModelPart part:parts)
-//        {
-//            for(short value:part.indexData)
-//                indexData[index++]=value;
-//
-//        }
-//
-//
-//    }
 
-//    public short[] getIndexData() {
-//
-//
-//
-//        return indexData;
-//
-//    }
 }

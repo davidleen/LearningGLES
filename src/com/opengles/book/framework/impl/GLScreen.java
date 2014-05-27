@@ -8,7 +8,7 @@ import com.opengles.book.framework.Screen;
 public abstract class GLScreen extends Screen {
     protected   GLGraphics glGraphics;
     protected   GLGame glGame;
-    
+    protected String TAG=GLScreen.this.getClass().getName();
     public GLScreen(Game game) {
         super(game);
         iniGame(game);
