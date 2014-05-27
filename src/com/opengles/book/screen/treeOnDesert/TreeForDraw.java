@@ -80,6 +80,9 @@ public class TreeForDraw extends AbstractSimpleObject
 		 
 		return textureId;
 	}
-    
-    
+
+    @Override
+    public void update(float deltaTime) {
+
+    }
 }

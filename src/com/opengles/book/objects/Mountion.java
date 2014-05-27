@@ -415,4 +415,10 @@ public class Mountion  implements ObjectDrawable
 	    	}
 	    	return result;
 	    }
+
+
+    @Override
+    public void update(float deltaTime) {
+
+    }
 }

@@ -139,14 +139,15 @@ public class ObjObject implements ObjectDrawable {
 		GLES20.glUseProgram(mProgram);
 		// 绑定固定值， 会变换的数值 在draw中绑定。
 
-		// 注入相机位置数据
-		GLES20.glUniform3fv(mCameraPositionHandler, 1,
-				MatrixState.cameraFB);
+
+        onBind(mProgram);
+
+
 
 		GLES20.glUseProgram(0);
 		
 		
-		onBind(mProgram);
+
 
 	}
 
@@ -205,6 +206,11 @@ public class ObjObject implements ObjectDrawable {
 						stride,
 						offset
 				);
+
+
+        // 注入相机位置数据
+        GLES20.glUniform3fv(mCameraPositionHandler, 1,
+                MatrixState.cameraFB);
 
 		// 总变换矩阵
 		GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false,
@@ -361,6 +367,10 @@ public class ObjObject implements ObjectDrawable {
 	protected String getVertexFileName() {
 		return "objObject/vertex.glsl";
 	}
-	
-	
+
+
+    @Override
+    public void update(float deltaTime) {
+
+    }
 }

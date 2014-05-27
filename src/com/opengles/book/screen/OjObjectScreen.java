@@ -59,12 +59,9 @@ public   class OjObjectScreen extends GLScreen {
 	@Override
 	public void update(float deltaTime) {
 
+        objects.get(currentObjectIndex).update(deltaTime);
 		List<TouchEvent> touchEvents = glGame.getInput().getTouchEvents();
         cameraController.onTouchEvent(touchEvents);
-
-
-
-
         timeCollapsedForSun += deltaTime;
         if (timeCollapsedForSun >= 0.1f)
         {

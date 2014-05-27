@@ -139,4 +139,9 @@ public class Sky  extends AbstractSimpleObject{
 		 
 		return textureId;
 	}
+
+    @Override
+    public void update(float deltaTime) {
+
+    }
 }

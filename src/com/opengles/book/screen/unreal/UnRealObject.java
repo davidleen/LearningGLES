@@ -117,7 +117,7 @@ public class UnRealObject implements ObjectDrawable {
 		try {
 			createTexture(context, model);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 
@@ -270,8 +270,6 @@ public class UnRealObject implements ObjectDrawable {
 	 * 加载纹理
 	 * 
 	 * @param context
-	 * @param path
-	 * @param fileName
 	 * @throws IOException
 	 */
 	public void createTexture(Context context, ObjModel model)
@@ -315,4 +313,9 @@ public class UnRealObject implements ObjectDrawable {
 		return result;
 	}
 
+
+    @Override
+    public void update(float deltaTime) {
+
+    }
 }

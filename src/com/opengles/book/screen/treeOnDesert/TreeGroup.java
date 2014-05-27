@@ -61,5 +61,9 @@ public class TreeGroup implements ObjectDrawable
     	}
 		
 	}
-    
+
+    @Override
+    public void update(float deltaTime) {
+
+    }
 }

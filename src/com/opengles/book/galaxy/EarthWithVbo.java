@@ -255,4 +255,9 @@ public class EarthWithVbo implements ObjectDrawable {
 		GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	}
+
+    @Override
+    public void update(float deltaTime) {
+
+    }
 }

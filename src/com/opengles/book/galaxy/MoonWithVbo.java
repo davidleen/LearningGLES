@@ -263,4 +263,8 @@ public class MoonWithVbo implements ObjectDrawable
 		GLES20.glDisableVertexAttribArray(VERTEX_TEXCOORD1_INDEX);
 	}
 
+    @Override
+    public void update(float deltaTime) {
+
+    }
 }

@@ -89,17 +89,10 @@ public    class RectangleObject extends AbstractSimpleObject{
 		 
 		return textureId;
 	}
-	 
 
-	 
 
-	 
+    @Override
+    public void update(float deltaTime) {
 
-	 
-	
-	
-	
-	
-	
-
+    }
 }

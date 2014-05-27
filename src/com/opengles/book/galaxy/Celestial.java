@@ -119,4 +119,9 @@ public class Celestial implements ObjectDrawable {
 
 		GLES20.glDrawArrays(GLES20.GL_POINTS, 0, vCount);
 	}
+
+    @Override
+    public void update(float deltaTime) {
+
+    }
 }
