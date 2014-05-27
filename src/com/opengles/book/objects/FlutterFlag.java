@@ -344,16 +344,10 @@ public   class FlutterFlag  implements ObjectDrawable {
 	        //获取横向长度总跨度引用
 	        muWidthSpanHandle=GLES20.glGetUniformLocation(mProgram, "uWidthSpan");  
 	    }
-	    
-	    
-	   
-	    
-	    
-	    
-	    
-	    
-	    
-	    
-	  
-	 
+
+
+    @Override
+    public void update(float deltaTime) {
+
+    }
 }

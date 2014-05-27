@@ -63,8 +63,10 @@ public class PoetPanel extends RectangleObject{
 			 
 		}
 	}
-	
-	
-	
-	
+
+
+    @Override
+    public void update(float deltaTime) {
+
+    }
 }

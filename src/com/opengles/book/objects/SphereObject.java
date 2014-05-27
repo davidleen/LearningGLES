@@ -56,10 +56,9 @@ public class SphereObject extends AbstractSimpleObject{
 		 
 		return textureId;
 	}
-	
-	
-	
-	
-	
 
+    @Override
+    public void update(float deltaTime) {
+
+    }
 }

@@ -85,4 +85,8 @@ public class MenuObject extends RectangleObject{
 		}
 	}
 
+    @Override
+    public void update(float deltaTime) {
+
+    }
 }

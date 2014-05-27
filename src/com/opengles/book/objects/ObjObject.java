@@ -1,13 +1,11 @@
-package com.opengles.book.galaxy;
+package com.opengles.book.objects;
 
 import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
 import com.opengles.book.*;
-import com.opengles.book.objLoader.Material;
-import com.opengles.book.objLoader.ObjModel;
-import com.opengles.book.objLoader.ObjModelPart;
-import com.opengles.book.objLoader.ObjectParser;
+import com.opengles.book.galaxy.ObjectDrawable;
+import com.opengles.book.objLoader.*;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -51,7 +49,7 @@ public class ObjObject implements ObjectDrawable {
 	int mCameraPositionHandler;// 相机位置
 
 	// int textureId;
-	ObjModel model;
+	protected ObjModel model;
 	int[] vboIds;
 
 	private Context context;
@@ -139,14 +137,15 @@ public class ObjObject implements ObjectDrawable {
 		GLES20.glUseProgram(mProgram);
 		// 绑定固定值， 会变换的数值 在draw中绑定。
 
-		// 注入相机位置数据
-		GLES20.glUniform3fv(mCameraPositionHandler, 1,
-				MatrixState.cameraFB);
+
+        onBind(mProgram);
+
+
 
 		GLES20.glUseProgram(0);
 		
 		
-		onBind(mProgram);
+
 
 	}
 
@@ -205,6 +204,11 @@ public class ObjObject implements ObjectDrawable {
 						stride,
 						offset
 				);
+
+
+        // 注入相机位置数据
+        GLES20.glUniform3fv(mCameraPositionHandler, 1,
+                MatrixState.cameraFB);
 
 		// 总变换矩阵
 		GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false,
@@ -361,6 +365,14 @@ public class ObjObject implements ObjectDrawable {
 	protected String getVertexFileName() {
 		return "objObject/vertex.glsl";
 	}
-	
-	
+
+
+    @Override
+    public void update(float deltaTime) {
+
+    }
+
+    public AABB getBoundary() {
+        return model.boundary;
+    }
 }

@@ -7,6 +7,9 @@ uniform vec4 lightSpecular;	//镜面光强度
 uniform vec3 uCamera;	//摄像机位置
  
 
+uniform float angleSpan;
+uniform float startY;
+uniform float ySpan;
 
 attribute vec3 aPosition;  //顶点位置
 attribute vec3 aNormal;    //顶点法向量
@@ -25,16 +28,17 @@ void pointLight(					//定位光光照计算的方法
   in vec3 lightLocation,			//光源位置
   in vec4 lightAmbient,			//环境光强度
   in vec4 lightDiffuse,			//散射光强度
-  in vec4 lightSpecular			//镜面光强度
+  in vec4 lightSpecular,			//镜面光强度
+  in vec3 tempPosition			//顶点位置
 ){
   ambient=lightAmbient;			//直接得出环境光的最终强度  
-  vec3 normalTarget=aPosition+normal;	//计算变换后的法向量
-  vec3 newNormal=(uMMatrix*vec4(normalTarget,1)).xyz-(uMMatrix*vec4(aPosition,1)).xyz;
+  vec3 normalTarget=tempPosition+normal;	//计算变换后的法向量
+  vec3 newNormal=(uMMatrix*vec4(normalTarget,1)).xyz-(uMMatrix*vec4(tempPosition,1)).xyz;
   newNormal=normalize(newNormal); 	//对法向量规格化
   //计算从表面点到摄像机的向量
-  vec3 eye= normalize(uCamera-(uMMatrix*vec4(aPosition,1)).xyz);  
+  vec3 eye= normalize(uCamera-(uMMatrix*vec4(tempPosition,1)).xyz);
   //计算从表面点到光源位置的向量vp
-  vec3 vp= normalize(lightLocation-(uMMatrix*vec4(aPosition,1)).xyz);  
+  vec3 vp= normalize(lightLocation-(uMMatrix*vec4(tempPosition,1)).xyz);
   vp=normalize(vp);//格式化vp
   vec3 halfVector=normalize(vp+eye);	//求视线与光线的半向量    
   float shininess=50.0;				//粗糙度，越小越光滑
@@ -49,19 +53,17 @@ void pointLight(					//定位光光照计算的方法
 void main()     
 { 
 
-	float startY=-2.0;
-	float ySpan=20.0;
-	float angleSpan=1.6;
+
 	
 	vec3 tempPosition=aPosition;
-	if(aPosition.y>0.0)
+	if(tempPosition.y>startY)
 	{
 		
-		float currentAngle=(aPosition.y-startY)/ySpan*angleSpan;
+		float currentAngle=(tempPosition.y-startY)/ySpan*angleSpan;
 		
 		
-		float newX= (aPosition.x * cos(currentAngle)-aPosition.z * sin(currentAngle));
-		float newZ= (aPosition.x * sin(currentAngle)+aPosition.z * cos(currentAngle));
+		float newX= (tempPosition.x * cos(currentAngle)-tempPosition.z * sin(currentAngle));
+		float newZ= (tempPosition.x * sin(currentAngle)+tempPosition.z * cos(currentAngle));
 		 
 		tempPosition.x=newX;
 		tempPosition.z=newZ;
@@ -70,7 +72,7 @@ void main()
    gl_Position = uMVPMatrix * vec4( tempPosition ,1); //根据总变换矩阵计算此次绘制此顶点位置  
    
    vec4 ambientTemp, diffuseTemp, specularTemp;   //存放环境光、散射光、镜面反射光的临时变量      
-   pointLight(normalize(aNormal),ambientTemp,diffuseTemp,specularTemp,uLightLocation,abientLight,lightDiffuse,lightSpecular);
+   pointLight(normalize(aNormal),ambientTemp,diffuseTemp,specularTemp,uLightLocation,abientLight,lightDiffuse,lightSpecular,tempPosition);
    
    ambient=ambientTemp;
    diffuse=diffuseTemp;

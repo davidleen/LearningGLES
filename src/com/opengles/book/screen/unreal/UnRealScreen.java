@@ -8,7 +8,6 @@ import com.opengles.book.framework.Game;
 import com.opengles.book.framework.Input.TouchEvent;
 import com.opengles.book.framework.gl.FPSCounter;
 import com.opengles.book.framework.impl.GLScreen;
-import com.opengles.book.galaxy.ObjObject;
 import com.opengles.book.galaxy.ObjectDrawable;
 
 import java.util.List;
