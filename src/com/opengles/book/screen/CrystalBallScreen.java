@@ -1,6 +1,8 @@
 package com.opengles.book.screen;
 
 import android.opengl.GLES20;
+
+import com.opengles.book.LightSources;
 import com.opengles.book.MatrixState;
 
 import com.opengles.book.framework.Game;
@@ -35,7 +37,8 @@ public class CrystalBallScreen extends GLScreen{
 
 
 
-
+	 private float timeCollapsedForSun = 0;
+	    int sunAng=0;
 
 	private static int cameraRadias=70;
 
@@ -47,6 +50,8 @@ public class CrystalBallScreen extends GLScreen{
      private CrystalBallObject  object;
 
 
+     
+      
 
 
 	public CrystalBallScreen(Game game) {
@@ -62,7 +67,18 @@ public class CrystalBallScreen extends GLScreen{
 
         cameraController.onTouchEvent(touchEvents);
 
-
+        timeCollapsedForSun += deltaTime;
+        if (timeCollapsedForSun >= 0.1f)
+        {
+            timeCollapsedForSun -= 0.1f;
+            sunAng +=3 ;
+            if (sunAng > 360)
+                sunAng -= 360;
+            double radias = Math.toRadians(sunAng);
+            LightSources.setSunLightPosition(
+                    (int) (1000 * Math.cos(radias)), 1,
+                    (int) (1000 * Math.sin(radias)));
+        }
 
 
 
@@ -92,7 +108,7 @@ public class CrystalBallScreen extends GLScreen{
 
 	@Override
 	public void resume() {
-		GLES20.glClearColor(1.0f, 1.0f, 1.0f, 0.5f);
+		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
 
 		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 		 

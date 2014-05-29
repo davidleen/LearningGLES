@@ -1,8 +1,9 @@
 uniform mat4 uMVPMatrix; //总变换矩阵
 uniform mat4 uMMatrix;//物体变换矩阵
+uniform vec3 uCamera;	//摄像机位置
 attribute vec3 aPosition;  //顶点位置
 attribute vec3 aNormal;  //向量位置
-uniform vec3 uCamera;	//摄像机位置
+
 attribute vec2 aTexCoor;    //顶点纹理坐标
 uniform vec3 uLightLocation;	//光源位置
 uniform vec4 abientLight;	//环境光强度
@@ -35,13 +36,15 @@ void pointLight(					//定位光光照计算的方法
   in vec4 lightSpecular			//镜面光强度
 ){
   ambient=lightAmbient;			//直接得出环境光的最终强度
+  //转置后
+  vec3 newPosition=(uMMatrix*vec4(aPosition,1)).xyz;
   vec3 normalTarget=aPosition+normal;	//计算变换后的法向量
   vec3 newNormal=(uMMatrix*vec4(normalTarget,1)).xyz-(uMMatrix*vec4(aPosition,1)).xyz;
   newNormal=normalize(newNormal); 	//对法向量规格化
   //计算从表面点到摄像机的向量
-  vec3 eye= normalize(uCamera-(uMMatrix*vec4(aPosition,1)).xyz);
+  vec3 eye= normalize(uCamera-newPosition);
   //计算从表面点到光源位置的向量vp
-  vec3 vp= normalize(lightLocation-(uMMatrix*vec4(aPosition,1)).xyz);
+  vec3 vp= normalize(lightLocation-newPosition);
   vp=normalize(vp);//格式化vp
   vec3 halfVector=normalize(vp+eye);	//求视线与光线的半向量
   float shininess=50.0;				//粗糙度，越小越光滑

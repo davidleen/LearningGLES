@@ -84,16 +84,21 @@ public   class CrystalBallObject implements ObjectDrawable {
 
     private Context context;
 
+    
+    private CubeWall wall;
     // Sphere sphere;
 
         public CrystalBallObject(Context context)
         {
 
         this.context=context;
-           model  = ObjectParser.parse(context, "twistcuboid/", "cuboid.obj");
-
+         //  model  = ObjectParser.parse(context, "tz/", "tz.obj");
+        //   model  = ObjectParser.parse(context, "twistcuboid/", "cuboid.obj");
+           model  = ObjectParser.parse(context, "sphere/", "sphere.obj");
          //   sphere=new Sphere(5,true);
             cubeTexture=new CubeTexture(context.getResources(),"objObject/default.png");
+            
+            wall=new CubeWall(cubeTexture);
             //初始化shader
             initShader(context);
         }
@@ -124,12 +129,14 @@ public   class CrystalBallObject implements ObjectDrawable {
 
 
             cubeTexture.reload();
+            wall.bind();
+            
             List<ObjModelPart> partList = model.parts;
             int size = partList.size();
             for (int i = 0; i < size; i++) {
                 ObjModelPart part = partList.get(i);
 
-                TextureMap.instance.create(context, model.path + part.material.textureFile);
+                TextureMap.create(context, model.path + part.material.textureFile);
             }
 
 		}
@@ -163,14 +170,15 @@ public   class CrystalBallObject implements ObjectDrawable {
 	   	 GLES20.glUseProgram(mProgram);
 
 
+	   	 
+	   	 wall.draw();
+	   	 
             GLES20.glEnable(GLES20.GL_TEXTURE_CUBE_MAP);
-	     	 //绑定纹理  GL_TEXTURE0 对应 0
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-
-        //    GLES20.glBindTexture ( GLES20.GL_TEXTURE_CUBE_MAP, cubeTextureId );
+ 
            cubeTexture.bind();
-           GLES20.glUniform1f(cubeMapHandler,0);
-
+           GLES20.glUniform1f(cubeMapHandler,0); 
+           
+           
             //注入总变换矩阵
 	        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, MatrixState.getFinalMatrix(), 0);
             //注入物体变换矩阵
@@ -183,13 +191,12 @@ public   class CrystalBallObject implements ObjectDrawable {
 
             GLES20.glUniform3fv(uCameraHandler,1,MatrixState.cameraFB);
 
-	         //Log.d(TAG, "alphaThreadHold:"+alphaThreadHold);
-
+	         
 
 	        // 启用位置向量数据
 			GLES20.glEnableVertexAttribArray(maPositionHandle);
 			// 启用法向量数据
-			//GLES20.glEnableVertexAttribArray( );
+			 GLES20.glEnableVertexAttribArray(maNormalHandle );
 			//启用纹理
 			GLES20.glEnableVertexAttribArray(maTexCoorHandle);
 
@@ -236,21 +243,21 @@ public   class CrystalBallObject implements ObjectDrawable {
 
             List<ObjModelPart> partList = model.parts;
             //绑定纹理  GL_TEXTURE1 对应 1
-            GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
             int size = partList.size();
             for (int i = 0; i < size; i++) {
                 ObjModelPart part = partList.get(i);
                 if(part.length<=0) continue;
                 Material material = part.material;
-                LightSources.setAmbient(material.ambientColor[0],material.ambientColor[1],material.ambientColor[2],material.alpha);
-                LightSources.setDiffuse(material.diffuseColor[0],material.diffuseColor[1],material.diffuseColor[2],material.alpha);
+                 LightSources.setAmbient(material.ambientColor[0],material.ambientColor[1],material.ambientColor[2],material.alpha);
+                 LightSources.setDiffuse(material.diffuseColor[0],material.diffuseColor[1],material.diffuseColor[2],material.alpha);
                 LightSources.setSpecLight(material.specularColor[0],material.specularColor[1],material.specularColor[2],material.alpha);
 
 
 
 
                 TextureMap.instance.get(model.path+material.textureFile).bind();
-                GLES20.glUniform1f(mMapLocHandler,1);
+                GLES20.glUniform1f(mMapLocHandler,0);
 
                 // 注入环境光光数据
                 GLES20.glUniform4fv(mabientLightHandler, 1,
@@ -270,15 +277,7 @@ public   class CrystalBallObject implements ObjectDrawable {
 
             }
 
-            // 解除绑定
-            GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
-            GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
-
-
-
-
-	        //can close these handler below  at will
-			// jiechu
+            // 解除绑定 
 			GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
 			GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
 			// 启用位置向量数据

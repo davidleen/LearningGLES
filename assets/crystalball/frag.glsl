@@ -19,10 +19,12 @@ void main()
     //  gl_FragColor=bcolor ;
        //   gl_FragColor = textureCube(sTexture, vec3(0.5,0.5,0.5));
 
-  //    vec3 v_reflect=reflect(v_incident,v_normal);
-   //   gl_FragColor = textureCube(sTexture, v_reflect);
+      vec3 v_reflect=reflect(-v_incident,v_normal);
+     vec4  finalCubeColor = textureCube(sTexture, v_reflect);
       //将计算出的颜色给此片元
-         vec4 finalColor=texture2D(mMapLoc, vTextureCoord);
- gl_FragColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
-    //gl_FragColor=gl_FragColor*alphaThreadHold;
+        vec4 finalColor=texture2D(mMapLoc, vTextureCoord);
+        finalColor=finalColor*0.9 +finalCubeColor *0.1;
+        finalColor=finalColor*ambient+finalColor*specular+finalColor*diffuse;
+  		gl_FragColor = finalColor;
+   
 }              

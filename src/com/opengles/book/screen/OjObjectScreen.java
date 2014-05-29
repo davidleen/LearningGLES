@@ -29,8 +29,9 @@ public   class OjObjectScreen extends GLScreen {
 	private int currentObjectIndex;
 
 	FPSCounter counter;
-	private float timeCollapsedForSun = 0;;
-    private float timeCollapsedForObject = 0;;
+	
+    private float timeCollapsedForObject = 0;
+    private float timeCollapsedForSun = 0;
     int sunAng=0;
 
 

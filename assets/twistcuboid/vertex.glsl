@@ -29,7 +29,8 @@ void pointLight(					//定位光光照计算的方法
   in vec4 lightAmbient,			//环境光强度
   in vec4 lightDiffuse,			//散射光强度
   in vec4 lightSpecular,			//镜面光强度
-  in vec3 tempPosition			//顶点位置
+  //顶点位置
+  in vec3 tempPosition			
 ){
   ambient=lightAmbient;			//直接得出环境光的最终强度  
   vec3 normalTarget=tempPosition+normal;	//计算变换后的法向量
