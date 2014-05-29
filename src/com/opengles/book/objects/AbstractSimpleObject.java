@@ -23,16 +23,17 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 	
 	protected String TAG=AbstractSimpleObject.this.getClass().getName();
 	
-	
+
+
 	 
 	
 	protected static final int VERTEX_POS_SIZE = 3;// xyz
-	//protected static final int VERTEX_NORMAL_SIZE = 3;// xyz
-	protected static final int VERTEX_TEXCOORD0_SIZE = 2;// s t
+	 protected static final int VERTEX_NORMAL_SIZE = 3;// xyz
+	protected static final int VERTEX_TEXCOORD_SIZE = 2;// s t
 
 	protected static final int STRIP_SIZE = (VERTEX_POS_SIZE
 			//+ VERTEX_NORMAL_SIZE
-			+ VERTEX_TEXCOORD0_SIZE)
+			+ VERTEX_TEXCOORD_SIZE)
 			* FloatUtils.RATIO_FLOATTOBYTE;
 	
 	int mProgram;//自定义渲染管线程序id
@@ -168,7 +169,7 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 			GLES20.glVertexAttribPointer
 					(
 							maTexCoorHandle,
-							VERTEX_TEXCOORD0_SIZE,
+                            VERTEX_TEXCOORD_SIZE,
 							GLES20.GL_FLOAT,
 							false,
 							stride,
@@ -249,6 +250,9 @@ public abstract class AbstractSimpleObject  implements ObjectDrawable {
 	    {
 	    	this.alphaThreadHold=alphaThreadHold;
 	    }
-	  
+
+
+
+
 	 
 }

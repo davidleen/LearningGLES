@@ -5,14 +5,25 @@ import java.nio.FloatBuffer;
  
 
 public class LightSources {
-	static float[] ambient = new float[4];
+	static float[] ambient = new float[4] ;
 	public static FloatBuffer ambientBuffer=  FloatUtils.FloatArrayToNativeBuffer(ambient);
-	public static float[] diffuse = new float[4];
-	public static FloatBuffer diffuseBuffer=FloatUtils.FloatArrayToNativeBuffer(diffuse);
+    static
+    {
+        setAmbient(0.15f, 0.15f, 0.15f, 1f);
+    }
 
-	public static float[] specLight = new float[4];
+	public static float[] diffuse = new float[4] ;
+	public static FloatBuffer diffuseBuffer=FloatUtils.FloatArrayToNativeBuffer(diffuse);
+    static
+    {
+        setDiffuse(0.5f, 0.5f, 0.25f, 1f);
+    }
+	public static float[] specLight = new float[4] ;
 	public static FloatBuffer specLightBuffer=FloatUtils.FloatArrayToNativeBuffer(specLight);
-	
+    static
+    {
+        setSpecLight(0.3f, 0.3f, 0.15f, 1f);
+    }
 	public static void setAmbient(int r, int g, int b, int a)
 	{
 
@@ -62,8 +73,14 @@ public class LightSources {
 
 	}
 
-	public static FloatBuffer lightPositionFBSun;
+
 	public static float[] lightPositionSun = new float[3];
+    public static FloatBuffer lightPositionFBSun= FloatUtils
+            .FloatArrayToNativeBuffer(lightPositionSun);
+    static
+    {
+        setSunLightPosition(0,0,1000);
+    }
 
 	/**
 	 * 设置太阳位置
@@ -77,8 +94,8 @@ public class LightSources {
 		lightPositionSun[0] = x;
 		lightPositionSun[1] = y;
 		lightPositionSun[2] = z;
-		lightPositionFBSun = FloatUtils
-				.FloatArrayToNativeBuffer(lightPositionSun);
+        lightPositionFBSun.put(lightPositionSun);
+        lightPositionFBSun.flip();
 
 	}
 }

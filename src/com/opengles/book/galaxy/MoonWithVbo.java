@@ -46,9 +46,7 @@ public class MoonWithVbo implements ObjectDrawable
 
 	int mMapLocImageId;
 
-//	float xAngle = 0;// ��x����ת�ĽǶ�
-//	float yAngle = 0;// ��y����ת�ĽǶ�
-//	float zAngle = 0;// ��z����ת�ĽǶ�
+
 
 	int[] vboIds;
 	int indicsLength;

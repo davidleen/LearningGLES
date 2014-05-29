@@ -231,7 +231,6 @@ public class ShaderUtil {
 			
 			 
 			GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
-			 
 			 //自动生成Mipmap纹理
 			if(isMipMap)
 	         GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);

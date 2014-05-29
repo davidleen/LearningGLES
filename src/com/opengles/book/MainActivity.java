@@ -4,12 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.opengles.book.galaxy.GalaxyGame;
-import com.opengles.book.screen.GalaxyScreen;
-import com.opengles.book.screen.GrayMapScreen;
-import com.opengles.book.screen.MainScreen;
-import com.opengles.book.screen.Reflect_BasketBall_Screen;
-import com.opengles.book.screen.TreeOnDesertScreen;
-import com.opengles.book.screen.OjObjectScreen;
+import com.opengles.book.screen.*;
 
 import android.app.Activity;
 import android.app.ListActivity;
@@ -54,6 +49,10 @@ public class MainActivity extends ListActivity {
 		info = new MenuInfo("地球星空", GalaxyScreen.class.getName());
 
 		datas.add(info);
+
+        info = new MenuInfo("水晶球", CrystalBallScreen.class.getName());
+
+        datas.add(info);
 
 		MenuAdapter adapter = new MenuAdapter(this, datas);
 

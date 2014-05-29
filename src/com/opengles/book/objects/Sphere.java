@@ -7,6 +7,7 @@ import java.util.Random;
 import android.util.Log;
 
 import com.opengles.book.BuildConfig;
+import com.opengles.book.FloatUtils;
 import com.opengles.book.R;
 
 /**
@@ -21,8 +22,12 @@ public class Sphere {
 	 
 	public float[] attributes;
 	public short[] indics;
+    protected static final int VERTEX_POS_SIZE = 3;// xyz
+    protected static final int VERTEX_NORMAL_SIZE = 3;// xyz
+    protected static final int VERTEX_TEXCOORD_SIZE = 2;// s t
 
-	 
+
+             ;
 
 	int angleSpanIndegree = 10;
 	int rowCount = 180 / angleSpanIndegree + 1;
@@ -40,13 +45,23 @@ public class Sphere {
 
 	public Sphere(float r)
 	{
-		createData(r);
+		createData(r,false);
 	}
 
-	public void createData(float r)
+    public Sphere(float r,boolean hasNormal)
+    {
+        createData(r,true);
+    }
+
+	public void createData(float r,boolean  hasNormal)
 	{
 		 
-		int 	stride =AbstractSimpleObject.STRIP_SIZE;
+		int 	stride =
+                VERTEX_POS_SIZE+
+                        (hasNormal? VERTEX_NORMAL_SIZE:0)+
+                + VERTEX_TEXCOORD_SIZE;
+
+
 		float angleSpanInRadian = (float) Math.toRadians(angleSpanIndegree);
 		attributes = new float[totalCount
 				* stride];
@@ -84,14 +99,17 @@ public class Sphere {
 				// attributes[position++] = random.nextInt((int) r);
 				// attributes[position++] = random.nextInt((int) r);
 				// // 法向量值
-//				attributes[position++] = x;
-//				attributes[position++] = y;
-//				attributes[position++] = z;
+                if(hasNormal)
+                {
+				attributes[position++] = x ;
+				attributes[position++] = y ;
+				attributes[position++] =z ;
+                }
 				// �������
 				float s = 1 - j * pieceofImageS; 
-				float t = 1 - i * pieceofImageT ; // 日景位置t
-				attributes[position++] = s;// 日景位置s
-				attributes[position++] = t;// 日景位置t 
+				float t = 1 - i * pieceofImageT ;
+				attributes[position++] = s;
+				attributes[position++] = t;
 			 
 				 
 
@@ -108,7 +126,7 @@ public class Sphere {
 				// v1_____v3
 				// /| |
 				// v0|_____|v2
-				short v0 = (short) (i * columnCount + j); // ��ǰ�ڵ�
+				short v0 = (short) (i * columnCount + j); //
 				short v1 = (short) ((i + 1) * columnCount + j);
 				short v2 = (short) (i * columnCount + j + 1);
 				short v3 = (short) ((i + 1) * columnCount + j + 1);

@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import android.content.res.Resources;
 import android.opengl.GLES20;
 import com.opengles.book.R;
+import com.opengles.book.framework.gl.Texture;
 
 public class cube extends Vertices {
 

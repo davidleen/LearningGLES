@@ -4,6 +4,8 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
 import com.opengles.book.*;
+import com.opengles.book.framework.gl.CubeTexture;
+import com.opengles.book.framework.gl.Texture;
 import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.objLoader.*;
 
@@ -56,6 +58,11 @@ public class ObjObject implements ObjectDrawable {
 
 	Map<String, Integer> textureMap = new HashMap<String, Integer>();
 
+
+
+
+    public Texture texture;
+
 	public ObjObject(Context context)
 	{
 		this(context, "tz/", "tz.obj");
@@ -65,7 +72,10 @@ public class ObjObject implements ObjectDrawable {
 	{
 
 		this.context = context;
+
 		model = ObjectParser.parse(context, path, fileName);
+
+
 
 		// 创建program
 		String mVertexShader = ShaderUtil.loadFromAssetsFile(
@@ -91,11 +101,11 @@ public class ObjObject implements ObjectDrawable {
 		// 物体运动针id
 		mUMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMMatrix");
 
-		muLightLocationSun = GLES20.glGetUniformLocation(mProgram,
-				"uLightLocation");
 
 		mCameraPositionHandler = GLES20.glGetUniformLocation(mProgram,
 				"cameraPosition");
+        muLightLocationSun = GLES20.glGetUniformLocation(mProgram,
+                "uLightLocation");
 
 		// 材料光属性
 		mDiffuseLightHandler = GLES20.glGetUniformLocation(mProgram,
@@ -163,6 +173,7 @@ public class ObjObject implements ObjectDrawable {
 		GLES20.glEnableVertexAttribArray(VERTEX_POS_INDEX);
 		// 启用法向量数据
 		GLES20.glEnableVertexAttribArray(VERTEX_NORMAL_INDEX);
+         //启用纹理数据
 		GLES20.glEnableVertexAttribArray(VERTEX_TEXTURE_CORD_INDEX);
 
 		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboIds[0]);
