@@ -3,26 +3,14 @@ package com.opengles.book.screen;
 import android.opengl.GLES20;
 
 import com.opengles.book.LightSources;
-import com.opengles.book.MatrixState;
 
 import com.opengles.book.framework.Game;
 import com.opengles.book.framework.Input.TouchEvent;
-import com.opengles.book.framework.gl.CubeTexture;
 import com.opengles.book.framework.gl.LookAtCamera;
-import com.opengles.book.framework.gl.Texture;
 import com.opengles.book.framework.impl.GLScreen;
 import com.opengles.book.galaxy.CameraController;
-import com.opengles.book.galaxy.ObjectDrawable;
-import com.opengles.book.objLoader.ObjModel;
-import com.opengles.book.objLoader.ObjectParser;
-import com.opengles.book.objects.CrystalBallObject;
-import com.opengles.book.objects.ObjObject;
-import com.opengles.book.objects.RectangleObject;
-import com.opengles.book.objects.Sphere;
-import com.opengles.book.screen.treeOnDesert.TreeGroup;
+import com.opengles.book.objects.*;
 
-import java.io.File;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,7 +28,7 @@ public class CrystalBallScreen extends GLScreen{
 	 private float timeCollapsedForSun = 0;
 	    int sunAng=0;
 
-	private static int cameraRadias=70;
+	private static int cameraRadian =70;
 
 	float ratio;
 
@@ -49,7 +37,7 @@ public class CrystalBallScreen extends GLScreen{
 
      private CrystalBallObject  object;
 
-
+    private Sky sky;
      
       
 
@@ -58,6 +46,7 @@ public class CrystalBallScreen extends GLScreen{
 		super(game);
 
       object=new CrystalBallObject(game.getContext());
+        sky=new Sky(game.getContext(),cameraRadian*2);
 	}
 
 	@Override
@@ -95,6 +84,7 @@ public class CrystalBallScreen extends GLScreen{
 
                 //设置观察点。
                 camera.setMatrices();
+               sky.draw();
               object.draw();
 
 
@@ -102,8 +92,9 @@ public class CrystalBallScreen extends GLScreen{
 
 	@Override
 	public void pause() {
-		 
+        sky.unBind();
         object.unBind();;
+
 	}
 
 	@Override
@@ -121,7 +112,7 @@ public class CrystalBallScreen extends GLScreen{
 
 
 
-
+        sky.bind();
         object.bind();
     }
 	
@@ -135,7 +126,7 @@ public class CrystalBallScreen extends GLScreen{
 
     private void setCamera()
     {
-        camera=new LookAtCamera(2, 1/ratio,1, 100);
+        camera=new LookAtCamera(2, 1/ratio,1, 1000);
         cameraController=new CameraController( glGame.getGLGraphics());
         cameraController.setListener(new CameraController.CameraUpdateListener() {
             @Override
@@ -143,7 +134,7 @@ public class CrystalBallScreen extends GLScreen{
 
             }
         });
-        camera.setPosition(0.0f,0,cameraRadias);
+        camera.setPosition(0.0f,0, cameraRadian);
         camera.setUp(0,1,0);
         camera.setLookAt(0f,0,0f) ;
         cameraController.setCamera(camera);

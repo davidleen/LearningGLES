@@ -85,7 +85,7 @@ public   class CrystalBallObject implements ObjectDrawable {
     private Context context;
 
     
-    private CubeWall wall;
+
     // Sphere sphere;
 
         public CrystalBallObject(Context context)
@@ -96,9 +96,12 @@ public   class CrystalBallObject implements ObjectDrawable {
         //   model  = ObjectParser.parse(context, "twistcuboid/", "cuboid.obj");
            model  = ObjectParser.parse(context, "sphere/", "sphere.obj");
          //   sphere=new Sphere(5,true);
-            cubeTexture=new CubeTexture(context.getResources(),"objObject/default.png");
+            String path="crystalball/";
+          //  cubeTexture=new CubeTexture(context.getResources(),new String[]{path+"basketball.png"});
+              cubeTexture=new CubeTexture(context.getResources(),new String[]{path+"blue.png",path+"sky.png",path+"mask.png",path+"tree.png",path+"tree.png",path+"tree.png"});
+          // cubeTexture=new CubeTexture(context.getResources(),new String[]{path+"basketball.png",path+"blue.png",path+"sky.png",path+"mask.png",path+"tree.png",path+"water.png"});
             
-            wall=new CubeWall(cubeTexture);
+
             //初始化shader
             initShader(context);
         }
@@ -129,7 +132,7 @@ public   class CrystalBallObject implements ObjectDrawable {
 
 
             cubeTexture.reload();
-            wall.bind();
+
             
             List<ObjModelPart> partList = model.parts;
             int size = partList.size();
@@ -171,7 +174,7 @@ public   class CrystalBallObject implements ObjectDrawable {
 
 
 	   	 
-	   	 wall.draw();
+
 	   	 
             GLES20.glEnable(GLES20.GL_TEXTURE_CUBE_MAP);
  
@@ -206,14 +209,14 @@ public   class CrystalBallObject implements ObjectDrawable {
 			int offset = 0;
 			int stride = STRIP_SIZE;
 			GLES20.glVertexAttribPointer
-					(
-							maPositionHandle,
-							VERTEX_POS_SIZE,
-							GLES20.GL_FLOAT,
-							false,
-							stride,
-							offset
-					);
+                    (
+                            maPositionHandle,
+                            VERTEX_POS_SIZE,
+                            GLES20.GL_FLOAT,
+                            false,
+                            stride,
+                            offset
+                    );
 
 			// 启用法向量
 			offset += VERTEX_POS_SIZE * FloatUtils.RATIO_FLOATTOBYTE;

@@ -25,11 +25,15 @@ public class Sky  extends AbstractSimpleObject{
 
 	int textureId=-1;
 	public Sky(Context context) {
-		super(context);
-		createData(50);
-		
-		textureId=ShaderUtil.loadTextureWithUtils(context, path+"sky.png", false); 
+		 this(context,100);
 	}
+
+
+    public Sky(Context context,int radian) {
+        super(context);
+        createData(radian);
+        textureId=ShaderUtil.loadTextureWithUtils(context, path+"sky.png", false);
+    }
 
 	@Override
 	protected float[] getVertexData() {
@@ -54,7 +58,7 @@ public class Sky  extends AbstractSimpleObject{
 		int columnCount = 360 / angleSpanIndegree ;
 		 
 		
-		int totalCount=rowCount*columnCount;
+		int totalCount=(rowCount+1)*(columnCount+1);
 		
 		 
 		float angleSpanInRadian = (float) Math.toRadians(angleSpanIndegree);
@@ -65,17 +69,17 @@ public class Sky  extends AbstractSimpleObject{
 		float pieceofImageT = 1.0f / rowCount ;
 		float pieceofImageS = 1.0f / columnCount;
 		 
-		Log.d(TAG, "totalCount:" + totalCount);
+
 		int position = 0, indexPosition = 0;
-		for (int i = rowCount-1; i>=0; i--)
+		for (int i = rowCount; i>=0; i--)
 		{
-			float rowAngle = (float) (i * angleSpanInRadian  );
+			float rowAngle = (float) (i * angleSpanInRadian   );
 			float sinRow = (float) Math.sin(rowAngle);
 			float cosRow = (float) Math.cos(rowAngle);
 
 			 
 			y = (float) (sinRow);
-			for (int j = 0; j < columnCount; j++)
+			for (int j = 0; j <=columnCount; j++)
 			{
 				float columnAngle = j * angleSpanInRadian;
 				x = (float) (cosRow
@@ -100,20 +104,20 @@ public class Sky  extends AbstractSimpleObject{
 			}
 		}
 
-		for (int i = 0; i < rowCount - 1; i++)
+		for (int i = 0; i < rowCount ; i++)
 		{
 
-			for (int j = 0; j < columnCount - 1; j++)
+			for (int j = 0; j < columnCount ; j++)
 			{
 
 				// ����ڵ���
 				// v1_____v3
 				// /| |
 				// v0|_____|v2
-				short v0 = (short) (i * columnCount + j); // ��ǰ�ڵ�
-				short v1 = (short) ((i + 1) * columnCount + j);
-				short v2 = (short) (i * columnCount + j + 1);
-				short v3 = (short) ((i + 1) * columnCount + j + 1);
+				short v0 = (short) (i * (columnCount+1) + j); // ��ǰ�ڵ�
+				short v1 = (short) ((i + 1) * (columnCount+1) + j);
+				short v2 = (short) (i * (columnCount+1) + j + 1);
+				short v3 = (short) ((i + 1) * (columnCount+1) + j + 1);
 				indics[indexPosition++] = v0;
 				indics[indexPosition++] = v1;
 				indics[indexPosition++] = v3;
