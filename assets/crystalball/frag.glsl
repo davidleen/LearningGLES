@@ -18,9 +18,9 @@ const float refractFactor=1.5;
 
               const float fresnelPower=10.0;
 
-              const vec3 etaRatio=vec3(0.9,0.8,0.7);
+           //   const vec3 etaRatio=vec3(1.1,1.2,1.3);
 
-
+ const vec3 etaRatio=vec3(0.9,0.8,0.7);
 
 
 
@@ -45,15 +45,15 @@ void main()
       
          if(dotValue>maxCos)
          {
-           reflectionFactor=0.0;
+          	 reflectionFactor=0.0;
           } else
            if(dotValue<minCos)
            {
-           reflectionFactor=1.0;
+           		reflectionFactor= 1.0;
            }
            else
            {
-           reflectionFactor=(dotValue-minCos)/(maxCos-minCos);
+           reflectionFactor= (maxCos-dotValue)/(maxCos-minCos);
            }       		             
                                         
 

@@ -128,7 +128,7 @@ public class ObjObject implements ObjectDrawable {
                 return LightSources.lightPositionFBSun;
             }
         });
-// 材料光属性
+        // 材料光属性
         ambientLightUniform=new Uniform4fv(mProgram,"abientLight",new Uniform.UniformBinder<FloatBuffer>() {
             @Override
             public FloatBuffer getBindValue() {
@@ -150,7 +150,7 @@ public class ObjObject implements ObjectDrawable {
         });
 
 
-
+        
         attributeWrap=new Vertices(new String[]{"aPosition","aNormal","aTexCoor"},new int[]{VERTEX_POS_SIZE,VERTEX_NORMAL_SIZE,VERTEX_TEXTURE_CORD_SIZE},mProgram);
 
 
