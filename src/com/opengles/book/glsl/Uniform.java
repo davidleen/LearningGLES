@@ -1,0 +1,34 @@
+package com.opengles.book.glsl;
+
+import android.opengl.GLES20;
+
+/**
+ *
+ * Created by davidleen29   qq:67320337
+ * on 14-6-3.
+ */
+public  abstract class Uniform<T> {
+
+
+    int uniformHandler;
+    UniformBinder<T> binder;
+    public Uniform(int mProgram, String uniformName,UniformBinder<T> binder)
+    {
+        uniformHandler= GLES20.glGetUniformLocation(mProgram,uniformName);
+        this.binder=binder;
+    }
+
+
+    public  void bind()
+    {
+
+        doBind(uniformHandler,binder);
+    }
+
+    protected abstract void doBind(int  uniformHandler,UniformBinder<T> binder);
+
+    public interface UniformBinder<T>
+    {
+        public T getBindValue();
+    }
+}
