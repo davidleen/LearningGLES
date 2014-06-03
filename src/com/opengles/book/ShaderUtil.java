@@ -20,7 +20,6 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
-import com.opengles.book.R;
 
 /**
  * 加载顶点Shader与片元Shader的工具类
@@ -248,8 +247,7 @@ public class ShaderUtil {
 					.order(ByteOrder.nativeOrder()).asFloatBuffer();
 			fb.put(vertices);
 			fb.flip();
-
-			createBuffer(target, fb, size, bufferId);
+			bindBufferData(target, fb, size, bufferId);
 			fb.clear();
 		}
 
@@ -261,12 +259,12 @@ public class ShaderUtil {
 			sb.put(indices);
 			sb.flip();
 
-			createBuffer(target, sb, size, bufferId);
+			bindBufferData(target, sb, size, bufferId);
 			sb.clear();
 		}
 
-		public static void createBuffer(int target, Buffer buf, int size,
-				int bufferId) {
+		public static void bindBufferData(int target, Buffer buf, int size,
+                                          int bufferId) {
 			GLES20.glBindBuffer(target, bufferId);
 			GLES20.glBufferData(target, size, buf, GLES20.GL_STATIC_DRAW);
 			GLES20.glBindBuffer(target, 0);

@@ -7,9 +7,15 @@ import com.opengles.book.*;
 import com.opengles.book.framework.gl.CubeTexture;
 import com.opengles.book.framework.gl.Texture;
 import com.opengles.book.galaxy.ObjectDrawable;
+import com.opengles.book.glsl.Uniform;
+import com.opengles.book.glsl.Uniform3fv;
+import com.opengles.book.glsl.Uniform4fv;
+import com.opengles.book.glsl.UniformMatrix4F;
+import com.opengles.book.math.Vector3;
 import com.opengles.book.objLoader.*;
 
 import java.io.IOException;
+import java.nio.FloatBuffer;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -24,35 +30,41 @@ import java.util.Map;
  */
 public class ObjObject implements ObjectDrawable {
 
-	protected static final int VERTEX_POS_INDEX = 0;// xyz
-	protected static final int VERTEX_NORMAL_INDEX = 1;// xyz
-	protected static final int VERTEX_TEXTURE_CORD_INDEX = 2;// s t
+
 
 	protected static final int VERTEX_POS_SIZE = 3;// xyz
 	protected static final int VERTEX_NORMAL_SIZE = 3;// xyz
 	protected static final int VERTEX_TEXTURE_CORD_SIZE = 2;// s t
 
-	protected static final int STRIP_SIZE = (VERTEX_POS_SIZE
-			+ VERTEX_NORMAL_SIZE
-			+ VERTEX_TEXTURE_CORD_SIZE)
-			* FloatUtils.RATIO_FLOATTOBYTE;
+//	protected static final int STRIP_SIZE = (VERTEX_POS_SIZE
+//			+ VERTEX_NORMAL_SIZE
+//			+ VERTEX_TEXTURE_CORD_SIZE)
+//			* FloatUtils.RATIO_FLOATTOBYTE;
 	String TAG = ObjObject.this.getClass().getName();
 
 	int mProgram;// 着色器id
-	int muMVPMatrixHandle;//总变换矩阵handler
-	int mUMatrixHandle; // 物体变换矩阵句柄
+	//int muMVPMatrixHandle;//总变换矩阵handler
+	//int mUMatrixHandle; // 物体变换矩阵句柄
 
-	int muLightLocationSun;
-	int mabientLightHandler;// 环境光
-	int mDiffuseLightHandler;// 散射光
-	int mSpecLightHandler;// 反射光
-	// int mMapLoc;
 
-	int mCameraPositionHandler;// 相机位置
+
+    Uniform4fv ambientLightUniform;// 环境光
+    Uniform4fv diffuseLightUniform;// 散射光
+    Uniform4fv specLightUniform;// 反射光
+
+   // 总变换矩阵属性
+    private UniformMatrix4F finalMatrix;
+    //物体变换矩阵属性
+    private UniformMatrix4F objectMatrix;
+
+    //相机位置属性
+    private Uniform3fv cameraUniform;
+    //太阳光位置属性  //光源位置。
+    private Uniform3fv sunLocationUniform;
+
 
 	// int textureId;
 	protected ObjModel model;
-	int[] vboIds;
 
 	private Context context;
 
@@ -60,6 +72,8 @@ public class ObjObject implements ObjectDrawable {
 
 
 
+    //顶点绘制类
+    private Vertices attributeWrap;
 
     public Texture texture;
 
@@ -86,35 +100,68 @@ public class ObjObject implements ObjectDrawable {
 				context.getResources());
 		mProgram = ShaderUtil.createProgram(mVertexShader, mFragmentShader);
 
-		GLES20.glBindAttribLocation(mProgram, VERTEX_POS_INDEX, "aPosition");
-		GLES20.glBindAttribLocation(mProgram, VERTEX_NORMAL_INDEX,
-				"aNormal");
-		GLES20.glBindAttribLocation(mProgram, VERTEX_TEXTURE_CORD_INDEX,
-				"aTexCoor");
 
-		GLES20.glLinkProgram(mProgram);
+        finalMatrix=new UniformMatrix4F(mProgram,"uMVPMatrix",new Uniform.UniformBinder<float[]>() {
+            @Override
+            public float[] getBindValue() {
+                return MatrixState.getFinalMatrix();
+            }
+        });
 
-		Log.d(TAG, "mProgram" + mProgram);
+        objectMatrix=new UniformMatrix4F(mProgram,"uMMatrix",new Uniform.UniformBinder<float[]>() {
+            @Override
+            public float[] getBindValue() {
+                return MatrixState.getMMatrix();
+            }
+        });
+        cameraUniform=new Uniform3fv(mProgram,"cameraPosition",new Uniform.UniformBinder<FloatBuffer>() {
+            @Override
+            public FloatBuffer getBindValue() {
+                return MatrixState.cameraFB;
+            }
+        });
 
-		// 总变换阵 id
-		muMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
-		// 物体运动针id
-		mUMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMMatrix");
+
+        sunLocationUniform=new Uniform3fv(mProgram,"uLightLocation",new Uniform.UniformBinder<FloatBuffer>() {
+            @Override
+            public FloatBuffer getBindValue() {
+                return LightSources.lightPositionFBSun;
+            }
+        });
+// 材料光属性
+        ambientLightUniform=new Uniform4fv(mProgram,"abientLight",new Uniform.UniformBinder<FloatBuffer>() {
+            @Override
+            public FloatBuffer getBindValue() {
+                return LightSources.ambientBuffer;
+            }
+        });
+
+        specLightUniform=new Uniform4fv(mProgram,"lightSpecular",new Uniform.UniformBinder<FloatBuffer>() {
+            @Override
+            public FloatBuffer getBindValue() {
+                return LightSources.specLightBuffer;
+            }
+        });
+        diffuseLightUniform=new Uniform4fv(mProgram,"lightDiffuse",new Uniform.UniformBinder<FloatBuffer>() {
+            @Override
+            public FloatBuffer getBindValue() {
+                return LightSources.diffuseBuffer;
+            }
+        });
 
 
-		mCameraPositionHandler = GLES20.glGetUniformLocation(mProgram,
-				"cameraPosition");
-        muLightLocationSun = GLES20.glGetUniformLocation(mProgram,
-                "uLightLocation");
 
-		// 材料光属性
-		mDiffuseLightHandler = GLES20.glGetUniformLocation(mProgram,
-				"lightDiffuse");
+        attributeWrap=new Vertices(new String[]{"aPosition","aNormal","aTexCoor"},new int[]{VERTEX_POS_SIZE,VERTEX_NORMAL_SIZE,VERTEX_TEXTURE_CORD_SIZE},mProgram);
 
-		mSpecLightHandler = GLES20.glGetUniformLocation(mProgram,
-				"lightSpecular");
-		mabientLightHandler = GLES20.glGetUniformLocation(mProgram,
-				"abientLight");
+
+
+
+
+
+
+
+
+
 		
 		
 		onCreate(mProgram);
@@ -132,26 +179,14 @@ public class ObjObject implements ObjectDrawable {
 			e.printStackTrace();
 		}
 
-		vboIds = new int[2];
-		GLES20.glGenBuffers(2, vboIds, 0);
-		ShaderUtil.createVertexBuffer(GLES20.GL_ARRAY_BUFFER,
-				model.vertexData,
-				vboIds[0]);
-		ShaderUtil.createIndexBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER,
-				model.indexData,
-				vboIds[1]);
 
-		Log.d(TAG, "vboIds:" + vboIds[0] + "," + vboIds[1]);
+        attributeWrap.create(model.vertexData,model.indexData);
+
 
 		// 预先绑定固定值 不需要在绘制时候重新绑定。
 		GLES20.glUseProgram(mProgram);
 		// 绑定固定值， 会变换的数值 在draw中绑定。
-
-
         onBind(mProgram);
-
-
-
 		GLES20.glUseProgram(0);
 		
 		
@@ -161,7 +196,7 @@ public class ObjObject implements ObjectDrawable {
 
 	@Override
 	public void unBind() {
-		GLES20.glDeleteBuffers(2, vboIds, 0);
+        attributeWrap.dispose();
 		deleteTexture();
 		onUnBind(mProgram);
 	}
@@ -169,69 +204,23 @@ public class ObjObject implements ObjectDrawable {
 	@Override
 	public void draw() {
 		GLES20.glUseProgram(mProgram);
-		// 启用位置向量数据
-		GLES20.glEnableVertexAttribArray(VERTEX_POS_INDEX);
-		// 启用法向量数据
-		GLES20.glEnableVertexAttribArray(VERTEX_NORMAL_INDEX);
-         //启用纹理数据
-		GLES20.glEnableVertexAttribArray(VERTEX_TEXTURE_CORD_INDEX);
-
-		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vboIds[0]);
-		GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, vboIds[1]);
-
-		int offset = 0;
-		int stride = STRIP_SIZE;
-		GLES20.glVertexAttribPointer
-				(
-						VERTEX_POS_INDEX,
-						VERTEX_POS_SIZE,
-						GLES20.GL_FLOAT,
-						false,
-						stride,
-						offset
-				);
-
-		// 启用法向量
-		offset += VERTEX_POS_SIZE * FloatUtils.RATIO_FLOATTOBYTE;
-
-		GLES20.glVertexAttribPointer
-				(
-						VERTEX_NORMAL_INDEX,
-						VERTEX_NORMAL_SIZE,
-						GLES20.GL_FLOAT,
-						false,
-						stride,
-						offset
-				);
-
-		offset += VERTEX_NORMAL_SIZE * FloatUtils.RATIO_FLOATTOBYTE;
-
-		GLES20.glVertexAttribPointer
-				(
-						VERTEX_TEXTURE_CORD_INDEX,
-						VERTEX_TEXTURE_CORD_SIZE,
-						GLES20.GL_FLOAT,
-						false,
-						stride,
-						offset
-				);
 
 
-        // 注入相机位置数据
-        GLES20.glUniform3fv(mCameraPositionHandler, 1,
-                MatrixState.cameraFB);
 
-		// 总变换矩阵
-		GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false,
-				MatrixState.getFinalMatrix(), 0);
+        //属性绑定
+        attributeWrap.bind();
+        //最终矩阵绑定
+        finalMatrix.bind();
+        //物体移动矩阵绑定
+        objectMatrix.bind();
+        //相机位置绑定
+        cameraUniform.bind();
+        //重新注入太阳光位置 光线会转动
+        sunLocationUniform.bind();
 
-		// 物体移动变换矩阵。
-		GLES20.glUniformMatrix4fv(mUMatrixHandle, 1, false,
-				MatrixState.getMMatrix(), 0);
 
-		// 注入太阳光位置 光线会转动
-		GLES20.glUniform3fv(muLightLocationSun, 1,
-				LightSources.lightPositionFBSun);
+
+
 		
 		
 		onDraw(mProgram);
@@ -250,33 +239,19 @@ public class ObjObject implements ObjectDrawable {
 			 
 
 			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getTextureId(model.path,material.textureFile));
-			// 注入环境光光数据
-			GLES20.glUniform4fv(mabientLightHandler, 1,
-					LightSources.ambientBuffer);
 
-			// 注入散射光数据
-			GLES20.glUniform4fv(mDiffuseLightHandler, 1,
-					LightSources.diffuseBuffer);
 
-			// 注入镜面光数据
-			GLES20.glUniform4fv(mSpecLightHandler, 1,
-					LightSources.specLightBuffer);
+              ambientLightUniform.bind();// 环境光
+              diffuseLightUniform.bind();// 散射光
+              specLightUniform.bind();// 反射光
 
-			GLES20.glDrawElements(GLES20.GL_TRIANGLES, part.length,
-					GLES20.GL_UNSIGNED_SHORT, part.index
-							* FloatUtils.RATIO_SHORTTOBYTE);
+            attributeWrap.draw(GLES20.GL_TRIANGLES,
+                    part.index, part.length
+            );
 
 		}
+        attributeWrap.unbind();
 
-		// 解除绑定
-		GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
-		GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
-		// 关闭位置向量数据
-		GLES20.glDisableVertexAttribArray(VERTEX_POS_INDEX);
-		// 关闭法向量数据
-		GLES20.glDisableVertexAttribArray(VERTEX_NORMAL_INDEX);
-		// 关闭纹理数据
-		GLES20.glDisableVertexAttribArray(VERTEX_TEXTURE_CORD_INDEX);
 
 	}
 
