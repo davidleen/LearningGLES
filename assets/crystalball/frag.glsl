@@ -12,13 +12,13 @@ varying vec4 specular;
 const float refractFactor=1.5;
 
 
-  const float fresnelBias=0.1;
+  const float fresnelBias=0.01;
 
               const float fresnelScale=0.8;
 
-              const float fresnelPower=2.0;
+              const float fresnelPower=10.0;
 
-              const vec3 etaRatio=vec3(1.2,1.3,1.5);
+              const vec3 etaRatio=vec3(0.9,0.8,0.7);
 
 
 
@@ -29,15 +29,35 @@ const float refractFactor=1.5;
 void main()                         
 {           
 
-
+   
        //计算折射光分量   反射系数
-   float  reflectionFactor =clamp(  fresnelBias +
+ //  float  reflectionFactor =clamp(  fresnelBias +
 
-                     fresnelScale * pow(1.0 + dot(v_incident, v_normal),
+//                     fresnelScale * pow(1.0 + dot(v_incident, v_normal),
 
-                                        fresnelPower) ,0.0,1.0);
+ //                                       fresnelPower) ,0.0,1.0);
+      
+      //使用简单方式                                  
+         float dotValue=      dot(-normalize(v_incident), normalize(v_normal)) ;  
+      float  reflectionFactor;    
+      const float maxCos=0.7;
+      const float minCos=0.2;
+      
+         if(dotValue>maxCos)
+         {
+           reflectionFactor=0.0;
+          } else
+           if(dotValue<minCos)
+           {
+           reflectionFactor=1.0;
+           }
+           else
+           {
+           reflectionFactor=(dotValue-minCos)/(maxCos-minCos);
+           }       		             
+                                        
 
-                 //  reflectionFactor=0.0;
+                //  reflectionFactor=0.0;
                                         //reflectionFactor
 
                                 //计算不同的折射偏光

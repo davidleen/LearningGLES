@@ -98,8 +98,8 @@ public   class CrystalBallObject implements ObjectDrawable {
          //   sphere=new Sphere(5,true);
             String path="crystalball/";
           //  cubeTexture=new CubeTexture(context.getResources(),new String[]{path+"basketball.png"});
-              cubeTexture=new CubeTexture(context.getResources(),new String[]{path+"blue.png",path+"sky.png",path+"mask.png",path+"tree.png",path+"tree.png",path+"tree.png"});
-          // cubeTexture=new CubeTexture(context.getResources(),new String[]{path+"basketball.png",path+"blue.png",path+"sky.png",path+"mask.png",path+"tree.png",path+"water.png"});
+            //  cubeTexture=new CubeTexture(context.getResources(),new String[]{path+"blue.png",path+"sky.png",path+"mask.png",path+"tree.png",path+"tree.png",path+"tree.png"});
+           cubeTexture=new CubeTexture(context.getResources(),new String[]{path+"basketball.png",path+"blue.png",path+"sky.png",path+"mask.png",path+"tree.png",path+"water.png"});
             
 
             //初始化shader
