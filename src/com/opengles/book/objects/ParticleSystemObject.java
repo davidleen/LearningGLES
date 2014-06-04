@@ -2,15 +2,22 @@ package com.opengles.book.objects;
 
 import java.util.Random;
 
+import android.content.Context;
+import com.opengles.book.ShaderUtil;
 import com.opengles.book.Vertices;
+import com.opengles.book.glsl.Uniform1fv;
 
 public class ParticleSystemObject {
 	public static final int NUM_PARTICLE=100;
 	float[] mParticleData=new float[NUM_PARTICLE*7];
-	
-	
-	private Vertices attributeWraper;
-	public ParticleSystemObject()
+
+    short[] mParticleIndicesData=new short[NUM_PARTICLE];
+    private Vertices vertices;
+    private Uniform1fv timeUniform;
+
+    //
+    int mProgram;
+	public ParticleSystemObject(Context context)
 	{
 		
 		//generate particle system data;
@@ -32,8 +39,17 @@ public class ParticleSystemObject {
 	           mParticleData[i * 7 + 6] = generator.nextFloat() * 0.25f - 0.125f;                   
 			
 		}
-		
-		//attributeWraper=new Vertices(new String[]{}, new int[]{1, 3, 3},mProgram );
+
+        // 创建program
+        String mVertexShader = ShaderUtil.loadFromAssetsFile(
+                "particleSystemObject/vertex.glsl",
+                context.getResources());
+        String mFragmentShader = ShaderUtil.loadFromAssetsFile(
+                "particleSystemObject/frag.glsl",
+                context.getResources());
+        mProgram = ShaderUtil.createProgram(mVertexShader, mFragmentShader);
+
+		 vertices=new Vertices(new String[]{}, new int[]{1, 3, 3},mProgram );
 		
 	}
 }
