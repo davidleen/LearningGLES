@@ -161,12 +161,14 @@ public class ParticleSystemObject implements ObjectDrawable{
 		{
 			uTime[0]=0;
 			
+			
+			
 			centerPosition[0]=generator.nextFloat()*2-1;
 			centerPosition[1]=generator.nextFloat()*2-1;
 			centerPosition[2]=generator.nextFloat()*2-1; 
 			centerPositionBuffer.put(centerPosition);
 			centerPositionBuffer.flip();
-			
+			centerPositionUniform.notifyChanged();
 //			uColor[0]=1.0f;
 //			uColor[1]=0.0f;
 //			uColor[2]=0; 
@@ -177,9 +179,9 @@ public class ParticleSystemObject implements ObjectDrawable{
 			uColor[3]=0.5f;
 			uColorBuffer.put(uColor);
 			uColorBuffer.flip();
-			
+			uColorUniform.notifyChanged();
 		}
-		
+		timeUniform.notifyChanged();
 		
 	}
 	

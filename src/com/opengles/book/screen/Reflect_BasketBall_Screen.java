@@ -287,7 +287,7 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 				//根据此轮起始Y坐标、此轮运动时间、此轮起始速度计算当前位置
 				float tempCurrY=startY-0.5f*G*timeSum*timeSum+vy*timeSum;
 				
-				Log.d("tag", "vy  tempCurrY:"+tempCurrY);
+			//	Log.d("tag", "vy  tempCurrY:"+tempCurrY);
 				if(tempCurrY<=0)
 				{//若当前位置低于地面则碰到地面反弹
 					//反弹后起始位置为0

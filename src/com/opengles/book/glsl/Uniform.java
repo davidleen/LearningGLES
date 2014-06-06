@@ -9,6 +9,8 @@ import android.opengl.GLES20;
  */
 public  abstract class Uniform<T> {
 
+	
+	boolean isUpdate=false;
 
     int uniformHandler;
     UniformBinder<T> binder;
@@ -16,13 +18,17 @@ public  abstract class Uniform<T> {
     {
         uniformHandler= GLES20.glGetUniformLocation(mProgram,uniformName);
         this.binder=binder;
+        notifyChanged();
     }
 
 
     public  void bind()
     {
-
-        doBind(uniformHandler,binder);
+//    	if(isUpdate)
+//    	{
+    		doBind(uniformHandler,binder);
+//    		isUpdate=false;
+//    	}
     }
 
     protected abstract void doBind(int  uniformHandler,UniformBinder<T> binder);
@@ -30,5 +36,10 @@ public  abstract class Uniform<T> {
     public interface UniformBinder<T>
     {
         public T getBindValue();
+    }
+    
+    public void notifyChanged()
+    {
+    	isUpdate=true;
     }
 }
