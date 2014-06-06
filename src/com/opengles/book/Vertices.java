@@ -151,12 +151,17 @@ public class Vertices {
 
 
 	}
-
+	/**
+     * draw TRIANGLES ，all vertex for default
+     */
+    public void draw( int drawType ) {
+        draw(drawType,0,indicesCount);
+    }
     /**
      * draw TRIANGLES ，all vertex for default
      */
     public void draw(  ) {
-        draw(GLES20.GL_TRIANGLES,0,indicesCount);
+    	draw(GLES20.GL_TRIANGLES); 
     }
 
 	/**

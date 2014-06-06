@@ -53,6 +53,10 @@ public class MainActivity extends ListActivity {
         info = new MenuInfo("水晶球", CrystalBallScreen.class.getName());
 
         datas.add(info);
+        
+        info = new MenuInfo("粒子系统", ParticleSystemScreen.class.getName());
+
+        datas.add(info);
 
 		MenuAdapter adapter = new MenuAdapter(this, datas);
 
