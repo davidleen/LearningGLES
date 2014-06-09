@@ -21,7 +21,7 @@ public class NewFloatUniform {
 	public int size;
 	
 	/**
-	 * 
+	 *  新类
 	 * @param size 
 	 */
 	public NewFloatUniform(int size)
