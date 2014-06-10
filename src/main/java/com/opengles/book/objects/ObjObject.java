@@ -249,7 +249,7 @@ public class ObjObject implements ObjectDrawable {
                     part.index, part.length
             );
 
-		}
+        }
         attributeWrap.unbind();
 
 

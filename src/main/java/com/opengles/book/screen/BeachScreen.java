@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.opengl.GLES20;
 
+import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.opengles.book.LightSources;
 import com.opengles.book.MatrixState;
 import com.opengles.book.framework.Game;
@@ -27,7 +28,8 @@ import com.opengles.book.galaxy.ObjectDrawable;
  */
 public   class BeachScreen extends GLScreen {
 
-	 
+
+    DiscreteDynamicsWorld world;
 	FPSCounter counter;
 	
 	

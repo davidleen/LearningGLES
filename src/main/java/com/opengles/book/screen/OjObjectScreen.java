@@ -29,6 +29,7 @@ public   class OjObjectScreen extends GLScreen {
 	private int currentObjectIndex;
 
 	FPSCounter counter;
+    private float timeForObjectChange=1;
 	
     private float timeCollapsedForObject = 0;
     private float timeCollapsedForSun = 0;
@@ -44,14 +45,21 @@ public   class OjObjectScreen extends GLScreen {
 
 	public OjObjectScreen(Game game) {
 		super(game);
+
+
+
         objects=new ArrayList<ObjObject>();
-                       objects.add(new ObjObject(game.getContext(),"","teapot.obj"));
-     objects.add(new ObjObject(game.getContext(), "tz/","tz.obj"));
-            objects.add(new ObjObject(game.getContext(),"cuboid"+ File.separator,"cuboid.obj"));
-                      objects.add(new TwistCuboid(game.getContext() ));
-         objects.add(new ObjObject(game.getContext(),"","shot.obj"));
-             objects.add(new ObjObject(game.getContext(),"","cube.obj"));
-         objects.add(new ObjObject(game.getContext(),"","invader.obj"));
+        //                      objects.add(new ObjObject(game.getContext(),"","teapot.obj"));
+       objects.add(new ObjObject(game.getContext(), "eager/","eager.obj"));
+        objects.add(new ObjObject(game.getContext(), "eager/","eager1.obj"));
+        objects.add(new ObjObject(game.getContext(), "eager/","eager2.obj"));
+//
+//     objects.add(new ObjObject(game.getContext(), "tz/","tz.obj"));
+//            objects.add(new ObjObject(game.getContext(),"cuboid"+ File.separator,"cuboid.obj"));
+//                      objects.add(new TwistCuboid(game.getContext() ));
+//         objects.add(new ObjObject(game.getContext(),"","shot.obj"));
+//             objects.add(new ObjObject(game.getContext(),"","cube.obj"));
+//         objects.add(new ObjObject(game.getContext(),"","invader.obj"));
        currentObjectIndex=0;
 
 
@@ -81,7 +89,7 @@ public   class OjObjectScreen extends GLScreen {
 
 
             timeCollapsedForObject+=deltaTime;
-            if (objects.size()>1&&timeCollapsedForObject >=10)
+            if (objects.size()>1&&timeCollapsedForObject >=timeForObjectChange)
             {
                 long switchTime=System.nanoTime();
                 objects.get(currentObjectIndex).unBind();
@@ -95,7 +103,7 @@ public   class OjObjectScreen extends GLScreen {
                 updateCameraBaseOnObjectBoundary(camera,objects.get(currentObjectIndex).getBoundary());
 
 
-                timeCollapsedForObject  -=( timeUsdInBind+10);
+                timeCollapsedForObject  -=( timeUsdInBind+timeForObjectChange);
 
             }
 
