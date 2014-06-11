@@ -58,6 +58,10 @@ public class MainActivity extends ListActivity {
 
         datas.add(info);
 
+        info = new MenuInfo("FrameBufferDemo", FrameBufferDemoScreen.class.getName());
+
+        datas.add(info);
+
 		MenuAdapter adapter = new MenuAdapter(this, datas);
 
 		setListAdapter(adapter);
