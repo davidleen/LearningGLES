@@ -51,8 +51,8 @@ public class FrameBufferDemoScreen extends GLScreen {
     @Override
     public void present(float deltaTime) {
 
-   //  GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,bufferId[frameIdIndex]);
-            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,0);
+    GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,bufferId[frameIdIndex]);
+        //      GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,0);
         //clear color and  depth buffer;
         GLES20.glClearColor(0,0,0,1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
@@ -71,14 +71,8 @@ public class FrameBufferDemoScreen extends GLScreen {
         GLES20.glDeleteFramebuffers(1,bufferId,frameIdIndex);
     }
 
-    @Override
-    public void resume() {
-
-//
-
-
-
-
+    private void renderBuffer()
+    {
 
         //获取Renderbuffer 支持的最大的 值  所有纹理宽高必须小于这个值。
         int[] size=new int[1];
@@ -129,8 +123,8 @@ public class FrameBufferDemoScreen extends GLScreen {
         GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER,GLES20.GL_COLOR_ATTACHMENT0,GLES20.GL_TEXTURE_2D,bufferId[textureIdIndex],0);
 
 
-         //specify renderbuffer as depth_attachment
-       GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER,GLES20.GL_DEPTH_ATTACHMENT,GLES20.GL_RENDERBUFFER,bufferId[renderIdIndex]);
+        //specify renderbuffer as depth_attachment
+        GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER,GLES20.GL_DEPTH_ATTACHMENT,GLES20.GL_RENDERBUFFER,bufferId[renderIdIndex]);
 
 
         //check for framebuffer complete
@@ -144,6 +138,11 @@ public class FrameBufferDemoScreen extends GLScreen {
 
         }else
         {throw new RuntimeException("status:"+status+", hex:"+Integer.toHexString(status));}
+    }
+
+    @Override
+    public void resume() {
+
 
 
         Bitmap bitmap=Bitmap.createBitmap(texWidth,texHeight, Bitmap.Config.ARGB_4444);
@@ -151,14 +150,23 @@ public class FrameBufferDemoScreen extends GLScreen {
         canvas.drawColor(Color.RED);
         canvas.drawBitmap(BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.icon),texWidth/2,texHeight/2,null);
         textureId=    ShaderUtil.loadTextureWithUtils(bitmap,false);
-        //  textureId=  ShaderUtil.loadTextureWithUtils(game.getContext(),"sky/sky.png",false);
-
-        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-        GLES20.glEnable(GLES20.GL_CULL_FACE);
+//
         int width = texWidth;
         int height = texHeight                ;
         GLES20.glViewport(0, 0, width, height);
         float ratio = (float) width / height;
+
+
+
+
+
+
+
+        //  textureId=  ShaderUtil.loadTextureWithUtils(game.getContext(),"sky/sky.png",false);
+
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+        GLES20.glEnable(GLES20.GL_CULL_FACE);
+
 
 
         // 设置光线位置
@@ -176,6 +184,8 @@ public class FrameBufferDemoScreen extends GLScreen {
         camera.setUp(0,1,0);
         camera.setLookAt(0f,0f,0f) ;
         cameraController=new CameraController(camera, glGame.getGLGraphics());
+
+        renderBuffer();
 
         obj.bind();
 
