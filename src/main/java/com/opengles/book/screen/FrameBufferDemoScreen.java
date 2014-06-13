@@ -9,7 +9,7 @@ import android.opengl.GLUtils;
 import android.util.DisplayMetrics;
 import com.opengles.book.LightSources;
 import com.opengles.book.R;
-import com.opengles.book.ShaderUtil;
+
 import com.opengles.book.framework.Game;
 import com.opengles.book.framework.Input;
 import com.opengles.book.framework.gl.LookAtCamera;
@@ -51,8 +51,8 @@ public class FrameBufferDemoScreen extends GLScreen {
     @Override
     public void present(float deltaTime) {
 
-    GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,bufferId[frameIdIndex]);
-        //      GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,0);
+           GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,bufferId[frameIdIndex]);
+        //   GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,0);
         //clear color and  depth buffer;
         GLES20.glClearColor(0,0,0,1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
@@ -97,13 +97,11 @@ public class FrameBufferDemoScreen extends GLScreen {
         // no texels need to be specified as we are going to draw into
         // the texture
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,bufferId[textureIdIndex]);
+       GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D,0,GLES20.GL_RGB,texWidth,texHeight,0,GLES20.GL_RGB,GLES20.GL_UNSIGNED_SHORT_5_6_5,null);
 
-
-        //   GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D,0,GLES20.GL_RGB,texWidth,texHeight,0,GLES20.GL_RGB,GLES20.GL_UNSIGNED_SHORT_5_6_5,null);
-
-        GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D,0,GLES20.GL_RGBA,texWidth,texHeight,0,GLES20.GL_RGBA,GLES20.GL_UNSIGNED_SHORT_4_4_4_4,null);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
+      //  GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D,0,GLES20.GL_RGBA,texWidth,texHeight,0,GLES20.GL_RGBA,GLES20.GL_UNSIGNED_SHORT_4_4_4_4,null);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
 
@@ -145,11 +143,11 @@ public class FrameBufferDemoScreen extends GLScreen {
 
 
 
-        Bitmap bitmap=Bitmap.createBitmap(texWidth,texHeight, Bitmap.Config.ARGB_4444);
+        Bitmap bitmap=Bitmap.createBitmap(texWidth,texHeight, Bitmap.Config.RGB_565);
         Canvas canvas=new Canvas(bitmap);
         canvas.drawColor(Color.RED);
         canvas.drawBitmap(BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.icon),texWidth/2,texHeight/2,null);
-        textureId=    ShaderUtil.loadTextureWithUtils(bitmap,false);
+        textureId=    loadTextureWithUtils(bitmap);
 //
         int width = texWidth;
         int height = texHeight                ;
@@ -204,6 +202,40 @@ public class FrameBufferDemoScreen extends GLScreen {
         texHeight=metrics.heightPixels;
         obj=new NewSky(game.getContext());
 
+
+    }
+
+
+
+    public static int loadTextureWithUtils(Bitmap bitmap )
+    {
+        int[] textureId = new int[1];
+
+        GLES20.glGenTextures(1, textureId, 0);
+
+
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId[0]);
+
+        //使用MipMap线性纹理采样
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,
+                GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+        //使用MipMap最近点纹理采样
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D,
+                GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+
+
+
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S,
+                GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,
+                GLES20.GL_CLAMP_TO_EDGE);
+
+
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+
+
+
+        return textureId[0];
 
     }
 }

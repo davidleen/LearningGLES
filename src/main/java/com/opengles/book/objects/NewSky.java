@@ -1,7 +1,10 @@
 package com.opengles.book.objects;
 
 import android.content.Context;
-import com.opengles.book.ShaderUtil;
+import android.graphics.Bitmap;
+import android.opengl.GLES20;
+import android.opengl.GLUtils;
+
 
 /**
  * 天空穹
@@ -127,8 +130,8 @@ public class NewSky extends NewAbstractSimpleObject{
 		indexData=indics;
 
 	}
-	
-	 
+
+
 
 
 }

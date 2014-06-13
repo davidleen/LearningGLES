@@ -17,6 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.opengles.book.testFBO.TestFboActivity;
 
 public class MainActivity extends ListActivity {
 
@@ -62,6 +63,12 @@ public class MainActivity extends ListActivity {
 
         datas.add(info);
 
+
+        info = new MenuInfo("测试fbo",  null);
+
+        datas.add(info);
+
+
 		MenuAdapter adapter = new MenuAdapter(this, datas);
 
 		setListAdapter(adapter);
@@ -70,10 +77,19 @@ public class MainActivity extends ListActivity {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 
+        MenuInfo menuInfo=	(MenuInfo)l.getItemAtPosition(position);
+        Intent intent;
+        if(menuInfo.screenClassName==null)
+        {
 
-		MenuInfo menuInfo=	(MenuInfo)l.getItemAtPosition(position); 
-		Intent intent=new Intent(MainActivity.this,GalaxyGame.class);
-		intent.putExtra(GalaxyGame.PARAMS_SCREEN_NAME, menuInfo.screenClassName);
+              intent = new Intent(MainActivity.this, TestFboActivity.class);
+
+        }else {
+
+
+              intent = new Intent(MainActivity.this, GalaxyGame.class);
+            intent.putExtra(GalaxyGame.PARAMS_SCREEN_NAME, menuInfo.screenClassName);
+        }
 		startActivity(intent);
 	}
 

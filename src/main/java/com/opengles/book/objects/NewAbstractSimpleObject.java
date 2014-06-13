@@ -48,6 +48,7 @@ public abstract class NewAbstractSimpleObject   {
     private UniformMatrix4F finalMatrix;
     //物体变换矩阵属性
     private Uniform1fv alphaThreadHoldUniform;
+    private int textureHandler;
 
     //透明度检测的阀值 （0-1）
     private float[] alphaThreadHoldValue=new float[]{0.0f};
@@ -104,6 +105,8 @@ public abstract class NewAbstractSimpleObject   {
 
 	   	  GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 	      GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+            // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
+          GLES20.glUniform1i(textureHandler, 0);
 	        //将最终变换矩阵传入shader程序
             finalMatrix.bind();
             alphaThreadHoldUniform.bind();
@@ -169,7 +172,7 @@ public abstract class NewAbstractSimpleObject   {
                 }
             });
 
-
+            textureHandler= GLES20.glGetUniformLocation(mProgram, "sTexture");
 
 		 
 	    

@@ -199,7 +199,7 @@ public class ShaderUtil {
 			int[] textureId = new int[1];
 
 			GLES20.glGenTextures(1, textureId, 0);
-			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId[0]);
+		 	GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId[0]);
 			// Log.d(TAG, "textureId:"+textureId[0]);
 			
 			if(isMipMap)
