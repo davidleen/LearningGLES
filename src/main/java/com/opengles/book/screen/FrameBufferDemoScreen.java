@@ -1,14 +1,21 @@
 package com.opengles.book.screen;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.DisplayMetrics;
 import com.opengles.book.LightSources;
+import com.opengles.book.R;
+import com.opengles.book.ShaderUtil;
 import com.opengles.book.framework.Game;
 import com.opengles.book.framework.Input;
 import com.opengles.book.framework.gl.LookAtCamera;
 import com.opengles.book.framework.impl.GLScreen;
 import com.opengles.book.galaxy.CameraController;
+import com.opengles.book.objects.NewSky;
 import com.opengles.book.objects.ObjObject;
 
 import java.util.List;
@@ -24,18 +31,15 @@ public class FrameBufferDemoScreen extends GLScreen {
     private static   int texHeight=512;
     int frameIdIndex=0,renderIdIndex=1,textureIdIndex=2;
     int[] bufferId=new int[3];
-    final float x = 10.0f;
-    final float y = 15.0f;
-    final float z = 2.0f;
-    final float vertexData[] = { -x, -y, z, 0, 0, -1, 0, 0,
-            -x,  y, z, 0, 0, -1, 0, 1,
-            x,  y, z, 0, 0, -1, 1, 1,
-            x, -y, z, 0, 0, -1, 1, 0
-    };
 
-    ObjObject obj;
+
+
+    NewSky obj;
     private LookAtCamera camera;
     CameraController cameraController;
+
+    private int textureId;
+
 
 
     @Override
@@ -47,25 +51,34 @@ public class FrameBufferDemoScreen extends GLScreen {
     @Override
     public void present(float deltaTime) {
 
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, bufferId[frameIdIndex]);
+   //  GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,bufferId[frameIdIndex]);
+            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,0);
         //clear color and  depth buffer;
         GLES20.glClearColor(0,0,0,1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         camera.setMatrices();
 
-        obj.draw();
+        obj.draw( textureId);
+
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,0);
     }
 
     @Override
     public void pause() {
 
         obj.unBind();
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+
         GLES20.glDeleteFramebuffers(1,bufferId,frameIdIndex);
     }
 
     @Override
     public void resume() {
+
+//
+
+
+
+
 
         //获取Renderbuffer 支持的最大的 值  所有纹理宽高必须小于这个值。
         int[] size=new int[1];
@@ -92,22 +105,22 @@ public class FrameBufferDemoScreen extends GLScreen {
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D,bufferId[textureIdIndex]);
 
 
-
+        //   GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D,0,GLES20.GL_RGB,texWidth,texHeight,0,GLES20.GL_RGB,GLES20.GL_UNSIGNED_SHORT_5_6_5,null);
 
         GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D,0,GLES20.GL_RGBA,texWidth,texHeight,0,GLES20.GL_RGBA,GLES20.GL_UNSIGNED_SHORT_4_4_4_4,null);
-
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_REPEAT);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_REPEAT);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+
+
 
 
         // bind renderbuffer and create a 16-bit depth buffer
         // width and height of renderbuffer = width and height of
         // the texture
-        GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER,bufferId[renderIdIndex] );
-
-        GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER,GLES20.GL_UNSIGNED_SHORT_4_4_4_4,texWidth,texHeight);
+        GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, bufferId[renderIdIndex]);
+        GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER,GLES20.GL_DEPTH_COMPONENT16,texWidth,texHeight);
 
         //bind the frameBuffer;
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,bufferId[frameIdIndex]);
@@ -117,7 +130,7 @@ public class FrameBufferDemoScreen extends GLScreen {
 
 
          //specify renderbuffer as depth_attachment
-    //     GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER,GLES20.GL_DEPTH_ATTACHMENT,GLES20.GL_RENDERBUFFER,bufferId[renderIdIndex]);
+       GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER,GLES20.GL_DEPTH_ATTACHMENT,GLES20.GL_RENDERBUFFER,bufferId[renderIdIndex]);
 
 
         //check for framebuffer complete
@@ -130,14 +143,20 @@ public class FrameBufferDemoScreen extends GLScreen {
 
 
         }else
-        {throw new RuntimeException("status:"+status);}
+        {throw new RuntimeException("status:"+status+", hex:"+Integer.toHexString(status));}
 
 
+        Bitmap bitmap=Bitmap.createBitmap(texWidth,texHeight, Bitmap.Config.ARGB_4444);
+        Canvas canvas=new Canvas(bitmap);
+        canvas.drawColor(Color.RED);
+        canvas.drawBitmap(BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.icon),texWidth/2,texHeight/2,null);
+        textureId=    ShaderUtil.loadTextureWithUtils(bitmap,false);
+        //  textureId=  ShaderUtil.loadTextureWithUtils(game.getContext(),"sky/sky.png",false);
 
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         GLES20.glEnable(GLES20.GL_CULL_FACE);
-        int width = glGame.getGLGraphics().getWidth();
-        int height = glGame.getGLGraphics().getHeight();
+        int width = texWidth;
+        int height = texHeight                ;
         GLES20.glViewport(0, 0, width, height);
         float ratio = (float) width / height;
 
@@ -173,7 +192,7 @@ public class FrameBufferDemoScreen extends GLScreen {
          DisplayMetrics metrics= game.getContext().getResources().getDisplayMetrics();
         texWidth= metrics.widthPixels;
         texHeight=metrics.heightPixels;
-        obj=new ObjObject(game.getContext(),"eager/","eager.obj");
+        obj=new NewSky(game.getContext());
 
 
     }
