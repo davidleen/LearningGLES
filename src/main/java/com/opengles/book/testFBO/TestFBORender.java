@@ -33,7 +33,7 @@ package com.opengles.book.testFBO;
 public class TestFBORender implements GLSurfaceView.Renderer
 {
     /** Used for debug logs. */
-    private static final String TAG = "Test7Renderer";
+    private static final String TAG = "TestFBORender";
 
     private final Context mActivityContext;
 
@@ -334,8 +334,10 @@ public class TestFBORender implements GLSurfaceView.Renderer
                 new String[] {"a_Position", "a_Color", "a_TexCoordinate"});
 
         // Load the texture
-        mTextureDataHandle = loadTexture(mActivityContext, R.drawable.icon
-        );
+//        mTextureDataHandle = loadTexture(mActivityContext, R.drawable.icon
+//        );
+
+        mTextureDataHandle=   loadTexture(mActivityContext, "sky/sky.png"    );
     }
 
     @Override
@@ -360,29 +362,50 @@ public class TestFBORender implements GLSurfaceView.Renderer
     @Override
     public void onDrawFrame(GL10 glUnused)
     {
-        IntBuffer framebuffer = IntBuffer.allocate(1);
-        IntBuffer depthRenderbuffer = IntBuffer.allocate(1);
-        IntBuffer texture = IntBuffer.allocate(1);
+
+
+        //获取Renderbuffer 支持的最大的 值  所有纹理宽高必须小于这个值。
+        int[] size=new int[1];
+        GLES20.glGetIntegerv(GLES20.GL_MAX_RENDERBUFFER_SIZE,size,0);
+
+
+        int frameIdIndex=0,renderIdIndex=1,textureIdIndex=2;
+        int[] bufferId=new int[3];
+
+
+        //id  index  0 frameId, 1 renderId 2 textureId;
+
+        GLES20.glGenFramebuffers(1,bufferId,frameIdIndex);
+        GLES20.glGenRenderbuffers(1, bufferId, renderIdIndex);
+        GLES20.glGenTextures(1, bufferId, textureIdIndex);
+
+
+    //    IntBuffer framebuffer = IntBuffer.allocate(1);
+    //    IntBuffer depthRenderbuffer = IntBuffer.allocate(1);
+     //   IntBuffer texture = IntBuffer.allocate(1);
         int texWidth = 480, texHeight = 480;
         IntBuffer maxRenderbufferSize = IntBuffer.allocate(1);
         GLES20.glGetIntegerv(GLES20.GL_MAX_RENDERBUFFER_SIZE, maxRenderbufferSize);
         // check if GL_MAX_RENDERBUFFER_SIZE is >= texWidth and texHeight
-        if((maxRenderbufferSize.get(0) <= texWidth) ||
-                (maxRenderbufferSize.get(0) <= texHeight))
+        if((size[0] <= texWidth) ||
+                (size[0] <= texHeight))
         {
             // cannot use framebuffer objects as we need to create
             // a depth buffer as a renderbuffer object
             // return with appropriate error
+            throw new RuntimeException(" texWidth and texHeight must be smaller than  GL_MAX_RENDERBUFFER_SIZE ");
         }
         // generate the framebuffer, renderbuffer, and texture object names
-        GLES20.glGenFramebuffers(1, framebuffer);
-        GLES20.glGenRenderbuffers(1, depthRenderbuffer);
-        GLES20.glGenTextures(1, texture);
+      //  GLES20.glGenFramebuffers(1, framebuffer);
+       // GLES20.glGenRenderbuffers(1, depthRenderbuffer);
+    //    GLES20.glGenTextures(1, texture);
+     //   GLES20.glGenTextures(1, bufferId,textureIdIndex);
         // bind texture and load the texture mip-level 0
         // texels are RGB565
         // no texels need to be specified as we are going to draw into
         // the texture
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture.get(0));
+      //  GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture.get(0));
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, bufferId[textureIdIndex]);
         GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGB, texWidth, texHeight,
                 0, GLES20.GL_RGB, GLES20.GL_UNSIGNED_SHORT_5_6_5, null);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
@@ -392,17 +415,24 @@ public class TestFBORender implements GLSurfaceView.Renderer
         // bind renderbuffer and create a 16-bit depth buffer
         // width and height of renderbuffer = width and height of
         // the texture
-        GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, depthRenderbuffer.get(0));
+       // GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, depthRenderbuffer.get(0));
+        GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, bufferId[renderIdIndex]);
         GLES20.glRenderbufferStorage(GLES20.GL_RENDERBUFFER, GLES20.GL_DEPTH_COMPONENT16,
                 texWidth, texHeight);
         // bind the framebuffer
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, framebuffer.get(0));
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER,bufferId[frameIdIndex]);
+       // GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, framebuffer.get(0));
         // specify texture as color attachment
+//        GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
+//                GLES20.GL_TEXTURE_2D, texture.get(0), 0);
+
         GLES20.glFramebufferTexture2D(GLES20.GL_FRAMEBUFFER, GLES20.GL_COLOR_ATTACHMENT0,
-                GLES20.GL_TEXTURE_2D, texture.get(0), 0);
+                GLES20.GL_TEXTURE_2D, bufferId[textureIdIndex], 0);
         // specify depth_renderbufer as depth attachment
         GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER, GLES20.GL_DEPTH_ATTACHMENT,
-                GLES20.GL_RENDERBUFFER, depthRenderbuffer.get(0));
+                GLES20.GL_RENDERBUFFER, bufferId[renderIdIndex]);
+//        GLES20.glFramebufferRenderbuffer(GLES20.GL_FRAMEBUFFER, GLES20.GL_DEPTH_ATTACHMENT,
+//                GLES20.GL_RENDERBUFFER, depthRenderbuffer.get(0));
         // check for framebuffer complete
         int status = GLES20.glCheckFramebufferStatus(GLES20.GL_FRAMEBUFFER);
         if(status == GLES20.GL_FRAMEBUFFER_COMPLETE)
@@ -462,7 +492,9 @@ public class TestFBORender implements GLSurfaceView.Renderer
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 
             // Bind the texture to this unit.
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture.get(0)/*mTextureDataHandle*/);
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, bufferId[textureIdIndex]/*mTextureDataHandle*/);
+
+            // GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture.get(0)/*mTextureDataHandle*/);
 
             // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
             GLES20.glUniform1i(mTextureUniformHandle, 0);
@@ -475,9 +507,12 @@ public class TestFBORender implements GLSurfaceView.Renderer
         }
 
         // cleanup
-        GLES20.glDeleteRenderbuffers(1, depthRenderbuffer);
-        GLES20.glDeleteFramebuffers(1, framebuffer);
-        GLES20.glDeleteTextures(1, texture);
+     //   GLES20.glDeleteRenderbuffers(1, depthRenderbuffer);
+        GLES20.glDeleteRenderbuffers(1, bufferId,renderIdIndex);
+        GLES20.glDeleteFramebuffers(1, bufferId ,frameIdIndex);
+     //   GLES20.glDeleteFramebuffers(1, framebuffer);
+       // GLES20.glDeleteTextures(1, texture);
+        GLES20.glDeleteTextures(1, bufferId,textureIdIndex);
     }
 
     /**
@@ -552,6 +587,38 @@ public class TestFBORender implements GLSurfaceView.Renderer
         return textureHandle[0];
     }
 
+
+    public static int loadTexture(final Context context, String
+                                    assertFileName)
+    {
+
+
+       return  ShaderUtil.loadTextureWithUtils(context,assertFileName,false);
+//        final int[] textureHandle = new int[1];
+//        GLES20.glGenTextures(1, textureHandle, 0);
+//
+//        if(textureHandle[0] != 0)
+//        {
+//            final BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inScaled = false;
+//            final Bitmap bitmap = BitmapFactory.decode(context.getAssets().open(assertFileName))
+//
+//            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
+//
+//            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST);
+//            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST);
+//
+//            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+//            bitmap.recycle();
+//        }
+//
+//        if(textureHandle[0] == 0)
+//        {
+//            throw new RuntimeException("failed to load texture");
+//        }
+//
+//        return textureHandle[0];
+    }
     /**
      * Helper function to compile a shader.
      *

@@ -100,8 +100,7 @@ public abstract class NewAbstractSimpleObject   {
 			 //指定使用某套shader程序
 	   	 GLES20.glUseProgram(mProgram);
 
-           if(textureId!=0)
-               GLES20.glEnable(GLES20.GL_TEXTURE_2D);
+
 
 	   	  GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 	      GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
@@ -122,8 +121,7 @@ public abstract class NewAbstractSimpleObject   {
             vertices.draw();
             vertices.unbind();
 
-            if(textureId!=0)
-                GLES20.glDisable(GLES20.GL_TEXTURE_2D);
+
 
 
 
