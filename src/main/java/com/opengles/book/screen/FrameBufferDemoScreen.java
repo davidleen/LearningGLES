@@ -48,14 +48,13 @@ public class FrameBufferDemoScreen extends GLScreen {
         camera.setMatrices();
 
 
-        frameBuffer.bind();
+       frameBuffer.bind();
 
-        //render to texture using fbo;
+
+
+//        //render to texture using fbo;
         GLES20.glClearColor(0,0,0,1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-        // Set the active texture unit to texture unit 0.
-
-
         obj.draw();
 
 
@@ -100,7 +99,7 @@ public class FrameBufferDemoScreen extends GLScreen {
         //  textureId=  ShaderUtil.loadTextureWithUtils(game.getContext(),"sky/sky.png",false);
 
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-        GLES20.glEnable(GLES20.GL_CULL_FACE);
+       // GLES20.glEnable(GLES20.GL_CULL_FACE);
 
 
 
@@ -119,7 +118,7 @@ public class FrameBufferDemoScreen extends GLScreen {
         camera.setUp(0, 1, 0);
         camera.setLookAt(0f, 0f, 0f) ;
         cameraController=new CameraController(camera, glGame.getGLGraphics());
-
+        camera.setMatrices();;
 
         obj.bind();
 
@@ -128,7 +127,7 @@ public class FrameBufferDemoScreen extends GLScreen {
         // Enable texture mapping
         GLES20.glEnable(GLES20.GL_TEXTURE_2D);
 
-        frameBuffer.create(game.getContext(),texWidth,texHeight);
+        frameBuffer.create();
 
     }
 
@@ -148,7 +147,7 @@ public class FrameBufferDemoScreen extends GLScreen {
 
 
 
-        frameBuffer=new FrameBufferManager.FrameBuffer();
+        frameBuffer=new FrameBufferManager.FrameBuffer(game.getContext(),texWidth,texHeight);
 
     }
 

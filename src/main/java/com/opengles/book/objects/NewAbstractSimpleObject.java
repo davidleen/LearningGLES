@@ -42,7 +42,7 @@ public abstract class NewAbstractSimpleObject   {
     String mFragmentShader;//片元着色器
 
 	private Vertices vertices;
-   // int alphaThreadHoldHandler;
+
 
     // 总变换矩阵属性
     private UniformMatrix4F finalMatrix;
