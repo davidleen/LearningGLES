@@ -69,6 +69,6 @@ public class LookAtCamera  extends Camera3D{
 	public void setMatrices( ) { 
 		MatrixState.setFrustumProject( -fieldOfView/2,fieldOfView/2, -fieldOfView*aspectRatio/2, fieldOfView*aspectRatio/2, near, far); 
 		MatrixState.setCamera(  position.x, position.y, position.z, lookAt.x, lookAt.y, lookAt.z, up.x, up.y, up.z);
-		MatrixState.setInitStack();
+		 MatrixState.setInitStack();
 	}
 }

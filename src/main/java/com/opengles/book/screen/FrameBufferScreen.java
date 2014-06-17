@@ -14,7 +14,7 @@ import com.opengles.book.objects.TwistCuboid;
 import java.util.List;
 
 /**
- * 使用fbo的 GL_SCREEN
+ * 使用fbo的 GL_SCREEN   可以继承 所有绘制的对象都将存在fbo 上  然后绘制到系统输出上。。  frameId=0  默认为系统的。
  * Created by davidleen29   qq:67320337
  * on 2014-6-11.
  */

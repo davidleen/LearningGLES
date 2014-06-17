@@ -24,7 +24,7 @@ import com.opengles.book.utils.TextureMap;
  *
  */
 public class ParticleSystemObject implements ObjectDrawable{
-	public static final int NUM_PARTICLE=100;
+	public static final int NUM_PARTICLE=10000;
 	float[] mParticleData=new float[NUM_PARTICLE*7];
 	int drawType=GLES20.GL_POINTS;
 

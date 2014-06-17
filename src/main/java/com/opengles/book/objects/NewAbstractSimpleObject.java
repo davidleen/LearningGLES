@@ -3,6 +3,7 @@ package com.opengles.book.objects;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 import com.opengles.book.FloatUtils;
 import com.opengles.book.MatrixState;
 import com.opengles.book.ShaderUtil;
@@ -17,6 +18,7 @@ import com.opengles.book.glsl.UniformMatrix4F;
  * @author davidleen29 
  * @create : 2014-4-25 下午11:44:25
  * @{  简单对象  shader 都是固定的   抽取公用方法和属性。}
+ * 改动：   texture 不再自己指定  右调用者传入。
  */
 public abstract class NewAbstractSimpleObject   {
 
@@ -159,6 +161,8 @@ public abstract class NewAbstractSimpleObject   {
             finalMatrix=new UniformMatrix4F(mProgram,"uMVPMatrix",new Uniform.UniformBinder<float[]>() {
                 @Override
                 public float[] getBindValue() {
+
+
                     return MatrixState.getFinalMatrix();
                 }
             });

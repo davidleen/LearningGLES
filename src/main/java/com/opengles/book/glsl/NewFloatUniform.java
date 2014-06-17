@@ -19,12 +19,13 @@ public class NewFloatUniform {
 	public FloatBuffer buffer;
 	public int uniformHandler;
 	public int size;
+    public    boolean changed;
 	
 	/**
 	 *  新类
 	 * @param size 
 	 */
-	public NewFloatUniform(int size)
+	public NewFloatUniform(int mProgram,String uniformName,int size)
 	{
 		
 		switch(size)
@@ -43,17 +44,18 @@ public class NewFloatUniform {
 		data=new float[size]; 
 		buffer=FloatUtils.FloatArrayToNativeBuffer(data); 
 		setData(data);
+
+        uniformHandler=GLES20.glGetUniformLocation(mProgram,uniformName);
 	}
 	
 	
 	
-	public void setUniform(int mProgram,String uniformName)
-	{
-		uniformHandler=GLES20.glGetUniformLocation(mProgram,uniformName);
-	}
+
 	
 	public void bind()
 	{
+        if(!changed) return ;
+
 		switch(size)
 		{
 			case  SiZE_1FV:
@@ -72,6 +74,8 @@ public class NewFloatUniform {
 				GLES20.glUniformMatrix4fv(uniformHandler, 1,false,buffer);
 				break;
 		}
+
+        changed=false;
 		
 				
 				 
@@ -79,15 +83,24 @@ public class NewFloatUniform {
 	
 	public void setData(float... data)
 	{
+
+        if(data.length!=this.data.length)
+        {
+            throw new RuntimeException(" invalided uniform value  size ,  the size defined is "+this.data.length);
+        }
+        changed=true;
 		buffer.put(data);
 		buffer.flip();
+
+
+
 		
 	}
 	
 	
 	public void dispose()
 	{
-		
+
 		 
 		 
 	}

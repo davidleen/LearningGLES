@@ -150,21 +150,25 @@ public class FrameBufferManager {
 
 
             GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+
+            GLES20.glDisable(GLES20.GL_CULL_FACE);
             //绘制视窗
             //清除深度缓冲
             GLES20.glClearColor(0,0,0,1.0f);
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
             //调用此方法计算产生平行投影矩阵
-          //  MatrixState.setInitStack();
-            MatrixState.setOrthoProject(-1f, 1f, -1f, 1f,1, 100);
-            //调用此方法产生摄像机9参数位置矩阵
-            MatrixState.setCamera(0, 10, 0, 0f, 0f, 0f, 0f, 0.0f,  1.0f);
+            MatrixState.pushMatrix();
 
 
-            //     plan.draw(testTextId);
-          plan.draw(bufferId[textureIdIndex]);
+                MatrixState.setOrthoProject(-1f, 1f, -1f, 1f,1, 100);
+                //调用此方法产生摄像机9参数位置矩阵
+                MatrixState.setCamera(0, 10, 0, 0f, 0f, 0f, 0f, 0.0f,  1.0f);
 
+            MatrixState.setInitStack();
+
+              plan.draw(bufferId[textureIdIndex]);
+            MatrixState.popMatrix();
 
 
 

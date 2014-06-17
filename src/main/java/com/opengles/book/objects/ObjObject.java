@@ -101,6 +101,7 @@ public class ObjObject implements ObjectDrawable {
 		mProgram = ShaderUtil.createProgram(mVertexShader, mFragmentShader);
 
 
+        //uniform 属性绑定
         finalMatrix=new UniformMatrix4F(mProgram,"uMVPMatrix",new Uniform.UniformBinder<float[]>() {
             @Override
             public float[] getBindValue() {

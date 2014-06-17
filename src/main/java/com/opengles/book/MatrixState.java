@@ -41,9 +41,10 @@ public class MatrixState
 
 	private static float[] currMatrix;//当前变换矩阵
 
-	public static void setInitStack()// ��ȡ���任��ʼ����
+	public static void setInitStack()// 设置初始化矩阵。
 	{
-		currMatrix = pool.newObject();
+        if(currMatrix==null)
+		    currMatrix = pool.newObject();
 		Matrix.setIdentityM(currMatrix, 0);
 		Matrix.setRotateM(currMatrix, 0, 0, 1, 0, 0);
 	}
@@ -55,7 +56,7 @@ public class MatrixState
 		mStack.push(currentClone);
 	}
 
-	public static void copyMatrix(float[] src, float[] dest)
+	private static void copyMatrix(float[] src, float[] dest)
 	{
 
 		for (int i = 0; i < MATRIX_SIZE; i++)
@@ -64,6 +65,23 @@ public class MatrixState
 		}
 
 	}
+
+
+    /**
+     * 保存当前现场
+     */
+    public void save()
+    {
+
+    }
+
+    /**
+     * 恢复现场
+     */
+    public void restore()
+    {
+
+    }
 
 	/**
 	 * 生成新的矩阵 并且初始化 即设0

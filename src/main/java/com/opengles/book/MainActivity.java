@@ -47,6 +47,11 @@ public class MainActivity extends ListActivity {
 
 		datas.add(info);
 
+
+        info = new MenuInfo("Obj文件解析展示(FBO)", OjObjectWithFBOScreen.class.getName());
+
+        datas.add(info);
+
 		info = new MenuInfo("地球星空", GalaxyScreen.class.getName());
 
 		datas.add(info);

@@ -1,6 +1,5 @@
 package com.opengles.book.screen;
 
-import android.graphics.Camera;
 import android.opengl.GLES20;
 import android.util.Log;
 import com.opengles.book.LightSources;
@@ -14,23 +13,21 @@ import com.opengles.book.galaxy.CameraController;
 import com.opengles.book.math.Vector3;
 import com.opengles.book.objLoader.AABB;
 import com.opengles.book.objects.ObjObject;
-import com.opengles.book.objects.TwistCuboid;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  *  a screen for generate various object by  .obj file
  */
-public   class OjObjectScreen extends GLScreen {
+public   class OjObjectWithFBOScreen extends FrameBufferScreen {
 
 
 	private int currentObjectIndex;
 
 	FPSCounter counter;
     private float timeForObjectChange=1;
-	
+
     private float timeCollapsedForObject = 0;
     private float timeCollapsedForSun = 0;
     int sunAng=0;
@@ -43,23 +40,16 @@ public   class OjObjectScreen extends GLScreen {
 
     private List<ObjObject> objects;
 
-	public OjObjectScreen(Game game) {
+	public OjObjectWithFBOScreen(Game game) {
 		super(game);
 
 
 
         objects=new ArrayList<ObjObject>();
-        //                      objects.add(new ObjObject(game.getContext(),"","teapot.obj"));
+                          objects.add(new ObjObject(game.getContext(),"","teapot.obj"));
        objects.add(new ObjObject(game.getContext(), "eager/","eager.obj"));
         objects.add(new ObjObject(game.getContext(), "eager/","eager1.obj"));
         objects.add(new ObjObject(game.getContext(), "eager/","eager2.obj"));
-//
-//     objects.add(new ObjObject(game.getContext(), "tz/","tz.obj"));
-//            objects.add(new ObjObject(game.getContext(),"cuboid"+ File.separator,"cuboid.obj"));
-//                      objects.add(new TwistCuboid(game.getContext() ));
-//         objects.add(new ObjObject(game.getContext(),"","shot.obj"));
-//             objects.add(new ObjObject(game.getContext(),"","cube.obj"));
-//         objects.add(new ObjObject(game.getContext(),"","invader.obj"));
        currentObjectIndex=0;
 
 
@@ -70,7 +60,7 @@ public   class OjObjectScreen extends GLScreen {
 
 	@Override
 	public void update(float deltaTime) {
-
+        super.update(  deltaTime);
         objects.get(currentObjectIndex).update(deltaTime);
 		List<TouchEvent> touchEvents = glGame.getInput().getTouchEvents();
         cameraController.onTouchEvent(touchEvents);
@@ -100,7 +90,7 @@ public   class OjObjectScreen extends GLScreen {
                 Log.d(TAG,"timeUsdInBind:"+timeUsdInBind);
 
 
-               updateCameraBaseOnObjectBoundary(camera,objects.get(currentObjectIndex).getBoundary());
+
 
 
                 timeCollapsedForObject  -=( timeUsdInBind+timeForObjectChange);
@@ -111,26 +101,12 @@ public   class OjObjectScreen extends GLScreen {
 	}
 
 
-    /**
-     * 根据当前对象更新camera 位置。
-     * @param camera
-     * @param boundary
-     */
-    private  void updateCameraBaseOnObjectBoundary(LookAtCamera camera,AABB boundary)
-    {
-          boundary= objects.get(currentObjectIndex).getBoundary();
-        Vector3 center=boundary.getCenter();
-        camera.setPosition(0.0f,center.y,boundary.getMaxSpan()+boundary.max.z );
-        camera.setUp(0,1,0);
-        camera.setLookAt(center) ;
-    }
-	@Override
-	public void present(float deltaTime) {
-	 	counter.logFrame();
 
+	@Override
+	public void onPresent(float deltaTime) {
+	 	counter.logFrame();
         MatrixState.pushMatrix();
         camera.setMatrices();
-
         MatrixState.popMatrix();
 		// 清除颜色
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT
@@ -156,7 +132,7 @@ public   class OjObjectScreen extends GLScreen {
 
 	@Override
 	public void pause() {
-
+        super.pause();
         objects.get(currentObjectIndex).unBind();
 		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 		 GLES20.glDisable(GLES20.GL_CULL_FACE);
@@ -165,6 +141,7 @@ public   class OjObjectScreen extends GLScreen {
 
 	@Override
 	public void resume() {
+        super.resume();
 
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -187,11 +164,14 @@ public   class OjObjectScreen extends GLScreen {
 
 
         camera=new LookAtCamera(2,1/ratio,1 ,1000);
+        camera.setPosition(0.0f,0f, 30f);
+        camera.setUp(0, 1, 0);
+        camera.setLookAt(0f, 0f, 0f);
         ObjObject objObject=objects.get(currentObjectIndex);
-        updateCameraBaseOnObjectBoundary(camera,objObject.getBoundary());
+        camera.setMatrices();
+
 
         cameraController=new CameraController(camera, glGame.getGLGraphics());
-        camera.setMatrices();
 
         objObject.bind();
 
@@ -200,6 +180,7 @@ public   class OjObjectScreen extends GLScreen {
 	@Override
 	public void dispose() {
 
+        super.dispose();
 	}
 
 
