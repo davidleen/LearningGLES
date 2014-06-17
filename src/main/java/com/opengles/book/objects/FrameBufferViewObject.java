@@ -37,14 +37,13 @@ public    class FrameBufferViewObject extends NewAbstractSimpleObject{
 		        	1,0,
 		        	 width*UNIT_SIZE,0, height*UNIT_SIZE,
 		        	1,1,
-		        	
 		        	-width*UNIT_SIZE,0, height*UNIT_SIZE,
 		        	0,1 
 		        };
 		
 		indexData=new short[]{
 				
-			0,1,2,2,3,	0
+			2,1,0,0,3,2
 				
 		};
 		

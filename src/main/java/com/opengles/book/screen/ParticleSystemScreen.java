@@ -25,7 +25,7 @@ import java.util.List;
 /**
  *  a screen for generate various object by  .obj file
  */
-public   class ParticleSystemScreen extends GLScreen {
+public   class ParticleSystemScreen extends FrameBufferScreen {
 
 
 	 
@@ -53,9 +53,14 @@ public   class ParticleSystemScreen extends GLScreen {
         counter = new FPSCounter();
 	}
 
-	@Override
-	public void update(float deltaTime) {
+//    @Override
+//    protected void onPresent() {
+//
+//    }
 
+    @Override
+	public void update(float deltaTime) {
+        super.update(deltaTime);
 		
 		List<TouchEvent> touchEvents = glGame.getInput().getTouchEvents();
         cameraController.onTouchEvent(touchEvents);
@@ -81,7 +86,7 @@ public   class ParticleSystemScreen extends GLScreen {
 
     
 	@Override
-	public void present(float deltaTime) {
+	public void onPresent(float deltaTime) {
 	 	counter.logFrame();
         camera.setMatrices();
 		// 清除颜色
@@ -108,7 +113,7 @@ public   class ParticleSystemScreen extends GLScreen {
 
 	@Override
 	public void pause() {
-
+        super.pause();
         object.unBind();
 		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 		 GLES20.glDisable(GLES20.GL_CULL_FACE);
@@ -118,6 +123,8 @@ public   class ParticleSystemScreen extends GLScreen {
 	@Override
 	public void resume() {
 
+
+        super.resume();
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
@@ -150,7 +157,7 @@ public   class ParticleSystemScreen extends GLScreen {
 
 	@Override
 	public void dispose() {
-		 
+        super.dispose();
 
 	}
 

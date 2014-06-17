@@ -33,14 +33,14 @@ public class FrameBufferManager {
 
         int width;
         int height;
-        int testTextId;
+      //  int testTextId;
         public FrameBuffer(Context context,int width,int height)
         {
             this.width=width;
             this.height=height;
-            plan=new FrameBufferViewObject(context,2,2);
+            plan=new FrameBufferViewObject(context,1,1);
 
-              testTextId= ShaderUtil.loadTextureWithUtils(context,"sky/sky.png",false);
+          //    testTextId= ShaderUtil.loadTextureWithUtils(context,"sky/sky.png",false);
 
         }
 
