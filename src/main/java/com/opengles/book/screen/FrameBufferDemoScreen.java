@@ -5,6 +5,7 @@ import android.util.DisplayMetrics;
 import com.opengles.book.LightSources;
 import com.opengles.book.MatrixState;
 
+import com.opengles.book.ShaderUtil;
 import com.opengles.book.framework.Game;
 import com.opengles.book.framework.Input;
 import com.opengles.book.framework.gl.LookAtCamera;
@@ -96,7 +97,7 @@ public class FrameBufferDemoScreen extends GLScreen {
 
 
 
-        //  textureId=  ShaderUtil.loadTextureWithUtils(game.getContext(),"sky/sky.png",false);
+   //     textureId=  ShaderUtil.loadTextureWithUtils(game.getContext(), "sky/sky.png", false);
 
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
        // GLES20.glEnable(GLES20.GL_CULL_FACE);

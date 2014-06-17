@@ -227,9 +227,20 @@ public class ShaderUtil {
 					GLES20.GL_REPEAT);
 			GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T,
 					GLES20.GL_REPEAT);
-			
-			 
-			GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+
+
+
+            //实际加载纹理,换成这个方法后，如果图片格式有问题，会抛出图片格式异常，不再会误显示其他异常
+            GLUtils.texImage2D
+                    (
+                            GLES20.GL_TEXTURE_2D, //纹理类型
+                            0,
+                            GLUtils.getInternalFormat(bitmap),
+                            bitmap, //纹理图像
+                            GLUtils.getType(bitmap),
+                            0 //纹理边框尺寸
+                    );
+//            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
 			 //自动生成Mipmap纹理
 			if(isMipMap)
 	         GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
