@@ -1,7 +1,7 @@
 package com.opengles.book.math;
 
 public class Sphere {
-    public final Vector3 center = new Vector3();
+    public final Vector3 center = Vector3.create();
     public float radius;
     
     public Sphere(float x, float y, float z, float radius) {

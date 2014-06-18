@@ -23,9 +23,9 @@ public class LookAtCamera  extends Camera3D{
 		this.near = near;
 		this.far = far;
 		
-		position = new Vector3(0,0,1);
-		up = new Vector3(0, 1, 0);
-		lookAt = new Vector3(0,0,0);
+		position = Vector3.create(0, 0, 1);
+		up = Vector3.create(0, 1, 0);
+		lookAt = Vector3.create(0, 0, 0);
 	}
 	
 	public Vector3 getPosition() {

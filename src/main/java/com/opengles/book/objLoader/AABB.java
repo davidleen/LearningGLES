@@ -12,11 +12,11 @@ public class AABB {
 
 
 
-   public Vector3 min=new Vector3();
+   public Vector3 min= Vector3.create();
 
-    public Vector3 max=new Vector3();
+    public Vector3 max= Vector3.create();
 
-   public Vector3 center=new Vector3();
+   public Vector3 center= Vector3.create();
 
     public void update(float x, float y, float z) {
 
