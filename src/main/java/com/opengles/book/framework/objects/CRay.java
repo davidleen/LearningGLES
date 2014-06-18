@@ -18,9 +18,9 @@ public class CRay {
       * @param t
      * @return
      */
-    public Vector3 getPoint(double t)
+    public Vector3 getPoint(float t)
     {
-        return null;
+        return direction.cpy().mul(t).add(origin);
     }
 
 }

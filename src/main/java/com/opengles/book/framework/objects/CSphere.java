@@ -21,8 +21,38 @@ public class CSphere extends CObject {
 
     }
 
+    //计算圆跟射线的交点
     @Override
     public IntersectType isIntersected(CRay ray, float distance) {
-        return null;
+
+        float t=0;
+        Vector3 m=ray.origin.cpy().sub(center);
+
+        float b=Vector3.dotValue(m,ray.direction);
+        float c=Vector3.dotValue(m,m)-radius*radius;
+        // Exit if r’s origin outside s (c > 0) and r pointing away from s (b > 0)
+        if (c > 0.0f && b > 0.0f) return IntersectType.MISS;
+        float discr = b*b - c;
+        // A negative discriminant corresponds to ray missing sphere
+        if(discr<0.0f)
+        {
+            return IntersectType.MISS;
+        }else if(discr<0.0001f)
+        {
+            return IntersectType.INTERSECTED;
+        }
+
+
+
+        // Ray now found to intersect sphere, compute smallest t value of intersection
+        t = (float)(-b - Math.sqrt(discr));
+        // If t is negative, ray started inside sphere so clamp t to zero
+        if (t < 0.0f) t = 0.0f;
+        //q=p+t*d;
+
+
+
+
+        return IntersectType.INTERSECTED_IN;
     }
 }
