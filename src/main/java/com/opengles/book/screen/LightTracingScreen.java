@@ -125,7 +125,7 @@ public   class LightTracingScreen extends FrameBufferScreen {
         cameraController=new CameraController(camera, glGame.getGLGraphics());
 
 
-        LightTracing tracer=new LightTracing(width,height,camera.getPosition());
+        LightTracing tracer=new LightTracing(200,200,camera.getPosition());
         Bitmap bitmap=tracer.trace();
         textureId=  ShaderUtil.loadTextureWithUtils(bitmap,false);
         bitmap.recycle();

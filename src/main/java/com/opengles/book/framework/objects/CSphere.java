@@ -35,7 +35,7 @@ public class CSphere extends CObject {
 
         Vector3.recycle(m);
         // Exit if r’s origin outside s (c > 0) and r pointing away from s (b > 0)
-        if (c > 0.0f && b > 0.0f) return IntersectType.MISS;
+      // if (c > 0.0f && b > 0.0f) return IntersectType.MISS;
         float discriminant = b*b - c;
         // A negative discriminant corresponds to ray missing sphere
         if(discriminant<0.0f)
@@ -53,7 +53,7 @@ public class CSphere extends CObject {
             // Ray now found to intersect sphere, compute smallest t value of intersection
             float   t = (float) (-b - Math.sqrt(discriminant));
             // If t is negative, ray started inside sphere so clamp t to zero
-            if (t < 0.0f)  t = 0.0f;
+      //      if (t < 0.0f)  t = 0.0f;
             intersectedPosition.set(ray.direction).mul(t).add(ray.origin);
         }
 

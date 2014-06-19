@@ -14,6 +14,8 @@ public abstract class CObject {
 //             镜面
 //                   反射系数 kSpecular
 //    ，镜面反射强度(shininess)和环境反射强度(reflectivity)
+
+    public Vector3 color;
     public Vector3 kAmbient;
     public Vector3 kDiffuse;
     public Vector3 kSpecular;

@@ -3,6 +3,7 @@ package com.opengles.book.framework.objects;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.util.Log;
 import com.opengles.book.math.Vector3;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.List;
 public class LightTracing {
 
     //默认背景黑色
-    Vector3 background=Vector3.create() ;
+    Vector3 background=Vector3.create().set(1,1,1) ;
     int width; int height;
     int z=0;
     Vector3 camera;//相机位置
@@ -32,6 +33,7 @@ public class LightTracing {
         this.camera=Vector3.create().set(camera);
 
         CLightSource cLightSource=new CDirectionalLight();
+        cLightSource.position=Vector3.create().set(0,100,0);
         cLightSource.kAmbient=Vector3.create().set(1,1,1);
         cLightSource.kDiffuse=Vector3.create().set(1,1,1);
         cLightSource.kSpecular=Vector3.create().set(1,1,1);
@@ -42,31 +44,34 @@ public class LightTracing {
         //空间构建
         CSphere object=new CSphere();
         //球体  红色
-        object.center=Vector3.create().set(0,0,-5);
-        object.radius=3;
+        object.center=Vector3.create().set(0,0,-25);
+        object.radius=10;
+        object.color=Vector3.create().set(1,0,0);
 
-        object.kAmbient=Vector3.create().set(1,0,0);
-        object.kDiffuse=Vector3.create().set(1,0,0);
-        object.kSpecular=Vector3.create().set(1,0,0);
+        object.kAmbient=Vector3.create().set(0.15f,0.15f,0.15f);
+        object.kDiffuse=Vector3.create().set(0.5f,0.5f,0.23f);
+        object.kSpecular=Vector3.create().set(0.3f,0.3f,0.15f);
 
         objects.add(object);
         //球体  黄色
         object=new CSphere();
-        object.center=Vector3.create().set(0,0,-10);
-        object.radius=5;
+        object.center=Vector3.create().set(0,10,-20);
+        object.radius=25;
+        object.color=Vector3.create().set(1,1,0);
 
-        object.kAmbient=Vector3.create().set(1,1,0);
-        object.kDiffuse=Vector3.create().set(1,1,0);
-        object.kSpecular=Vector3.create().set(1,1,0);
+        object.kAmbient=Vector3.create().set(0.15f,0.15f,0.15f);
+        object.kDiffuse=Vector3.create().set(0.5f,0.5f,0.23f);
+        object.kSpecular=Vector3.create().set(0.3f,0.3f,0.15f);
 
         //球体 绿色
         object=new CSphere();
-        object.center=Vector3.create().set(5,5,5);
-        object.radius=5;
+        object.center=Vector3.create().set(20,0,-20);
+        object.radius=8;
+        object.color=Vector3.create().set(0,1,0);
 
-        object.kAmbient=Vector3.create().set(0,1,1);
-        object.kDiffuse=Vector3.create().set(0,1,1);
-        object.kSpecular=Vector3.create().set(0,1,1);
+        object.kAmbient=Vector3.create().set(0.15f,0.15f,0.15f);
+        object.kDiffuse=Vector3.create().set(0.5f,0.5f,0.23f);
+        object.kSpecular=Vector3.create().set(0.3f,0.3f,0.15f);
 
         objects.add(object);
 
@@ -90,7 +95,10 @@ public class LightTracing {
 
                 calculatePrimaryRay(x, y, ray); // Ray or iginat ing from the
 
-
+                if(x==0&& y==0)
+                {
+                   Log.e("TAG","x");
+                }
 
                  Vector3    color = rayTrace(ray, 1); // Start Recursion for this
                  
@@ -113,8 +121,7 @@ public class LightTracing {
             if(object.isIntersected(ray,intersectPoint)!=IntersectType.MISS)
             {
                 Vector3 p =intersectPoint;
-                Vector3 N = object.getNormal(p);
-                N.nor();
+                Vector3 N = object.getNormal(p).nor();
                 for(CLightSource source:sources)
                 {
 
@@ -129,8 +136,8 @@ public class LightTracing {
                     //计算镜面光
                     Vector3 specular = source.evaluateSpecular(N, L, V, object.kSpecular,object.shininess);
                     //颜色值累加
-                    color.add(ambient).add(diffuse).add(specular);
-
+//                    color.add(ambient).add(diffuse).add(specular);
+                    color.set(Vector3.mul(object.color, ambient)).add(Vector3.mul(object.color, diffuse)).add(Vector3.mul(object.color, specular));
                    if(totalTraceDepth > depth)
                    {
                         //计算射线和物体交点处的反射射线 Reflect;
@@ -165,6 +172,7 @@ public class LightTracing {
     }
 
     private void calculatePrimaryRay(int x, int y, CRay ray) {
+
 
 
         ray.origin=camera;

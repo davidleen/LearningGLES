@@ -23,7 +23,7 @@ public class CDirectionalLight extends CLightSource {
     //diffuse =
     public Vector3 evaluateDiffuse(Vector3 light, Vector3 normal,Vector3 materialDiffuse) {
 
-        Vector3 IdKd=    Vector3.mul(kAmbient,materialDiffuse);
+        Vector3 IdKd=    Vector3.mul(kDiffuse,materialDiffuse);
 
         float NdotL =Math.max (Vector3.dotValue(normal,light), 0.0f);
         return IdKd.mul(NdotL);
@@ -47,7 +47,7 @@ public class CDirectionalLight extends CLightSource {
     @Override
     public Vector3 evaluateSpecular(  Vector3 normal, Vector3 light,Vector3 camera,
                                       Vector3 materialSpecular,   float _shininess) {
-        Vector3 IsKs =    Vector3.mul(kAmbient, materialSpecular);
+        Vector3 IsKs =    Vector3.mul(kSpecular, materialSpecular);
 
         Vector3 HVector=Vector3.create().set(light).add(camera).nor();
 
