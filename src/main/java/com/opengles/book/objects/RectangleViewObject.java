@@ -19,25 +19,32 @@ public    class RectangleViewObject extends NewAbstractSimpleObject{
 
 
 
-	public RectangleViewObject(Context context, int width, int height) {
-		super(context);
-		 initData(width, height);
+	public RectangleViewObject(Context context, int width, int height ) {
+		this(context,width,height,0);
 
 	   
 		}
-	
-	
-	private void initData(int width,int height)
+
+
+    public RectangleViewObject(Context context, float width, float height,float z) {
+        super(context);
+        initData(width, height,z);
+
+
+    }
+
+
+    private void initData(float width,float height,float z)
 	{
 		vertexData=new float[]
 		        {
-		        	-width*UNIT_SIZE,0,-height*UNIT_SIZE,
+		        	-width*UNIT_SIZE,-height*UNIT_SIZE,z,
 		        	0,0,
-		        	 width*UNIT_SIZE,0,-height*UNIT_SIZE,
+		        	 width*UNIT_SIZE,-height*UNIT_SIZE,z,
 		        	1,0,
-		        	 width*UNIT_SIZE,0, height*UNIT_SIZE,
+		        	 width*UNIT_SIZE, height*UNIT_SIZE,z,
 		        	1,1,
-		        	-width*UNIT_SIZE,0, height*UNIT_SIZE,
+		        	-width*UNIT_SIZE, height*UNIT_SIZE,z,
 		        	0,1 
 		        };
 		

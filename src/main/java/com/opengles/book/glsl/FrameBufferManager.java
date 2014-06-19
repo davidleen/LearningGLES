@@ -1,8 +1,14 @@
 package com.opengles.book.glsl;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.opengl.GLES20;
 import com.opengles.book.MatrixState;
+import com.opengles.book.ShaderUtil;
+import com.opengles.book.framework.gl.FPSCounter;
 import com.opengles.book.objects.RectangleViewObject;
 
 /**
@@ -27,19 +33,29 @@ public class FrameBufferManager {
     public static final class FrameBuffer
     {
         RectangleViewObject plan;
+        RectangleViewObject fpsPlan;
         int frameIdIndex=0,renderIdIndex=1,textureIdIndex=2;
         int[] bufferId=new int[3];
-
+        Canvas canvas;
+        Bitmap bitmap;
         int width;
         int height;
-      //  int testTextId;
+     int testTextId;
+        FPSCounter counter;
+        Paint pain;
         public FrameBuffer(Context context,int width,int height)
         {
             this.width=width;
             this.height=height;
+            counter = new FPSCounter();
             plan=new RectangleViewObject(context,1,1);
+            fpsPlan=new RectangleViewObject(context,0.1f,0.1f,0.1f);
 
-          //    testTextId= ShaderUtil.loadTextureWithUtils(context,"sky/sky.png",false);
+            bitmap= Bitmap.createBitmap(100, 32, Bitmap.Config.ARGB_8888);
+            canvas=new Canvas(bitmap);
+            pain=new Paint();pain.setColor(Color.RED);
+            pain.setTextSize(18);
+
 
         }
 
@@ -117,6 +133,7 @@ public class FrameBufferManager {
 
 
             plan.bind();
+            fpsPlan.bind();
         }
 
 
@@ -124,6 +141,7 @@ public class FrameBufferManager {
         {
 
             plan.unBind();
+            fpsPlan.unBind();
             // cleanup
             //   GLES20.glDeleteRenderbuffers(1, depthRenderbuffer);
             GLES20.glDeleteRenderbuffers(1, bufferId,renderIdIndex);
@@ -162,11 +180,20 @@ public class FrameBufferManager {
 
                 MatrixState.setOrthoProject(-1f, 1f, -1f, 1f,1, 100);
                 //调用此方法产生摄像机9参数位置矩阵
-                MatrixState.setCamera(0, 10, 0, 0f, 0f, 0f, 0f, 0.0f,  1.0f);
+                MatrixState.setCamera(0,0 , 10, 0f, 0f, 0f, 0f, 1.0f,  0.0f);
 
             MatrixState.setInitStack();
+            if(counter.countFrame())
+            {
+                //update   redraw image  rebind to data;
+                canvas.drawText("fps:"+counter.getFps(),0,19,pain);
+                testTextId= ShaderUtil.loadTextureWithUtils(bitmap, false);
 
-              plan.draw(bufferId[textureIdIndex]);
+            }
+             plan.draw(bufferId[textureIdIndex]);
+
+
+            fpsPlan.draw(testTextId);
             MatrixState.popMatrix();
 
 

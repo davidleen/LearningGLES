@@ -22,7 +22,7 @@ import java.util.List;
 public abstract class FrameBufferScreen extends GLScreen {
 
 
-    FPSCounter counter;
+
 
     FrameBufferManager.FrameBuffer frameBuffer;
 
@@ -41,7 +41,7 @@ public abstract class FrameBufferScreen extends GLScreen {
     @Override
     public final void  present(float deltaTime) {
 
-        counter.logFrame();
+
        frameBuffer.bind();
 
         onPresent(deltaTime);
@@ -81,7 +81,7 @@ public abstract class FrameBufferScreen extends GLScreen {
 
     public FrameBufferScreen(Game game) {
         super(game);
-        counter = new FPSCounter();
+
          DisplayMetrics metrics= game.getContext().getResources().getDisplayMetrics();
 
         frameBuffer=new FrameBufferManager.FrameBuffer(game.getContext(),metrics.widthPixels,metrics.heightPixels);
