@@ -16,17 +16,6 @@ public class Vector3 {
 	private Vector3() {
 	}
 
-	private Vector3(float x, float y, float z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
-
-	private Vector3(Vector3 other) {
-		this.x = other.x;
-		this.y = other.y;
-		this.z = other.z;
-	}
 
     public static Vector3 create(float x, float y, float z) {
         Vector3 vector3=vector3Pool.newObject();
@@ -200,7 +189,7 @@ public class Vector3 {
     private static Pool<Vector3> vector3Pool=new Pool<Vector3>(new Pool.PoolObjectFactory<Vector3>() {
         @Override
         public Vector3 createObject() {
-            return Vector3.create();
+            return new Vector3();
         }
     },100);
 }

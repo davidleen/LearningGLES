@@ -68,6 +68,11 @@ public class MainActivity extends ListActivity {
 
         datas.add(info);
 
+        info = new MenuInfo("LightTracing", LightTracingScreen.class.getName());
+
+        datas.add(info);
+
+
 
         info = new MenuInfo("测试fbo",  null);
 

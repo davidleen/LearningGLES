@@ -7,7 +7,7 @@ import com.opengles.book.math.Vector3;
  * Created by davidleen29   qq:67320337
  * on 2014-6-18.
  */
-public class CSphere extends CObject {
+public class CSquare extends CObject {
 
 
     public Vector3 center;

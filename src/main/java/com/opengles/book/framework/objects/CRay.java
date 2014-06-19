@@ -9,8 +9,8 @@ import com.opengles.book.math.Vector3;
  */
 public class CRay {
 
-    public Vector3 origin;
-    public Vector3 direction;
+    public Vector3 origin ;
+    public Vector3 direction ;
 
 
     /**

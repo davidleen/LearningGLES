@@ -9,7 +9,7 @@ import com.opengles.book.ShaderUtil;
  * @author Administrator
  *
  */
-public    class FrameBufferViewObject extends NewAbstractSimpleObject{
+public    class RectangleViewObject extends NewAbstractSimpleObject{
 
 
 	private static final int UNIT_SIZE=1;
@@ -19,7 +19,7 @@ public    class FrameBufferViewObject extends NewAbstractSimpleObject{
 
 
 
-	public FrameBufferViewObject(Context context, int width, int height) {
+	public RectangleViewObject(Context context, int width, int height) {
 		super(context);
 		 initData(width, height);
 

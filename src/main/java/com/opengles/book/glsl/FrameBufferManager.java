@@ -3,8 +3,7 @@ package com.opengles.book.glsl;
 import android.content.Context;
 import android.opengl.GLES20;
 import com.opengles.book.MatrixState;
-import com.opengles.book.ShaderUtil;
-import com.opengles.book.objects.FrameBufferViewObject;
+import com.opengles.book.objects.RectangleViewObject;
 
 /**
  * FBO 对象管理器
@@ -27,7 +26,7 @@ public class FrameBufferManager {
 
     public static final class FrameBuffer
     {
-        FrameBufferViewObject plan;
+        RectangleViewObject plan;
         int frameIdIndex=0,renderIdIndex=1,textureIdIndex=2;
         int[] bufferId=new int[3];
 
@@ -38,7 +37,7 @@ public class FrameBufferManager {
         {
             this.width=width;
             this.height=height;
-            plan=new FrameBufferViewObject(context,1,1);
+            plan=new RectangleViewObject(context,1,1);
 
           //    testTextId= ShaderUtil.loadTextureWithUtils(context,"sky/sky.png",false);
 

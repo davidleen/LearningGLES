@@ -21,5 +21,5 @@ public abstract class CObject {
     public float reflectivity;
 
     public abstract  Vector3 getNormal(Vector3 point);
-    public abstract  IntersectType isIntersected(CRay ray,float distance);
+    public abstract  IntersectType isIntersected(CRay ray,Vector3 intersectedPosition);
 }

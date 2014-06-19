@@ -190,8 +190,11 @@ public class ShaderUtil {
 //		int textureId= loadTextureWithUtils(bitmap,false);
 //		bitmap.recycle();
 //		return textureId;
-		
-		return loadTextureWithUtils(BitmapFactory.decodeStream(is), isMipMap);
+		Bitmap bitmap=BitmapFactory.decodeStream(is);
+
+		int result= loadTextureWithUtils(bitmap, isMipMap);
+        bitmap.recycle();
+        return result;
 	}
 
 		public static int loadTextureWithUtils(Bitmap bitmap,boolean isMipMap)
