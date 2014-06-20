@@ -103,7 +103,6 @@ public abstract class NewAbstractSimpleObject   {
 	   	 GLES20.glUseProgram(mProgram);
 
 
-
 	   	  GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 	      GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
             // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
@@ -111,7 +110,6 @@ public abstract class NewAbstractSimpleObject   {
 	        //将最终变换矩阵传入shader程序
             finalMatrix.bind();
             alphaThreadHoldUniform.bind();
-
 
 
 
@@ -128,7 +126,8 @@ public abstract class NewAbstractSimpleObject   {
 
 
 
-		}
+
+        }
 
 
 

@@ -30,8 +30,7 @@ public   class ParticleSystemScreen extends FrameBufferScreen {
 
 	 
 
-	FPSCounter counter;
-	
+
    
     private float timeCollapsedForSun = 0;
     int sunAng=0;
@@ -50,7 +49,7 @@ public   class ParticleSystemScreen extends FrameBufferScreen {
 
 
 
-        counter = new FPSCounter();
+
 	}
 
 //    @Override
@@ -87,7 +86,7 @@ public   class ParticleSystemScreen extends FrameBufferScreen {
     
 	@Override
 	public void onPresent(float deltaTime) {
-	 	counter.logFrame();
+
         camera.setMatrices();
 		// 清除颜色
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT

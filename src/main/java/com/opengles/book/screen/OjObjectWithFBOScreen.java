@@ -25,7 +25,7 @@ public   class OjObjectWithFBOScreen extends FrameBufferScreen {
 
 	private int currentObjectIndex;
 
-	FPSCounter counter;
+
     private float timeForObjectChange=1;
 
     private float timeCollapsedForObject = 0;
@@ -55,7 +55,7 @@ public   class OjObjectWithFBOScreen extends FrameBufferScreen {
 
 
 
-        counter = new FPSCounter();
+
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public   class OjObjectWithFBOScreen extends FrameBufferScreen {
 
 	@Override
 	public void onPresent(float deltaTime) {
-	 	counter.logFrame();
+
         MatrixState.pushMatrix();
         camera.setMatrices();
         MatrixState.popMatrix();
@@ -135,7 +135,7 @@ public   class OjObjectWithFBOScreen extends FrameBufferScreen {
         super.pause();
         objects.get(currentObjectIndex).unBind();
 		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
-		 GLES20.glDisable(GLES20.GL_CULL_FACE);
+	//	 GLES20.glDisable(GLES20.GL_CULL_FACE);
 
 	}
 
@@ -146,7 +146,7 @@ public   class OjObjectWithFBOScreen extends FrameBufferScreen {
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-		 GLES20.glEnable(GLES20.GL_CULL_FACE);
+		// GLES20.glEnable(GLES20.GL_CULL_FACE);
 		int width = glGame.getGLGraphics().getWidth();
 		int height = glGame.getGLGraphics().getHeight();
 		GLES20.glViewport(0, 0, width, height);

@@ -14,7 +14,7 @@ public class FPSCounter {
             startTime = System.nanoTime();
         }
     }
-    public long getFps()
+    public int getFps()
     {
         return fps;
     }

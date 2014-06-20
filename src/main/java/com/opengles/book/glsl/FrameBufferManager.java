@@ -1,14 +1,12 @@
 package com.opengles.book.glsl;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.*;
 import android.opengl.GLES20;
 import com.opengles.book.MatrixState;
 import com.opengles.book.ShaderUtil;
 import com.opengles.book.framework.gl.FPSCounter;
+import com.opengles.book.math.Vector2;
 import com.opengles.book.objects.RectangleViewObject;
 
 /**
@@ -48,13 +46,13 @@ public class FrameBufferManager {
             this.width=width;
             this.height=height;
             counter = new FPSCounter();
-            plan=new RectangleViewObject(context,1,1);
-            fpsPlan=new RectangleViewObject(context,0.1f,0.1f,0.1f);
+            plan=new RectangleViewObject(context,width,height);
+            fpsPlan=new RectangleViewObject(context,width/10,height/10,1f,new Vector2(0,-height/2+height/10));
 
-            bitmap= Bitmap.createBitmap(100, 32, Bitmap.Config.ARGB_8888);
+            bitmap= Bitmap.createBitmap(width/10, height/10, Bitmap.Config.ARGB_8888);
             canvas=new Canvas(bitmap);
             pain=new Paint();pain.setColor(Color.RED);
-            pain.setTextSize(18);
+            pain.setTextSize(30);
 
 
         }
@@ -177,23 +175,59 @@ public class FrameBufferManager {
             //调用此方法计算产生平行投影矩阵
             MatrixState.pushMatrix();
 
+            MatrixState.setOrthoProject(-width/2f, width/2f, -height/2f, height/2f,1, 100);
 
-                MatrixState.setOrthoProject(-1f, 1f, -1f, 1f,1, 100);
+            //缓冲区的绘制 需要调整镜头   在缓冲区图像 与正常的图像是倒转的。
+
                 //调用此方法产生摄像机9参数位置矩阵
-                MatrixState.setCamera(0,0 , 10, 0f, 0f, 0f, 0f, 1.0f,  0.0f);
+            //需要调整镜头
+            MatrixState.setCamera(0,0 , -10, 0f, 0f, 0f, 0f, -1f,  0.0f);
 
             MatrixState.setInitStack();
+            //fps 提示 旋转  fist apply  last effect
+            MatrixState.pushMatrix();
+          // MatrixState.rotate(180,0,0,1);
+          //  MatrixState.rotate(180,0,1,0);
+            plan.draw(bufferId[textureIdIndex]);
+
+
+            MatrixState.popMatrix();
+
+
+
+            //调用此方法产生摄像机9参数位置矩阵
+            //绘制fps
+            MatrixState.setCamera(0,0 , 10, 0f, 0f, 0f, 0f, 1f,  0.0f);
             if(counter.countFrame())
             {
+
+                if(testTextId!=0)   //remove old texture
+                    GLES20.glDeleteTextures(1,new int[]{testTextId},0);
                 //update   redraw image  rebind to data;
-                canvas.drawText("fps:"+counter.getFps(),0,19,pain);
+                //   canvas.drawColor(Color.BLACK);
+                canvas.drawColor(Color.TRANSPARENT , PorterDuff.Mode.CLEAR);
+                canvas.drawText("fps:"+counter.getFps(),10,50,pain);
                 testTextId= ShaderUtil.loadTextureWithUtils(bitmap, false);
 
             }
-             plan.draw(bufferId[textureIdIndex]);
-
-
+            //开启混合
+            GLES20.glEnable(GLES20.GL_BLEND);
+            //设置混合因子
+            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+//
+            if(testTextId!=0)
             fpsPlan.draw(testTextId);
+        //    MatrixState.translate(0,-0.9f,0);
+
+
+//            GLES20.glEnable(GLES20.GL_BLEND);
+//            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA,GLES20.GL_ONE_MINUS_SRC_ALPHA);
+//
+//
+//            plan.draw(bufferId[textureIdIndex]);
+//            GLES20.glDisable(GLES20.GL_BLEND);
+
+            GLES20.glDisable(GLES20.GL_BLEND);
             MatrixState.popMatrix();
 
 

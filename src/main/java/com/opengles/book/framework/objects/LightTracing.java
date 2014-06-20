@@ -44,8 +44,8 @@ public class LightTracing {
         //空间构建
         CSphere object=new CSphere();
         //球体  红色
-        object.center=Vector3.create().set(0,0,-25);
-        object.radius=10;
+        object.center=Vector3.create().set(-200,0,-25);
+        object.radius=100;
         object.color=Vector3.create().set(1,0,0);
 
         object.kAmbient=Vector3.create().set(0.15f,0.15f,0.15f);
@@ -55,8 +55,8 @@ public class LightTracing {
         objects.add(object);
         //球体  黄色
         object=new CSphere();
-        object.center=Vector3.create().set(0,10,-20);
-        object.radius=25;
+        object.center=Vector3.create().set(0,100,-200);
+        object.radius=90;
         object.color=Vector3.create().set(1,1,0);
 
         object.kAmbient=Vector3.create().set(0.15f,0.15f,0.15f);
@@ -65,8 +65,8 @@ public class LightTracing {
 
         //球体 绿色
         object=new CSphere();
-        object.center=Vector3.create().set(20,0,-20);
-        object.radius=8;
+        object.center=Vector3.create().set(100,0,-80);
+        object.radius=80;
         object.color=Vector3.create().set(0,1,0);
 
         object.kAmbient=Vector3.create().set(0.15f,0.15f,0.15f);

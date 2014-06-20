@@ -16,13 +16,12 @@ import com.opengles.book.objects.MenuObject;
 import com.opengles.book.objects.MenuObject.MenuClickListner;
 import com.opengles.book.objects.RectangleObject;
 
-public class MainScreen extends GLScreen{
+public class MainScreen extends FrameBufferScreen{
 	
 	private List<MenuObject> menus;
 	 int width;
 	 int height;
-	
-	List<Vector2> positions=new ArrayList<Vector2>();
+
 	 
 	public MainScreen(Game game) {
 		super(game);
@@ -94,6 +93,7 @@ menu.setListener(new MenuClickListner() {
 
 	@Override
 	public void update(float deltaTime) {
+        super.update(deltaTime);
 		List<TouchEvent> touchs = glGame.getInput().getTouchEvents();
 		
 		for (TouchEvent touch : touchs)
@@ -127,13 +127,18 @@ menu.setListener(new MenuClickListner() {
 	}
 
 	@Override
-	public void present(float deltaTime) {
+	public void onPresent(float deltaTime) {
 		
 		// 清除颜色
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT
 						| GLES20.GL_COLOR_BUFFER_BIT);
-		
-		
+
+        float ratio = (float) width / height;
+        //调用此方法计算产生透视投影矩阵
+        MatrixState.setOrthoProject(-width/2, width/2, -height/2, height/2,    1,  1000);
+
+        MatrixState.setCamera(0,  10, 0f, 0f, 0f, 0f, 0f, 0f,   -1f);
+        MatrixState.setInitStack();
 		
 		 
 		 for(MenuObject obj:menus)
@@ -149,6 +154,7 @@ menu.setListener(new MenuClickListner() {
 
 	@Override
 	public void pause() {
+        super.pause();
 		 
 		 for(MenuObject obj:menus)
 		 {
@@ -160,6 +166,8 @@ menu.setListener(new MenuClickListner() {
 
 	@Override
 	public void resume() {
+
+        super.resume();
 		GLES20.glClearColor(1.0f, 1.0f, 1.0f, 0.5f); 
 		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
 		//GLES20.glEnable(GLES20.GL_CULL_FACE);
@@ -168,12 +176,7 @@ menu.setListener(new MenuClickListner() {
 		  height = glGame.getGLGraphics().getHeight();
 		GLES20.glViewport(0, 0, width, height);
 		//计算GLSurfaceView的宽高比
-		float ratio = (float) width / height;
-		 //调用此方法计算产生透视投影矩阵
-		MatrixState.setOrthoProject(-width/2, width/2, -height/2, height/2,    1,  1000);
-		
-		MatrixState.setCamera(0,  10, 0f, 0f, 0f, 0f, 0f, 0f,   -1f);
-		MatrixState.setInitStack();
+
 		 for(MenuObject obj:menus)
 		 {
 			 obj.bind();
@@ -183,6 +186,8 @@ menu.setListener(new MenuClickListner() {
 
 	@Override
 	public void dispose() {
+
+        super.dispose();
 		
 		
 	}

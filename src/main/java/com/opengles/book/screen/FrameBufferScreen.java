@@ -42,7 +42,7 @@ public abstract class FrameBufferScreen extends GLScreen {
     public final void  present(float deltaTime) {
 
 
-       frameBuffer.bind();
+        frameBuffer.bind();
 
         onPresent(deltaTime);
 
