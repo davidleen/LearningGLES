@@ -191,5 +191,5 @@ public class Vector3 {
         public Vector3 createObject() {
             return new Vector3();
         }
-    },100);
+    },1000);
 }

@@ -43,4 +43,19 @@ public abstract class CLightSource {
      */
     public abstract     Vector3 evaluateSpecular( Vector3 normal, Vector3 light,Vector3 camera,
                                                   Vector3 materialSpecular,   float _shininess);
+
+    /**
+     * 计算光照效果
+     * @param normal
+     * @param light
+     * @param camera
+
+
+     * @param ambientOut
+     * @param diffuseOut
+     * @param specularOut
+     */
+    public abstract void evaluate( Vector3 normal, Vector3 light,Vector3 camera,
+                          CObject material,Vector3 ambientOut,Vector3 diffuseOut,Vector3 specularOut);
+
 }

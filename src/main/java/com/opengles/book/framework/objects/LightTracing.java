@@ -33,7 +33,7 @@ public class LightTracing {
         this.camera=Vector3.create().set(camera);
 
         CLightSource cLightSource=new CDirectionalLight();
-        cLightSource.position=Vector3.create().set(0,100,0);
+        cLightSource.position=Vector3.create().set(0,1000,0);
         cLightSource.kAmbient=Vector3.create().set(1,1,1);
         cLightSource.kDiffuse=Vector3.create().set(1,1,1);
         cLightSource.kSpecular=Vector3.create().set(1,1,1);
@@ -44,36 +44,37 @@ public class LightTracing {
         //空间构建
         CSphere object=new CSphere();
         //球体  红色
-        object.center=Vector3.create().set(-200,0,-25);
-        object.radius=100;
+        object.center=Vector3.create().set(0,0,-100);
+        object.radius=300;
         object.color=Vector3.create().set(1,0,0);
 
         object.kAmbient=Vector3.create().set(0.15f,0.15f,0.15f);
         object.kDiffuse=Vector3.create().set(0.5f,0.5f,0.23f);
         object.kSpecular=Vector3.create().set(0.3f,0.3f,0.15f);
+        object.shininess=10;
 
-        objects.add(object);
-        //球体  黄色
-        object=new CSphere();
-        object.center=Vector3.create().set(0,100,-200);
-        object.radius=90;
-        object.color=Vector3.create().set(1,1,0);
-
-        object.kAmbient=Vector3.create().set(0.15f,0.15f,0.15f);
-        object.kDiffuse=Vector3.create().set(0.5f,0.5f,0.23f);
-        object.kSpecular=Vector3.create().set(0.3f,0.3f,0.15f);
-
-        //球体 绿色
-        object=new CSphere();
-        object.center=Vector3.create().set(100,0,-80);
-        object.radius=80;
-        object.color=Vector3.create().set(0,1,0);
-
-        object.kAmbient=Vector3.create().set(0.15f,0.15f,0.15f);
-        object.kDiffuse=Vector3.create().set(0.5f,0.5f,0.23f);
-        object.kSpecular=Vector3.create().set(0.3f,0.3f,0.15f);
-
-        objects.add(object);
+         objects.add(object);
+//        //球体  黄色
+//        object=new CSphere();
+//        object.center=Vector3.create().set(0,100,-200);
+//        object.radius=90;
+//        object.color=Vector3.create().set(1,1,0);
+//
+//        object.kAmbient=Vector3.create().set(0.15f,0.15f,0.15f);
+//        object.kDiffuse=Vector3.create().set(0.5f,0.5f,0.23f);
+//        object.kSpecular=Vector3.create().set(0.3f,0.3f,0.15f);
+//
+//        //球体 绿色
+//        object=new CSphere();
+//        object.center=Vector3.create().set(100,0,-80);
+//        object.radius=80;
+//        object.color=Vector3.create().set(0,1,0);
+//
+//        object.kAmbient=Vector3.create().set(0.15f,0.15f,0.15f);
+//        object.kDiffuse=Vector3.create().set(0.5f,0.5f,0.23f);
+//        object.kSpecular=Vector3.create().set(0.3f,0.3f,0.15f);
+//
+//        objects.add(object);
 
 
         //开始光线追踪
@@ -101,7 +102,6 @@ public class LightTracing {
                 }
 
                  Vector3    color = rayTrace(ray, 1); // Start Recursion for this
-                 
                 writePixel(bitmap,x+halfWidth, y+halfHeight, color); // write Pixel to Output Buffer
                 Vector3.recycle(color);
             }
@@ -115,50 +115,74 @@ public class LightTracing {
 
 
         Vector3 color=Vector3.create().set(background);
+        Vector3 intersectPoint=Vector3.create();
         for(CObject object:objects)
         {
-            Vector3 intersectPoint=Vector3.create();
+
             if(object.isIntersected(ray,intersectPoint)!=IntersectType.MISS)
             {
                 Vector3 p =intersectPoint;
                 Vector3 N = object.getNormal(p).nor();
+
+                //视线向量
+                Vector3 viewVector =Vector3.create().set(camera).sub( p).nor();
                 for(CLightSource source:sources)
                 {
 
-                    //计算环境光
-                    Vector3 ambient = source.evaluateAmbient(object.kAmbient);
-                    //光线向量
-                    Vector3 L = Vector3.create().set(source.position).sub(p).nor();
-                    //计算散射光
-                    Vector3 diffuse =source.evaluateDiffuse(N, L,object.kDiffuse);
-                   //视线向量
-                    Vector3 V =Vector3.create().set(camera).sub( p).nor();
-                    //计算镜面光
-                    Vector3 specular = source.evaluateSpecular(N, L, V, object.kSpecular,object.shininess);
+
+                    Vector3 L=Vector3.create().set(source.position).sub(intersectPoint).nor();
+                    Vector3 ambient=Vector3.create();
+                    Vector3 diffuse=Vector3.create();
+                    Vector3 specular=Vector3.create();
+
+                    source.evaluate(N,L,camera,object,ambient,diffuse,specular);
+
+
                     //颜色值累加
 //                    color.add(ambient).add(diffuse).add(specular);
-                    color.set(Vector3.mul(object.color, ambient)).add(Vector3.mul(object.color, diffuse)).add(Vector3.mul(object.color, specular));
+                    Vector3 tempAmbient=Vector3.mul(object.color, ambient);
+
+                    Vector3 tempDiffuse=Vector3.mul(object.color, diffuse);
+
+                    Vector3 tempSpecular=Vector3.mul(object.color, specular);
+
+
+                    Vector3.recycle(ambient);
+
+                    Vector3.recycle(diffuse);
+
+                    Vector3.recycle(specular);
+
+
+                    color.set(tempAmbient).add(tempDiffuse).add(tempSpecular);
+                    Vector3.recycle(tempAmbient);
+
+                    Vector3.recycle(tempDiffuse);
+
+                    Vector3.recycle(tempSpecular);
+
                    if(totalTraceDepth > depth)
                    {
                         //计算射线和物体交点处的反射射线 Reflect;
                         CRay reflect=new CRay();
-
                         Vector3 c = rayTrace(reflect, ++depth);
                         color.add(Vector3.mul(color, c));
 
                     }
 
 
-                    Vector3.recycle(ambient);
+
                     Vector3.recycle(L);
-                    Vector3.recycle(diffuse);
-                    Vector3.recycle(V);
-                    Vector3.recycle(specular);
                 }
+                Vector3.recycle(viewVector);
                 Vector3.recycle(p);
                 Vector3.recycle(N);
             }
+
+
+
         }
+        Vector3.recycle(intersectPoint);
         return color;
     }
     private void writePixel(Bitmap bitmap,int x, int y, Vector3 color) {

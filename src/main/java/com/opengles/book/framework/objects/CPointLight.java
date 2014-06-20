@@ -23,4 +23,9 @@ public class CPointLight  extends  CLightSource {
     public Vector3 evaluateSpecular(Vector3 normal, Vector3 light, Vector3 camera, Vector3 materialSpecular, float _shininess) {
         return null;
     }
+
+    @Override
+    public void evaluate(Vector3 normal, Vector3 light, Vector3 camera, CObject material, Vector3 ambientOut, Vector3 diffuseOut, Vector3 specularOut) {
+
+    }
 }

@@ -49,7 +49,7 @@ public class CDirectionalLight extends CLightSource {
                                       Vector3 materialSpecular,   float _shininess) {
         Vector3 IsKs =    Vector3.mul(kSpecular, materialSpecular);
 
-        Vector3 HVector=Vector3.create().set(light).add(camera).nor();
+        Vector3 HVector=Vector3.create().set(light).add(camera).mul(0.5f).nor();
 
         float NdotL = Math.max(Vector3.dotValue(normal, light), 0.0f);
         float NdotH;
@@ -62,5 +62,51 @@ public class CDirectionalLight extends CLightSource {
         Vector3.recycle(HVector);
 
         return IsKs.mul(NdotH);
+    }
+
+
+    /**
+     * 计算光照效果
+     * @param normal
+     * @param light
+     * @param camera
+
+
+     * @param ambientOut
+     * @param diffuseOut
+     * @param specularOut
+     */
+    @Override
+    public void evaluate( Vector3 normal, Vector3 light,Vector3 camera,
+                         CObject material,Vector3 ambientOut,Vector3 diffuseOut,Vector3 specularOut)
+    {
+
+
+        //计算环境光
+        Vector3 temp=   Vector3.mul(kAmbient,material.kAmbient);
+        ambientOut.set(temp);
+        Vector3.recycle(temp);
+
+
+
+        //计算漫射光
+        Vector3 IdKd=    Vector3.mul(kDiffuse,material.kDiffuse);
+        float NdotL =Math.max (Vector3.dotValue(normal,light), 0.0f);
+        diffuseOut.set(IdKd.mul(NdotL));
+        Vector3.recycle(IdKd);
+
+
+
+        //计算反射光
+        Vector3 IsKs =    Vector3.mul(kSpecular, material.kSpecular);
+
+        //半法向量
+        Vector3 HVector=Vector3.create().set(light).add(camera).nor();
+        float powerFactor=Math.max(0.0f,(float)Math.pow(Vector3.dotValue(normal,HVector),material.shininess)); 	//镜面反射光强度因子
+        //回收
+        Vector3.recycle(HVector);
+        specularOut.set( IsKs.mul(powerFactor));
+
+        Vector3.recycle(IsKs);
     }
 }

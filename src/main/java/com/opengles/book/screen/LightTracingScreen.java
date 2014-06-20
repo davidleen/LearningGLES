@@ -22,7 +22,7 @@ public   class LightTracingScreen extends FrameBufferScreen {
 
 
 
-
+    int width;int height;
 
 
     private CameraController cameraController;
@@ -69,7 +69,7 @@ public   class LightTracingScreen extends FrameBufferScreen {
 
 
 		MatrixState.pushMatrix();
-		MatrixState.rotate(90,1,0,0);
+
 
 
         obj.draw(textureId);
@@ -88,7 +88,7 @@ public   class LightTracingScreen extends FrameBufferScreen {
         super.pause();
        obj.unBind();
 		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
-		 GLES20.glDisable(GLES20.GL_CULL_FACE);
+		// GLES20.glDisable(GLES20.GL_CULL_FACE);
 
 	}
 
@@ -99,7 +99,7 @@ public   class LightTracingScreen extends FrameBufferScreen {
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-		 GLES20.glEnable(GLES20.GL_CULL_FACE);
+		// GLES20.glEnable(GLES20.GL_CULL_FACE);
 		int width = glGame.getGLGraphics().getWidth();
 		int height = glGame.getGLGraphics().getHeight();
 		GLES20.glViewport(0, 0, width, height);
@@ -125,7 +125,7 @@ public   class LightTracingScreen extends FrameBufferScreen {
         cameraController=new CameraController(camera, glGame.getGLGraphics());
 
 
-        LightTracing tracer=new LightTracing(width,height,camera.getPosition());
+        LightTracing tracer=new LightTracing(500,500,camera.getPosition());
         Bitmap bitmap=tracer.trace();
         textureId=  ShaderUtil.loadTextureWithUtils(bitmap,false);
         bitmap.recycle();
