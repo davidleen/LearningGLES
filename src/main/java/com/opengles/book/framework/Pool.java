@@ -15,8 +15,8 @@ public class Pool<T> {
     private final List<T> freeObjects;
     private final PoolObjectFactory<T> factory;
     private final int maxSize;
-    private  int reuseCount;
-    private int createCount;
+    private  long reuseCount;
+    private long createCount;
 
     public Pool(PoolObjectFactory<T> factory, int maxSize) {
         this.factory = factory;

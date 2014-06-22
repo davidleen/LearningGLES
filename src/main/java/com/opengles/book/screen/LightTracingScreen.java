@@ -8,8 +8,10 @@ import com.opengles.book.ShaderUtil;
 import com.opengles.book.framework.Game;
 import com.opengles.book.framework.Input.TouchEvent;
 import com.opengles.book.framework.gl.LookAtCamera;
+import com.opengles.book.framework.impl.GLScreen;
 import com.opengles.book.framework.objects.LightTracing;
 import com.opengles.book.galaxy.CameraController;
+import com.opengles.book.glsl.FrameBufferManager;
 import com.opengles.book.objects.RectangleViewObject;
 
 import java.util.List;
@@ -23,10 +25,10 @@ public   class LightTracingScreen extends FrameBufferScreen {
 
 
     int width;int height;
+    float ratio ;
 
-
-    private CameraController cameraController;
-    LookAtCamera  camera;
+//    private CameraController cameraController;
+//    LookAtCamera  camera;
 
 
     RectangleViewObject obj;
@@ -35,9 +37,10 @@ public   class LightTracingScreen extends FrameBufferScreen {
 
 	public LightTracingScreen(Game game) {
 		super(game);
-
-
-        obj=new RectangleViewObject(game.getContext(),20,20);
+        width = glGame.getGLGraphics().getWidth();
+        height = glGame.getGLGraphics().getHeight();
+        ratio=(float)height/width;
+        obj=new RectangleViewObject(game.getContext(),width,height);
 
 
 
@@ -49,7 +52,7 @@ public   class LightTracingScreen extends FrameBufferScreen {
         super.update(  deltaTime);
 
 		List<TouchEvent> touchEvents = glGame.getInput().getTouchEvents();
-        cameraController.onTouchEvent(touchEvents);
+    //    cameraController.onTouchEvent(touchEvents);
 
 
 	}
@@ -58,26 +61,27 @@ public   class LightTracingScreen extends FrameBufferScreen {
 
 	@Override
 	public void onPresent(float deltaTime) {
+        // 清除颜色
+        GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT
+                | GLES20.GL_COLOR_BUFFER_BIT);
+//        MatrixState.pushMatrix();
+//         camera.setMatrices();
+//       MatrixState.popMatrix();
+
+
+
+        GLES20.glViewport(0, 0, width, height);
+
+        MatrixState.setOrthoProject(-width/2, width/2, -height/2, height/2, 1, 1000);
+
+
+        //需要调整镜头
+        MatrixState.setCamera(0, 0, 10, 0f, 0f, 0f, 0f, 1f, 0.0f);
+        MatrixState.setInitStack();
 
         MatrixState.pushMatrix();
-        camera.setMatrices();
-        MatrixState.popMatrix();
-		// 清除颜色
-		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT
-				| GLES20.GL_COLOR_BUFFER_BIT);
-
-
-
-		MatrixState.pushMatrix();
-
-
-
+       // MatrixState.rotate(30,1,0,0);
         obj.draw(textureId);
-
-
-
-
-
 		MatrixState.popMatrix();
 
 
@@ -85,7 +89,7 @@ public   class LightTracingScreen extends FrameBufferScreen {
 
 	@Override
 	public void pause() {
-        super.pause();
+         super.pause();
        obj.unBind();
 		GLES20.glDisable(GLES20.GL_DEPTH_TEST);
 		// GLES20.glDisable(GLES20.GL_CULL_FACE);
@@ -94,16 +98,21 @@ public   class LightTracingScreen extends FrameBufferScreen {
 
 	@Override
 	public void resume() {
-        super.resume();
+       super.resume();
 
 		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+
 		// GLES20.glEnable(GLES20.GL_CULL_FACE);
-		int width = glGame.getGLGraphics().getWidth();
-		int height = glGame.getGLGraphics().getHeight();
-		GLES20.glViewport(0, 0, width, height);
-		float ratio = (float) width / height;
+
+
+
+
+
+
+
+
 
 
 		// 设置光线位置
@@ -115,30 +124,33 @@ public   class LightTracingScreen extends FrameBufferScreen {
 
 
 
-
-        camera=new LookAtCamera(2,1/ratio,1 ,1000);
-        camera.setPosition(0.0f,0f, 30f);
+        LookAtCamera camera;
+        camera=new LookAtCamera(2, ratio,500 ,5000);
+        camera.setPosition(0.0f,0f, 1000f);
         camera.setUp(0, 1, 0);
         camera.setLookAt(0f, 0f, 0f);
 
-        camera.setMatrices();
-        cameraController=new CameraController(camera, glGame.getGLGraphics());
+//        width=400;
+//        height=400;
+//        cameraController=new CameraController(camera, glGame.getGLGraphics());
+        int bitmapWidth=400;
 
-
-        LightTracing tracer=new LightTracing(500,500,camera.getPosition());
+        LightTracing tracer=new LightTracing(bitmapWidth,(int)(bitmapWidth*ratio), camera );
         Bitmap bitmap=tracer.trace();
         textureId=  ShaderUtil.loadTextureWithUtils(bitmap,false);
         bitmap.recycle();
 
-//        textureId=ShaderUtil.loadTextureWithUtils(game.getContext(),"sky/sky.png",false);
+       // textureId=ShaderUtil.loadTextureWithUtils(game.getContext(),"sky/sky.png",false);
         obj.bind();
+
+
 
 	}
 
 	@Override
 	public void dispose() {
 
-        super.dispose();
+       // super.dispose();
 	}
 
 

@@ -14,8 +14,8 @@ public class LookAtCamera  extends Camera3D{
 	final Vector3 lookAt;
 	float fieldOfView;
 	float aspectRatio;
-	float near;
-	float far;
+        public 	float near;
+	public float far;
 
 	public LookAtCamera(float fieldOfView, float aspectRatio, float near, float far) {
 		this.fieldOfView = fieldOfView;
