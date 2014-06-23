@@ -125,7 +125,7 @@ public   class LightTracingScreen extends FrameBufferScreen {
 
 
         LookAtCamera camera;
-        camera=new LookAtCamera(2, ratio,500 ,5000);
+        camera=new LookAtCamera(2, ratio,500 ,50000);
         camera.setPosition(0.0f,0f, 1000f);
         camera.setUp(0, 1, 0);
         camera.setLookAt(0f, 0f, 0f);

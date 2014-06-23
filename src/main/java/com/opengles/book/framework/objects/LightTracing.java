@@ -2,9 +2,8 @@ package com.opengles.book.framework.objects;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.util.Log;
-import com.opengles.book.LightSources;
 import com.opengles.book.framework.gl.LookAtCamera;
+import com.opengles.book.math.Vector2;
 import com.opengles.book.math.Vector3;
 
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ this.camera=camera;
 
 
         CLightSource aLightSource=new CDirectionalLight();
-        aLightSource.position=Vector3.create().set(10000,10000,0);
+        aLightSource.position=Vector3.create().set(10000,10000,10000);
         aLightSource.kAmbient=Vector3.create().set(1,1,1);
         aLightSource.kDiffuse=Vector3.create().set(1,1,1);
         aLightSource.kSpecular=Vector3.create().set(1,1,1);
@@ -76,7 +75,7 @@ this.camera=camera;
         object.kDiffuse=Vector3.create().set(0.5f,0.5f,0.23f);
         object.kSpecular=Vector3.create().set(0.3f,0.3f,0.15f);
         object.shininess=1;
-        //  objects.add(object);
+          objects.add(object);
 //
         //球体 蓝色
         object=new CSphere();
@@ -89,19 +88,21 @@ this.camera=camera;
         object.kSpecular=Vector3.create().set(0.3f,0.3f,0.15f);
         object.shininess=1;
 
-     //   objects.add(object);
+         objects.add(object);
 
 
 
         //添加后面板
 
 
-        CSquare square=null;
 
 
-        square=new CSquare();
+
+        CSquare  square=new CSquare();
         square.normal=Vector3.create(0,0,1);
-        square.d=- 100000;
+        square.d=- 400;
+        square.min=new Vector2(-400,-400);
+        square.max=new Vector2(400,400);
         square.color=Vector3.create().set(0,0.4f,0.4f);
         square.kAmbient=Vector3.create() .set(0.2f,0.3f,0.6f);
         square.kDiffuse=Vector3.create() .set(0.5f,0.4f,0.25f);
@@ -117,15 +118,15 @@ this.camera=camera;
         //添加左边面板
 
 
-          square=new CSquare();
-        square.normal=Vector3.create(1,0,0);
-        square.d=3000;
-        square.color=Vector3.create().set(1,1,0);
-        square.kAmbient=Vector3.create().set(0.15f,0.15f,0.15f);
-        square.kDiffuse=Vector3.create().set(0.5f,0.5f,0.23f);
-        square.kSpecular=Vector3.create().set(0.3f,0.3f,0.15f);
-        object.shininess=1;
-       // objects.add(square);
+        CPlan    plan=new CPlan();
+        plan.normal=Vector3.create(1,0,0);
+        plan.d=600;
+        plan.color=Vector3.create().set(1,0,0);
+        plan.kAmbient=Vector3.create().set(0.15f,0.15f,0.15f);
+        plan.kDiffuse=Vector3.create().set(0.5f,0.5f,0.23f);
+        plan.kSpecular=Vector3.create().set(0.3f,0.3f,0.15f);
+        plan.shininess=1;
+       //  objects.add(plan);
 
         //开始光线追踪
         trace();
@@ -331,7 +332,7 @@ this.camera=camera;
         Vector3.recycle(info.intersectPoint);
     }
         //adjust the color  for 1 as the max value
-        color.set(Math.min(color.x,1) ,Math.min(color.y,1),Math.min(color.z,1));
+        color.set(Math.min(color.x, 1), Math.min(color.y, 1), Math.min(color.z, 1));
         return color;
     }
     private void writePixel(Bitmap bitmap,int x, int y, Vector3 color) {
