@@ -138,16 +138,16 @@ public class Vector3 {
 	}
 
     /**
-     * 求向量x乘法
+     * 求向量x乘法  /点乘法
      * @param v1
      * @param v2
-
+     * @param result the vector for result
      * @return
      */
-    public static Vector3 mul(Vector3 v1,Vector3 v2 )
+    public static void mul(Vector3 v1,Vector3 v2 ,Vector3 result)
     {
 
-     return    Vector3.create().set(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
+          result.set(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
     }
 
 
@@ -163,6 +163,21 @@ public class Vector3 {
         return  v1.x*v2.x+v1.y*v2.y+v1.z*v2.z;
     }
 
+
+    /**
+     * 向量X乘法
+     * u × v = (u2v3 − u3v2,−(u1v3 − u3v1), u1v2 − u2v1).
+     * u × v = n ||u|| || v|| sin θ,
+     */
+    public static void crossValue(Vector3 v1, Vector3 v2 ,Vector3 result)
+    {
+
+
+
+        result.set(v1.y*v2.z-v1.z*v2.y,-(v1.x*v2.z-v1.z*v2.x),v1.x*v2.y-v1.y-v2.x);
+
+
+    }
 
     /**
      * 构造类    提供数据重用

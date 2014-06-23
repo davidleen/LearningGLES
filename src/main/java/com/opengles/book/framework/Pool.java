@@ -1,6 +1,7 @@
 package com.opengles.book.framework;
 
 import android.util.Log;
+import com.opengles.book.BuildConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +31,13 @@ public class Pool<T> {
 
         if (freeObjects.size() == 0) {
             object = factory.createObject();
-            Log.d(TAG, "create object time :" + (++createCount));
+            if(BuildConfig.DEBUG)
+             Log.d(TAG, "create "+object.getClass().getName()+"object time :" + (++createCount));
         }
         else {
             object = freeObjects.remove(freeObjects.size() - 1);
 
-          //  Log.d(TAG,"reuse object time :"+(++reuseCount));
+          // Log.d(TAG,"reuse "+object.getClass().getName()+" time :"+(++reuseCount));
         }
         return object;
     }

@@ -24,4 +24,6 @@ public abstract class CObject {
 
     public abstract  Vector3 getNormal(Vector3 point);
     public abstract  IntersectType isIntersected(CRay ray,Vector3 intersectedPosition);
+
+    public abstract  boolean  isInShadow(CRay lightRay);
 }
