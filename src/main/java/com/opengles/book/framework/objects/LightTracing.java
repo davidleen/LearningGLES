@@ -38,7 +38,7 @@ this.camera=camera;
 
 
         CLightSource aLightSource=new CDirectionalLight();
-        aLightSource.position=Vector3.create().set(10000,10000,10000);
+        aLightSource.position=Vector3.create().set(10000,0,0);
         aLightSource.kAmbient=Vector3.create().set(1,1,1);
         aLightSource.kDiffuse=Vector3.create().set(1,1,1);
         aLightSource.kSpecular=Vector3.create().set(1,1,1);
