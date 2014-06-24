@@ -38,7 +38,7 @@ void main()
  //                                       fresnelPower) ,0.0,1.0);
       
       //使用简单方式                                  
-         float dotValue=      dot(-normalize(v_incident), normalize(v_normal)) ;  
+      float dotValue=      dot(-normalize(v_incident), normalize(v_normal)) ;
       float  reflectionFactor;    
       const float maxCos=0.7;
       const float minCos=0.2;

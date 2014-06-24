@@ -39,7 +39,9 @@ public   class LightTracingScreen extends FrameBufferScreen {
 		super(game);
         width = glGame.getGLGraphics().getWidth();
         height = glGame.getGLGraphics().getHeight();
+
         ratio=(float)height/width;
+
         obj=new RectangleViewObject(game.getContext(),width,height);
 
 

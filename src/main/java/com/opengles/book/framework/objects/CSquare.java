@@ -4,12 +4,13 @@ import com.opengles.book.math.Vector2;
 import com.opengles.book.math.Vector3;
 
 /**
+ * 有限定范围的平面
  * Created by Administrator on 2014/6/23.
  */
 public class CSquare extends CPlan {
 
-    public Vector2 min;
-    public Vector2 max;
+    public Vector3 min;
+    public Vector3 max;
 
 
 
@@ -25,18 +26,18 @@ public class CSquare extends CPlan {
         float t =(d - Vector3.dotValue(normal, ray.origin)) / Vector3.dotValue(normal, ray.direction);
 
 
-        if(t>0.0001f)
+        if(t>0.1f)   //如果改点在平面上  不相交 t 值大于一个阀值 才能说明相交。
         {
 
             result =IntersectType.INTERSECTED;
             intersectedPosition.set(ray.direction).mul(t).add(ray.origin);
 
-            float x =intersectedPosition.x;
-            float y=intersectedPosition.y;
-            if(min.x<x&&min.y<y&&max.x>x&&max.y>y)
+
+           if(intersectedPosition.between(min,max))
                 result =IntersectType.INTERSECTED;
             else
-            {result=IntersectType.MISS;
+            {
+                result=IntersectType.MISS;
 
             }
 

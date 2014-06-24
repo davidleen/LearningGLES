@@ -2,6 +2,7 @@ package com.opengles.book.framework.objects;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 import com.opengles.book.framework.gl.LookAtCamera;
 import com.opengles.book.math.Vector2;
 import com.opengles.book.math.Vector3;
@@ -21,6 +22,8 @@ public class LightTracing {
     int width; int height;
     int z=0;
     LookAtCamera camera;//相机位置
+
+    float  planShines=100;
 
 
     private int totalTraceDepth=2;
@@ -57,10 +60,10 @@ this.camera=camera;
         //球体  红色
         object.center=Vector3.create().set(0,0,0f);
         object.radius=100f;
-        object.color=Vector3.create().set(1,1,0);
+        object.color=Vector3.create().set(1,0,0);
 
         object.kAmbient=Vector3.create().set(0.15f,0.15f,0.15f);
-        object.kDiffuse=Vector3.create().set(0.7f,0.7f,0.35f);
+        object.kDiffuse=Vector3.create().set(0.5f,0.5f,0.35f);
         object.kSpecular=Vector3.create().set(0.3f,0.3f,0.15f);
         object.shininess=1;
 
@@ -75,8 +78,8 @@ this.camera=camera;
         object.kDiffuse=Vector3.create().set(0.5f,0.5f,0.23f);
         object.kSpecular=Vector3.create().set(0.3f,0.3f,0.15f);
         object.shininess=1;
-          objects.add(object);
-//
+    //      objects.add(object);
+
         //球体 蓝色
         object=new CSphere();
         object.center=Vector3.create().set(-300,0,0);
@@ -88,21 +91,23 @@ this.camera=camera;
         object.kSpecular=Vector3.create().set(0.3f,0.3f,0.15f);
         object.shininess=1;
 
-         objects.add(object);
+  //    objects.add(object);
 
 
 
+
+
+
+
+
+
+        CSquare  square=null;
+        square=new CSquare();
         //添加后面板
-
-
-
-
-
-        CSquare  square=new CSquare();
         square.normal=Vector3.create(0,0,1);
-        square.d=- 400;
-        square.min=new Vector2(-400,-400);
-        square.max=new Vector2(400,400);
+        square.d= - 400;
+        square.min=Vector3.create(-400,-400,-400);
+        square.max=Vector3.create(400,400,-400);
         square.color=Vector3.create().set(0,0.4f,0.4f);
         square.kAmbient=Vector3.create() .set(0.2f,0.3f,0.6f);
         square.kDiffuse=Vector3.create() .set(0.5f,0.4f,0.25f);
@@ -111,22 +116,87 @@ this.camera=camera;
 //        square.kAmbient=Vector3.create() .set(0.3f,0.3f,0.3f);
 //        square.kDiffuse=Vector3.create() .set(0.3f,0.3f,0.3f);
 //        square.kSpecular=Vector3.create() .set(0.3f,0.3f,0.3f);
-        object.shininess=1;
-       objects.add(square);
+        square.shininess=planShines;
+        objects.add(square);
+//
+//
+//        //添加左边面板
+           square=new CSquare();
+        square.normal=Vector3.create( 1,0,0);
+        square.d=  -400;
+        square.min=Vector3.create(-400,-400,-400);
+        square.max=Vector3.create(-400,400,400);
+        square.color=Vector3.create().set(1f,0f,0f);
+      //  square.color=Vector3.create().set(0,0.4f,0.4f);
+        square.kAmbient=Vector3.create() .set(0.2f,0.3f,0.6f);
+        square.kDiffuse=Vector3.create() .set(0.5f,0.4f,0.25f);
+        square.kSpecular=Vector3.create() .set(0.3f,0.3f,0.15f);
+
+//        square.kAmbient=Vector3.create() .set(0.3f,0.3f,0.3f);
+//        square.kDiffuse=Vector3.create() .set(0.3f,0.3f,0.3f);
+//        square.kSpecular=Vector3.create() .set(0.3f,0.3f,0.3f);
+        square.shininess=planShines;
+           objects.add(square);
+
+        //添加右边面板
+        square=new CSquare();
+        square.normal=Vector3.create( 1,0,0);
+        square.d=400;
+        square.min=Vector3.create(400,-400,-400);
+        square.max=Vector3.create(400,400,400);
+        square.color=Vector3.create().set(1f,1f,1f);
+        //  square.color=Vector3.create().set(0,0.4f,0.4f);
+        square.kAmbient=Vector3.create() .set(0.2f,0.3f,0.6f);
+        square.kDiffuse=Vector3.create() .set(0.5f,0.4f,0.25f);
+        square.kSpecular=Vector3.create() .set(0.3f,0.3f,0.15f);
+
+//        square.kAmbient=Vector3.create() .set(0.3f,0.3f,0.3f);
+//        square.kDiffuse=Vector3.create() .set(0.3f,0.3f,0.3f);
+//        square.kSpecular=Vector3.create() .set(0.3f,0.3f,0.3f);
+        square.shininess=planShines;
+        objects.add(square);
 
 
-        //添加左边面板
+        //添加上方面板
+        square=new CSquare();
+        square.normal=Vector3.create(0, 1,0);
+        square.d=200;
+        square.min=Vector3.create(-400,200,-400);
+        square.max=Vector3.create(400,200,400);
+        square.color=Vector3.create().set(1f,0.6f,0.6f);
+        //  square.color=Vector3.create().set(0,0.4f,0.4f);
+        square.kAmbient=Vector3.create() .set(0.2f,0.3f,0.6f);
+        square.kDiffuse=Vector3.create() .set(0.5f,0.4f,0.25f);
+        square.kSpecular=Vector3.create() .set(0.3f,0.3f,0.15f);
+
+//        square.kAmbient=Vector3.create() .set(0.3f,0.3f,0.3f);
+//        square.kDiffuse=Vector3.create() .set(0.3f,0.3f,0.3f);
+//        square.kSpecular=Vector3.create() .set(0.3f,0.3f,0.3f);
+        square.shininess=planShines;
+         objects.add(square);
 
 
-        CPlan    plan=new CPlan();
-        plan.normal=Vector3.create(1,0,0);
-        plan.d=600;
-        plan.color=Vector3.create().set(1,0,0);
-        plan.kAmbient=Vector3.create().set(0.15f,0.15f,0.15f);
-        plan.kDiffuse=Vector3.create().set(0.5f,0.5f,0.23f);
-        plan.kSpecular=Vector3.create().set(0.3f,0.3f,0.15f);
-        plan.shininess=1;
-       //  objects.add(plan);
+        //添加下方面板
+        square=new CSquare();
+        square.normal=Vector3.create(0, 1,0);
+        square.d=-200;
+        square.min=Vector3.create(-400,-200,-400);
+        square.max=Vector3.create(400,-200,400);
+        square.color=Vector3.create().set(1f,0f,1f);
+        //  square.color=Vector3.create().set(0,0.4f,0.4f);
+        square.kAmbient=Vector3.create() .set(0.2f,0.3f,0.6f);
+        square.kDiffuse=Vector3.create() .set(0.5f,0.4f,0.25f);
+        square.kSpecular=Vector3.create() .set(0.3f,0.3f,0.15f);
+
+//        square.kAmbient=Vector3.create() .set(0.3f,0.3f,0.3f);
+//        square.kDiffuse=Vector3.create() .set(0.3f,0.3f,0.3f);
+//        square.kSpecular=Vector3.create() .set(0.3f,0.3f,0.3f);
+        square.shininess=planShines;
+        objects.add(square);
+
+
+
+
 
         //开始光线追踪
         trace();
@@ -135,7 +205,7 @@ this.camera=camera;
     public Bitmap trace( )
     {
           CRay ray= CRay.createCRay();
-        Bitmap  bitmap= Bitmap.createBitmap(width,height, Bitmap.Config.RGB_565);
+        Bitmap  bitmap= Bitmap.createBitmap(width,height, Bitmap.Config.ARGB_8888);
 
         int halfWidth=width/2;
         int halfHeight=height/2;
@@ -164,7 +234,7 @@ this.camera=camera;
     {
 
 
-        Vector3 color=Vector3.create().set(background);
+        Vector3 color=Vector3.create().set(0,0,0);
 
         IntersectInfo info=null;
 
@@ -260,6 +330,11 @@ this.camera=camera;
                 Vector3.recycle(ambient);
             }else {
 
+
+
+
+
+
                 Vector3 ambient = Vector3.create();
                 Vector3 diffuse = Vector3.create();
                 Vector3 specular = Vector3.create();
@@ -287,6 +362,7 @@ this.camera=camera;
 
 
                 color.add(tempAmbient).add(tempDiffuse).add(tempSpecular);
+
                 Vector3.recycle(tempAmbient);
 
                 Vector3.recycle(tempDiffuse);
@@ -300,9 +376,9 @@ this.camera=camera;
                     //计算射线和物体交点处的反射射线 Reflect;
                     CRay reflect = CRay.createCRay();
 
-                    reflect.origin.set(info.intersectPoint);
-                  Vector3 inDirection=Vector3.create().set(info.intersectPoint).sub(ray.origin).nor();
-                    if (calculateReflectVector(inDirection, N, reflect.direction)) {
+                    reflect.origin.set(info.intersectPoint);//.sub(ray.direction);
+               //   Vector3 inDirection=Vector3.create().set(info.intersectPoint).sub(ray.origin).nor();
+                    if (calculateReflectVector(ray.direction, N, reflect.direction)) {
                         //   reflect.direction.set(N).mul(2).add(ray.direction).nor();
                         Vector3 newColor = rayTrace(reflect, ++depth);
 
@@ -313,7 +389,7 @@ this.camera=camera;
                         Vector3.recycle(temp);
 
                     }
-                     Vector3.recycle(inDirection);
+                   //  Vector3.recycle(inDirection);
                     CRay.recycle(reflect);
 
 

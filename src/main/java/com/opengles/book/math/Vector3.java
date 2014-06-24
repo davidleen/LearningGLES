@@ -152,6 +152,25 @@ public class Vector3 {
 
 
     /**
+     * 判断点是否在范围值之间
+     */
+    public  boolean between(Vector3 min,Vector3 max)
+    {
+
+        float offset=0.01f;
+        //比较大小 使用接近值 偏移量
+        if(x<min.x-offset) return false;
+        if(y<min.y-offset) return false;
+        if(z<min.z-offset) return false;
+        if(x>max.x+offset) return false;
+        if(y>max.y+offset) return false;
+        if(z>max.z+offset) return false;
+
+         return  true;
+
+    }
+
+    /**
      * 向量点乘积
      * @param v1
      * @param v2

@@ -42,7 +42,7 @@ public class CPlan extends CObject {
         float t =(d - Vector3.dotValue(normal, ray.origin)) / Vector3.dotValue(normal, ray.direction);
 
 
-        if(t>0.0001f)
+        if(t>0.1f)
         {
 
             result =IntersectType.INTERSECTED;
