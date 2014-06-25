@@ -14,9 +14,9 @@ public class Mass {
     //质点质量
     public   float m;
     //质点的位置
-   	//质点的速度
+
      Vector3 pos;
-    //质点的受力
+    //质点的速度
     Vector3 vel;
     //质点的受力
     Vector3 force;

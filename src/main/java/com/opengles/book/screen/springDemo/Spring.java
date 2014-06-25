@@ -34,10 +34,20 @@ public class Spring {
 
             force = normalV.mul(deltaX).mul(springFactor);//弹簧的拉力 = k*deltaX*dir
 
-//            force = force.add(mass1.vel.add(mass2.vel.multiConstant(-1)).multiConstant(-frictionConstant));//计算合力
-//
-//            mass1.applyForce(force);//对第一个质点施加力
-//            mass2.applyForce(force.multiConstant(-1));//对第二个质点施加力
+
+            Vector3 frictionForce=Vector3.create() ;
+            //计算摩擦力 相对速度×摩擦系数。
+            frictionForce.set(mass1.vel).sub(mass2.vel).mul(-frictionFactor);
+            //添加摩擦力
+            force = force.add(frictionForce);//
+            Vector3.recycle(frictionForce);
+
+             mass1.applyForce(force);//对第一个质点施加力
+             mass2.applyForce(force.mul(-1));//对第二个质点施加力 第二个质点受力 是相反的
         }
+
+        Vector3.recycle(springVector);
+
+
     }
 }
