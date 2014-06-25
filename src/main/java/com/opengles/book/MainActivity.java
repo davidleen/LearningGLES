@@ -17,6 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.opengles.book.screen.cubeCollisionDemo.CubeCollisionDemoScreen;
 import com.opengles.book.testFBO.TestFboActivity;
 
 public class MainActivity extends ListActivity {
@@ -69,6 +70,11 @@ public class MainActivity extends ListActivity {
         datas.add(info);
 
         info = new MenuInfo("LightTracing", LightTracingScreen.class.getName());
+
+        datas.add(info);
+
+
+        info = new MenuInfo("立方体碰撞检测", CubeCollisionDemoScreen.class.getName());
 
         datas.add(info);
 

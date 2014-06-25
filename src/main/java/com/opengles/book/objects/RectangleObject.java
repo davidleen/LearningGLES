@@ -20,10 +20,10 @@ public    class RectangleObject extends AbstractSimpleObject{
 	 
 	float[] vertexData;
 	short[] indexData;
-	public RectangleObject(Context context, String textureFileName,int width,int height) {
+	public RectangleObject(Context context, String textureFileName,int xLength,int zLength) {
 		super(context);
 		  
-		 initData(width, height);
+		 initData(xLength, zLength);
 		 
 			textureId = ShaderUtil.loadTextureWithUtils(context,textureFileName ,false);
 		 
@@ -31,25 +31,26 @@ public    class RectangleObject extends AbstractSimpleObject{
 		 
 	}
 	
-	public RectangleObject(Context context, Bitmap bitmap,int width,int height) {
+	public RectangleObject(Context context, Bitmap bitmap,int xLength,int zLength) {
 		super(context);
 		 
-		 initData(width, height);
+		 initData(xLength, zLength);
 		 textureId = ShaderUtil.loadTextureWithUtils(bitmap,false); 
 	   
 		}
 	
-	public RectangleObject(Context context, int width,int height) {
+	public RectangleObject(Context context, int xLength,int zLength) {
 		super(context);
 		 
-		 initData(width, height);
+		 initData(xLength, zLength);
 		 textureId =-1;
 	   
 		}
 	
 	
-	private void initData(int width,int height)
+	private void initData(int xLength,int zLength)
 	{
+        int width=xLength/2;int height=zLength/2;
 		vertexData=new float[]
 		        {
 		        	-width*UNIT_SIZE,0,-height*UNIT_SIZE,

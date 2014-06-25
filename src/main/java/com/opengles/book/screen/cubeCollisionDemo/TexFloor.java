@@ -15,10 +15,14 @@ import javax.vecmath.Vector3f;
  * Created by davidleen29   qq:67320337
  * on 2014-6-25.
  */
-public class TexFloor {
+public class TexFloor  extends  RigidBody{
 
 
-    public TexFloor(float size,float  yOffset,CollisionShape groundShape,DiscreteDynamicsWorld dynamicsWorld)
+    private TexFloor(RigidBodyConstructionInfo constructionInfo) {
+        super(constructionInfo);
+    }
+
+    public static final TexFloor create(float  yOffset,CollisionShape groundShape )
     {
 
         //创建刚体初始变换对象
@@ -30,20 +34,17 @@ public class TexFloor {
         Vector3f localIneria=new Vector3f(0,0,0);
 
         MotionState motionState=new DefaultMotionState(groundTransform);
+        // o 质量的物体 表示静止的物体
         RigidBodyConstructionInfo rbInfo=new RigidBodyConstructionInfo(0,motionState,groundShape,localIneria);
-        RigidBody body=new RigidBody(rbInfo);
+        TexFloor body=new TexFloor(rbInfo);
         body.setRestitution(0.4f);
         body.setFriction(0.8f);
-        dynamicsWorld.addRigidBody(body);
+        return body;
 
-        //初始化shader相关数据
+
 
     }
 
 
 
-    public void draw(int textureId)
-    {
-
-    }
 }

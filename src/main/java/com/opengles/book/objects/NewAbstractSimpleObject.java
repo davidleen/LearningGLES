@@ -18,7 +18,7 @@ import com.opengles.book.glsl.UniformMatrix4F;
  * @author davidleen29 
  * @create : 2014-4-25 下午11:44:25
  * @{  简单对象  shader 都是固定的   抽取公用方法和属性。}
- * 改动：   texture 不再自己指定  右调用者传入。
+ * 改动：   texture 不再自己指定  由调用者传入。
  */
 public abstract class NewAbstractSimpleObject   {
 
