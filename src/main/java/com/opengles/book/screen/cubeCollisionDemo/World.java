@@ -111,7 +111,7 @@ public class World {
 
         //初始化1个刚体
 
-        CubeBody body=  CubeBody.create(boxShape,1,BOX_SIZE/2,BOX_SIZE/2,BOX_SIZE/2);
+        CubeBody body=  CubeBody.create(boxShape,1,BOX_SIZE,BOX_SIZE,BOX_SIZE );
 
         bodies.add(body);
         dynamicsWorld.addRigidBody(body);
@@ -188,15 +188,22 @@ public class World {
 
             }
             //绘制立方体代码
-           cubeDrawer.draw(textureId);
+         //  cubeDrawer.draw(textureId);
             MatrixState.popMatrix();
         }
+        MatrixState.pushMatrix();
+
+        MatrixState.translate(0,0,-10);
+
+       // cubeDrawer.draw(floorTextureId);
+        MatrixState.popMatrix();
             //绘制地板
             MatrixState.pushMatrix();
 
-            MatrixState.translate(0,0,-100);
-          // MatrixState.rotate(30,1,0,0);
+           MatrixState.translate(0,0,-100);
+           MatrixState.rotate(90,1,0,0);
            object.draw(floorTextureId);
+
             MatrixState.popMatrix();
 
 
@@ -240,5 +247,6 @@ public class World {
         body.setLinearVelocity(new Vector3f(0,2,-12));//箱子直线运动的速度--Vx,Vy,Vz三个分量
         body.setAngularVelocity(new Vector3f(0,0,0)); //箱子自身旋转的速度--绕箱子自身的x,y,x三轴旋转的速度
         bodies.add(body);
+        dynamicsWorld.addRigidBody(body);
     }
 }

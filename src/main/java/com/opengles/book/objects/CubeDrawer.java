@@ -10,14 +10,14 @@ import com.opengles.book.framework.gl.CubeTexture;
 import com.opengles.book.galaxy.ObjectDrawable;
 
 /**
- * 立方体构造
+ * 立方体构造  使用立体纹理
  * @author davidleen29
  *
  */
-public class CubeDrawer extends NewAbstractSimpleObject{
+public class CubeDrawer extends AbstractSimple3DObject{
 	
-	private   int  unitSize=1;
-	private CubeTexture texture;
+	private static    int  DEFAULT_UNIT_SIZE=1;
+
 	
 
 	private float[] vertexData;
@@ -25,21 +25,23 @@ public class CubeDrawer extends NewAbstractSimpleObject{
 
     public CubeDrawer(Context context)
     {
-        this(context,1);
+        this(context,DEFAULT_UNIT_SIZE);
     }
 	public CubeDrawer(Context context,int unitSize)
 	{
 		super(context);
 		  vertexData=new float[]{
-			1,1,1,	
-			1,1,-1,
-			1,-1,1,
-			1,-1,-1,
+           //vertex          //normal
+			1,1,1,   	       1,1,1,
+
+			1,1,-1,         	1,1,-1,
+			1,-1,1,            1,-1,1,
+			1,-1,-1,           1,-1,-1,
 			
-			-1,1,1,	
-			-1,1,-1,
-			-1,-1,1,
-			-1,-1,-1
+			-1,1,1,	           -1,1,1,
+			-1,1,-1,           -1,1,-1,
+			-1,-1,1,           -1,-1,1,
+			-1,-1,-1,         -1,-1,-1
 			 
 				
 		};
@@ -52,31 +54,32 @@ public class CubeDrawer extends NewAbstractSimpleObject{
 				
 				//右侧面
 				0,1,2,
-				0,2,3,
-				
-				//前侧面
-				0,3,4,
-				3,7,4,
-				
-				//左侧面
-				4,7,5,
-				7,6,5,
-				
-				//下侧面
-				2,3,6,
-				2,6,7,
-				
-				//上侧面
-				0,1,5,
-				0,5,4,
-				
-				//后侧面
-				1,2,5,
-				2,5,6
+				1,3,2
+
+
+                 //前侧面
+                 ,  4,0,6,
+                 6,0,2
+
+                 //左侧面
+                 , 5,4,7,
+                 7,4,6
+
+                 //下侧面
+                 ,    2,3,6,
+                 6,3,7
+
+                 //上侧面
+                 , 4,5,1,
+                 4,1,0
+
+                 //后侧面
+                 , 1,5,3,
+                 3,5,7
 				
 		};
 		
-		this.texture=texture;
+
 	}
 
 

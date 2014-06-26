@@ -19,12 +19,14 @@ public class CubeCollisionDemoScreen extends FrameBufferScreen {
     World world;
 
     final static float EYE_X=-3;//观察者的位置x
-    final static float EYE_Y=10;//观察者的位置y
+    final static float EYE_Y=2;//观察者的位置y
     final static float EYE_Z=5;//观察者的位置z
 
     final static float TARGET_X=1;//目标的位置x
     final static float TARGET_Y=1;//目的位置Y
     final static float TARGET_Z=-3;//目标的位置Z
+
+    float ratio;
 
     public CubeCollisionDemoScreen(Game game ) {
         super(game);
@@ -67,20 +69,8 @@ public class CubeCollisionDemoScreen extends FrameBufferScreen {
         int height=glGraphics.getHeight();
         GLES20.glViewport(0, 0,width  , height);
         //计算透视投影的比例
-        float ratio = (float) width / height;
-        //调用此方法计算产生透视投影矩阵
-        MatrixState.setFrustumProject(-ratio, ratio, -1, 1, 4, 100);
+          ratio = (float) width / height;
 
-        MatrixState.setCamera(
-                EYE_X,   //人眼位置的X
-                EYE_Y, 	//人眼位置的Y
-                EYE_Z,   //人眼位置的Z
-                TARGET_X, 	//人眼球看的点X
-                TARGET_Y,   //人眼球看的点Y
-                TARGET_Z,   //人眼球看的点Z
-                0,
-                1,
-                0);
         world.onResume();
 
     }
@@ -95,7 +85,19 @@ public class CubeCollisionDemoScreen extends FrameBufferScreen {
 
     @Override
     protected void onPresent(float deltaData) {
+        //调用此方法计算产生透视投影矩阵
+        MatrixState.setFrustumProject(-ratio, ratio, -1, 1, 2, 10000);
 
+        MatrixState.setCamera(
+                EYE_X,   //人眼位置的X
+                EYE_Y, 	//人眼位置的Y
+                EYE_Z,   //人眼位置的Z
+                TARGET_X, 	//人眼球看的点X
+                TARGET_Y,   //人眼球看的点Y
+                TARGET_Z,   //人眼球看的点Z
+                0,
+                1,
+                0);
 
         world.onPresent(deltaData);
 

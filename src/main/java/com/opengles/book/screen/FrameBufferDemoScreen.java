@@ -8,6 +8,7 @@ import com.opengles.book.MatrixState;
 import com.opengles.book.ShaderUtil;
 import com.opengles.book.framework.Game;
 import com.opengles.book.framework.Input;
+import com.opengles.book.framework.gl.CubeTexture;
 import com.opengles.book.framework.gl.LookAtCamera;
 import com.opengles.book.framework.impl.GLScreen;
 import com.opengles.book.galaxy.CameraController;
@@ -25,13 +26,14 @@ public class FrameBufferDemoScreen extends GLScreen {
 
     private static   int texWidth=512;
     private static   int texHeight=512;
-
+    int floorTextureId;
 
 
     FrameBufferManager.FrameBuffer frameBuffer;
 
 
-    TwistCuboid obj;
+    CubeDrawer obj;
+    CubeTexture   cubeTexture ;
     private LookAtCamera camera;
     CameraController cameraController;
 
@@ -54,9 +56,10 @@ public class FrameBufferDemoScreen extends GLScreen {
 
 
 //        //render to texture using fbo;
-        GLES20.glClearColor(0,0,0,1.0f);
+
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-        obj.draw();
+        obj.draw(cubeTexture);
+
 
 
         frameBuffer.show();
@@ -73,6 +76,7 @@ public class FrameBufferDemoScreen extends GLScreen {
     public void pause() {
 
         obj.unBind();
+        cubeTexture.dispose();;
          frameBuffer.delete();
 
 
@@ -92,7 +96,7 @@ public class FrameBufferDemoScreen extends GLScreen {
         GLES20.glViewport(0, 0, width, height);
         float ratio = (float) width / height;
 
-
+        GLES20.glClearColor(0,0,0,1.0f);
 
 
 
@@ -129,6 +133,7 @@ public class FrameBufferDemoScreen extends GLScreen {
         GLES20.glEnable(GLES20.GL_TEXTURE_2D);
 
         frameBuffer.create();
+        cubeTexture.reload();
 
     }
 
@@ -143,12 +148,13 @@ public class FrameBufferDemoScreen extends GLScreen {
          DisplayMetrics metrics= game.getContext().getResources().getDisplayMetrics();
         texWidth= metrics.widthPixels;
          texHeight=metrics.heightPixels;
-        obj=new TwistCuboid(game.getContext());
+        obj=new CubeDrawer(game.getContext(),5);
 
 
 
 
         frameBuffer=new FrameBufferManager.FrameBuffer(game.getContext(),texWidth,texHeight);
+      cubeTexture =new CubeTexture(game.getContext().getResources(),new String[]{"sky/sky.png"});
 
     }
 
