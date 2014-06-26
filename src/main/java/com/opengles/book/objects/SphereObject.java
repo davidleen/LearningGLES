@@ -7,7 +7,7 @@ import android.content.Context;
  
 
 /**
- * 平面的通用对象
+ * 球体通用对象通用对象
  * @author Administrator
  *
  */

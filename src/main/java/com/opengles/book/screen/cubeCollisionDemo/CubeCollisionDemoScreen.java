@@ -7,6 +7,8 @@ import com.opengles.book.framework.Input;
 import com.opengles.book.framework.impl.GLGame;
 import com.opengles.book.screen.FrameBufferScreen;
 
+import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL10Ext;
 import java.util.List;
 
 /**
@@ -19,12 +21,12 @@ public class CubeCollisionDemoScreen extends FrameBufferScreen {
     World world;
 
     final static float EYE_X=-3;//观察者的位置x
-    final static float EYE_Y=2;//观察者的位置y
-    final static float EYE_Z=5;//观察者的位置z
+    final static float EYE_Y=10 ;//观察者的位置y
+    final static float EYE_Z=30;//观察者的位置z
 
     final static float TARGET_X=1;//目标的位置x
-    final static float TARGET_Y=1;//目的位置Y
-    final static float TARGET_Z=-3;//目标的位置Z
+    final static float TARGET_Y=20;//目的位置Y
+    final static float TARGET_Z=-30;//目标的位置Z
 
     float ratio;
 
@@ -45,7 +47,6 @@ public class CubeCollisionDemoScreen extends FrameBufferScreen {
                  world.add();
              }
             }
-
 
 
 
@@ -86,7 +87,7 @@ public class CubeCollisionDemoScreen extends FrameBufferScreen {
     @Override
     protected void onPresent(float deltaData) {
         //调用此方法计算产生透视投影矩阵
-        MatrixState.setFrustumProject(-ratio, ratio, -1, 1, 2, 10000);
+        MatrixState.setFrustumProject(-ratio, ratio, -1, 1, 1, 10000);
 
         MatrixState.setCamera(
                 EYE_X,   //人眼位置的X
