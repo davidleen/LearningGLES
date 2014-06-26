@@ -1,6 +1,7 @@
 package com.opengles.book.screen.cubeCollisionDemo;
 
 import android.opengl.GLES20;
+import com.bulletphysics.collision.shapes.TriangleIndexVertexArray;
 import com.opengles.book.MatrixState;
 import com.opengles.book.framework.Game;
 import com.opengles.book.framework.Input;
@@ -110,6 +111,6 @@ public class CubeCollisionDemoScreen extends FrameBufferScreen {
     public void add()
     {
 
-
+        TriangleIndexVertexArray  array;
     }
 }

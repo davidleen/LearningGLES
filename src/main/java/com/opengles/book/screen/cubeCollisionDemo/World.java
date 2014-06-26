@@ -184,9 +184,9 @@ public class World {
         MatrixState.pushMatrix();
 
 
-       MatrixState.translate(0,   planeShape.getPlaneConstant(), 0);
+       MatrixState.translate(0,   planeShape.getPlaneConstant()-2, 0);
         MatrixState.rotate(90, 1, 0, 0);
-    //    object.draw(floorTextureId);
+      object.draw(floorTextureId);
 
         MatrixState.popMatrix();
 

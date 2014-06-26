@@ -344,7 +344,7 @@ public class Mountion  implements ObjectDrawable
 	
 	
 	
-	//从灰度图片中加载陆地上每个顶点的高度
+	        //从灰度图片中加载陆地上每个顶点的高度
 		public   float[][] loadLandforms(Context context,String fileName)
 		{
 			
