@@ -21,5 +21,29 @@ public abstract class GLScreen extends Screen {
 		glGame = (GLGame)game;
         glGraphics = ((GLGame)game).getGLGraphics();
 	}
-    
+
+    @Override
+    public void update(float deltaTime) {
+
+    }
+
+    @Override
+    public void present(float deltaTime) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void dispose() {
+
+    }
 }

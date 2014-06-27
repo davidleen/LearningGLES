@@ -2,6 +2,7 @@ package com.opengles.book.screen.cubeCollisionDemo;
 
 import android.content.Context;
 import android.opengl.GLES20;
+import android.util.Log;
 import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.dispatch.CollisionConfiguration;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
@@ -32,12 +33,18 @@ import java.util.Random;
  */
 public class World {
 
+    private static final  String TAG="World";
+
 
     public static final int MAX_AABB_LENGTH = 10000;
     //立方体的边长。
     public static final int BOX_SIZE = 4;
+    public static final int BULLET_SIZE=1;
 
     public  static final  int SPHERE_RADIUS=4;
+
+
+    public static final int D_PLAN=-10;
     //立方体 共用形状
     private BoxShape boxShape;
     //平面形状
@@ -60,6 +67,9 @@ public class World {
     private TexFloor floor;
 
     int floorTextureId;
+
+    //子弹的框架
+    private BoxShape bulletShape;
 
 
     CubeTexture textureGrass;
@@ -102,11 +112,12 @@ public class World {
         dynamicsWorld.setGravity(gravity);
         //创建公用的立方体碰撞形状
         boxShape = new BoxShape(new Vector3f(BOX_SIZE, BOX_SIZE, BOX_SIZE));
+        bulletShape= new BoxShape(new Vector3f(BULLET_SIZE,BULLET_SIZE,BULLET_SIZE));
         sphereShape = new SphereShape(SPHERE_RADIUS);
 
 
         //创建共用的平面碰撞形状。
-        planeShape = new StaticPlaneShape(new Vector3f(0, 1, 0), 0);
+        planeShape = new StaticPlaneShape(new Vector3f(0, 1, 0), -10);
 
 
         //创建集合
@@ -136,7 +147,11 @@ public class World {
 
     public float timeCollapsed = 0;
 
+
+
     public void onUpdate(float deltaTime) {
+
+
 
 
         timeCollapsed += deltaTime;
@@ -145,6 +160,7 @@ public class World {
             dynamicsWorld.stepSimulation(TIME_STEP, MAX_SUB_STEPS);
             timeCollapsed -= TIME_STEP;
         }
+
 
 
     }
@@ -279,8 +295,9 @@ public class World {
     }
 
 
-    public void add() {
+    public void add(Vector3f newPosition,Vector3f newDirection) {
 
+        Log.d(TAG,"newPosition:"+newPosition.toString()+", newDirection:"+newDirection);
 
         Random random = new Random();
         RigidBody body;
@@ -289,33 +306,50 @@ public class World {
         switch (value)
         {
             case 0:
-                body = BodyCreator.createCube(boxShape, 1, 0, 10, 25);
+                body = BodyCreator.createCube(boxShape, 1, newPosition);
                 break;
             case 1:
 
                 CompoundShape  shape=BodyCreator.create(sphereShape,boxShape,sphereShape,BOX_SIZE*2);
-                body = BodyCreator.createComObject(shape, 1, new Vector3f(0, 100, -25));
-                //组合刚体从上方掉落
+                body = BodyCreator.createComObject(shape, 1, newPosition);
 
-                //设置箱子的初始速度
-                body.setLinearVelocity(new Vector3f(0, 10f, 0f));//箱子直线运动的速度--Vx,Vy,Vz三个分量
-                body.setAngularVelocity(new Vector3f(0, 0, 0)); //箱子自身旋转的速度--绕箱子自身的x,y,x三轴旋转的速度
-                bodies.add(body);
-                dynamicsWorld.addRigidBody(body);
-                return ;
+
+            break;
 
             default:
-                body = BodyCreator.createSphere(sphereShape, 1, new Vector3f(0, 10, 25));
+                body = BodyCreator.createSphere(sphereShape, 1, newPosition);
         }
 
 
-
+        //设置箱子的初始速度
+        Vector3f velocity=new Vector3f(newDirection);
+        velocity.scale(100);
 
 
 
 //        //设置箱子的初始速度
-        body.setLinearVelocity(new Vector3f(0, 15f, -12f));//箱子直线运动的速度--Vx,Vy,Vz三个分量
-        body.setAngularVelocity(new Vector3f(1, 1, 1)); //箱子自身旋转的速度--绕箱子自身的x,y,x三轴旋转的速度
+        body.setLinearVelocity(velocity);//箱子直线运动的速度--Vx,Vy,Vz三个分量
+        body.setAngularVelocity(new Vector3f(1,1,1)); //箱子自身旋转的速度--绕箱子自身的x,y,x三轴旋转的速度
+        bodies.add(body);
+        dynamicsWorld.addRigidBody(body);
+    }
+
+
+    public void addBullet(Vector3f newPosition,Vector3f newDirection)
+    {
+
+        RigidBody body=null;
+        body = BodyCreator.createCube(bulletShape, 1, newPosition);
+
+        //设置子弹的初始速度
+        Vector3f velocity=new Vector3f(newDirection);
+        velocity.scale(1000);
+
+
+
+//        //设置箱子的初始速度
+        body.setLinearVelocity(velocity);//箱子直线运动的速度--Vx,Vy,Vz三个分量
+        body.setAngularVelocity(new Vector3f(1,1,1)); //箱子自身旋转的速度--绕箱子自身的x,y,x三轴旋转的速度
         bodies.add(body);
         dynamicsWorld.addRigidBody(body);
     }

@@ -5,6 +5,7 @@ import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
+import com.opengles.book.math.Vector3;
 import com.opengles.book.objects.Sphere;
 
 import javax.vecmath.Tuple3f;
@@ -103,7 +104,14 @@ public class BodyCreator {
 
 
     }
+    public static final  RigidBody createCube(  CollisionShape collisionShape,  float mass,Vector3f position)
+    {
 
+        return create(collisionShape,mass,position,0.6f,0.8f);
+
+
+
+    }
 
     public static RigidBody createComObject( CollisionShape collisionShape,  float mass,Vector3f origin)
     {

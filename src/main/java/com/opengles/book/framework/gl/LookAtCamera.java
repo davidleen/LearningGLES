@@ -8,13 +8,13 @@ import com.opengles.book.math.Vector3;
 
  
 
-public class LookAtCamera  extends Camera3D{
+public class LookAtCamera  {
 	final Vector3 position;
 	final Vector3 up;
 	final Vector3 lookAt;
 	float fieldOfView;
 	float aspectRatio;
-        public 	float near;
+    public 	float near;
 	public float far;
 
 	public LookAtCamera(float fieldOfView, float aspectRatio, float near, float far) {

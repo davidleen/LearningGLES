@@ -197,4 +197,33 @@ public class MatrixState
 		return currMatrix;
 	}
 
+
+
+
+    //获取摄像机矩阵的你矩阵方法
+
+    public static void getInvertVMatrix(float[] result)
+    {
+
+        Matrix.invertM(result,0,mVMatrix,0);
+
+    }
+
+    /**
+     * 将摄像机坐标系中的坐标变换为世界坐标系中的坐标
+     * @param p
+     * @return
+     */
+    public static float[] fromCameraToWorld(float[] p)
+    {
+
+        float[] invM=getNewMatrix();
+        getInvertVMatrix(invM);
+        float[] worldPosition=new float[4];
+        Matrix.multiplyMV(worldPosition,0,invM,0,new float[]{p[0],p[1],p[2],1},0);
+        pool.free(invM);
+
+        return new float[]{worldPosition[0],worldPosition[1],worldPosition[2]};
+
+    }
 }
