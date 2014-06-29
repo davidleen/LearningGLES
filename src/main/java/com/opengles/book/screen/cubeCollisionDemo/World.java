@@ -323,8 +323,8 @@ public class World {
 
         //设置箱子的初始速度
         Vector3f velocity=new Vector3f(newDirection);
-        velocity.scale(100);
-
+        velocity.scale(10);
+        velocity.add(new Vector3f(0,20,0));
 
 
 //        //设置箱子的初始速度
