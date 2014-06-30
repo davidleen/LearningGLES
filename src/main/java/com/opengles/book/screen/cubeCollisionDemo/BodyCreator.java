@@ -12,7 +12,7 @@ import javax.vecmath.Tuple3f;
 import javax.vecmath.Vector3f;
 
 /**
- * {简单描述用途}
+ *     body 生成类
  * Created by davidleen29   qq:67320337
  * on 2014-6-26.
  */

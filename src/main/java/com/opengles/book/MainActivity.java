@@ -3,6 +3,10 @@ package com.opengles.book;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuItem;
+import android.widget.*;
 import com.opengles.book.galaxy.GalaxyGame;
 import com.opengles.book.screen.*;
 
@@ -13,10 +17,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 import com.opengles.book.screen.cubeCollisionDemo.CubeCollisionDemoScreen;
 import com.opengles.book.testFBO.TestFboActivity;
 
@@ -88,10 +88,44 @@ public class MainActivity extends ListActivity {
 		MenuAdapter adapter = new MenuAdapter(this, datas);
 
 		setListAdapter(adapter);
+
+
+        getListView().setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
+                                                      @Override
+                                                      public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                registerForContextMenu(getListView());
+                return false;
+            }
+        });
 	}
+    @Override
+    public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+        contextMenu.setHeaderTitle("运动治疗");
+        contextMenu.add(0, 0, 0, "完成");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int id=info.position;
+
+
+        switch (item.getItemId()) {
+            case 0:
+                Toast.makeText(MainActivity.this,"click",Toast.LENGTH_LONG).show();
+
+                break;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
+
+
 
         MenuInfo menuInfo=	(MenuInfo)l.getItemAtPosition(position);
         Intent intent;
