@@ -13,6 +13,12 @@ public class AABB3 {
 
     //Vector3 size(){}
 
+
+    public AABB3(Vector3 min, Vector3 max) {
+        this.min = min;
+        this.max = max;
+    }
+
     /**
      * 求中心点
      * @param center
@@ -30,17 +36,26 @@ public class AABB3 {
      */
     public  boolean contains(Vector3 point)
     {
-        if(point.x<min.x) return false;
-        if(point.y<min.y) return false;
-        if(point.z<min.z) return false;
-        if(point.x>max.x) return false;
-        if(point.y>max.y) return false;
-        if(point.z>max.z) return false;
+      return  contains(point.x,point.y,point.z);
+
+    }
+    /**
+     * 是否包含点。
+     * @param   x,   y,   z
+     * @return
+     */
+    public  boolean contains(float x, float y, float z)
+    {
+        if( x<min.x) return false;
+        if( y<min.y) return false;
+        if (z<min.z) return false;
+        if( x>max.x) return false;
+        if( y>max.y) return false;
+        if( z>max.z) return false;
 
         return  true;
 
     }
-
 
     /**
      * 求距离该点最近的点

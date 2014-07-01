@@ -36,7 +36,7 @@ public class ObjObject implements ObjectDrawable {
 	protected static final int VERTEX_NORMAL_SIZE = 3;// xyz
 	protected static final int VERTEX_TEXTURE_CORD_SIZE = 2;// s t
 
-//	protected static final int STRIP_SIZE = (VERTEX_POS_SIZE
+//	protected static final int VERTEX_STRIP_SIZE_OF_BUFFER = (VERTEX_POS_SIZE
 //			+ VERTEX_NORMAL_SIZE
 //			+ VERTEX_TEXTURE_CORD_SIZE)
 //			* FloatUtils.RATIO_FLOATTOBYTE;

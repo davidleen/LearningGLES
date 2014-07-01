@@ -123,6 +123,11 @@ public class BodyCreator {
     }
 
 
+    public static RigidBody createMountain(CollisionShape shape,Vector3f origin)
+    {
+        return create(shape,0,origin,0.4f,0.8f);
+    }
+
     /**
      * 创建复合的对象模型
      */

@@ -37,7 +37,7 @@ public class CubeCollisionDemoScreen extends FrameBufferScreen {
     final static float TARGET_Y=10;//目的位置Y
     final static float TARGET_Z=-30;//目标的位置Z
     final static float NEAR=1;
-    final static float FAR=1000;
+    final static float FAR=10000;
 
     ProjectInfo projectInfo ;
     Camera3D camera;
@@ -90,7 +90,7 @@ public class CubeCollisionDemoScreen extends FrameBufferScreen {
             Vector3f newPosition=new Vector3f();
             Vector3f direction=new Vector3f();
             simulateTouch(x,y,newPosition,direction);
-            world.add(newPosition, direction);
+        world.add(newPosition, direction);
         }
 
 
@@ -170,9 +170,5 @@ public class CubeCollisionDemoScreen extends FrameBufferScreen {
 
     }
 
-    public void add()
-    {
 
-        TriangleIndexVertexArray  array;
-    }
 }

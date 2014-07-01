@@ -1,4 +1,4 @@
-package com.opengles.book.objects;
+package com.opengles.book.screen.cubeCollisionDemo;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -10,7 +10,6 @@ import com.opengles.book.FloatUtils;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.ShortBuffer;
 
 import static com.opengles.book.screen.GrayMapScreen.UNIT_SIZE;
 
@@ -37,12 +36,15 @@ public class GrayMap {
     public int indexStrideWidth;
     public int triangleCount;
     public int vertexCount;
+    public int vertexBuffSize;
+    public int indexBuffSize;
+
+    //关闭法向量
     protected static final int VERTEX_POS_SIZE = 3;// xyz
-     protected static final int VERTEX_NORMAL_SIZE = 3;// xyz
+    // protected static final int VERTEX_NORMAL_SIZE = 3;// xyz
     protected static final int VERTEX_TEXTURE_SIZE = 2;// s t
-    protected static final int STRIP_SIZE = (VERTEX_POS_SIZE
-             + VERTEX_NORMAL_SIZE
-            + VERTEX_TEXTURE_SIZE)
+    protected static final int VERTEX_SIZE=VERTEX_POS_SIZE+VERTEX_TEXTURE_SIZE;
+    protected static final int VERTEX_STRIP_SIZE_OF_BUFFER = VERTEX_SIZE
             * FloatUtils.RATIO_FLOATTOBYTE;
     public static GrayMap load(Context context,String fileName)
     {
@@ -85,7 +87,7 @@ public class GrayMap {
         int rows=result.length;
         int cols=result[0].length;
         int vCount=cols*rows ;//共有点数  共有方块数
-        float[] vertices =new float[vCount*STRIP_SIZE];//每个顶点xyz三个坐标 st 纹理坐标
+        float[] vertices =new float[vCount* VERTEX_SIZE];//每个顶点xyz三个坐标 st 纹理坐标
         int count=0;//顶点计数器
         float halfRows=rows/2;
         float halfCols=cols/2;
@@ -98,7 +100,7 @@ public class GrayMap {
             for(int i=0;i<cols;i++)
             {
 
-                //xyz st
+                //xyz
                 vertices[count++]=(i-halfCols)*UNIT_SIZE;
                 vertices[count++]=result[j][i];
                 vertices[count++]=(j-halfRows)*UNIT_SIZE;
@@ -139,19 +141,19 @@ public class GrayMap {
 
         }
 
-        int size = vertices.length * FloatUtils.RATIO_FLOATTOBYTE ;
-        grayMap.vertexData=ByteBuffer.allocateDirect(size)
+        grayMap.vertexBuffSize   = vertices.length * FloatUtils.RATIO_FLOATTOBYTE ;
+        grayMap.vertexData=ByteBuffer.allocateDirect(grayMap.vertexBuffSize)
                 .order(ByteOrder.nativeOrder());
         grayMap.vertexData.asFloatBuffer().put(vertices).flip();
 
 
-          size = indexData.length * FloatUtils.RATIO_SHORTTOBYTE ;
-        grayMap.indexData=ByteBuffer.allocateDirect(size)
+        grayMap.indexBuffSize = indexData.length * FloatUtils.RATIO_SHORTTOBYTE ;
+        grayMap.indexData=ByteBuffer.allocateDirect(grayMap.indexBuffSize)
                 .order(ByteOrder.nativeOrder());
         grayMap.vertexData.asShortBuffer().put(indexData).flip();
         grayMap.triangleCount= indexData.length/VERTEX_COUNT_PER_TRIANGLE;
-        grayMap.vertexCount= vertices.length;
-        grayMap.vertexStrideWidth=STRIP_SIZE;
+        grayMap.vertexCount= vertices.length/VERTEX_SIZE;
+        grayMap.vertexStrideWidth= VERTEX_STRIP_SIZE_OF_BUFFER;
         grayMap.indexStrideWidth=VERTEX_COUNT_PER_TRIANGLE*FloatUtils.RATIO_SHORTTOBYTE;   //3 表示一个
         return  grayMap;
 

@@ -4,18 +4,21 @@ import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
 import com.bulletphysics.collision.broadphase.AxisSweep3;
-import com.bulletphysics.collision.dispatch.CollisionConfiguration;
-import com.bulletphysics.collision.dispatch.CollisionDispatcher;
-import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
+import com.bulletphysics.collision.dispatch.*;
 import com.bulletphysics.collision.shapes.*;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
+import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
+
 import com.opengles.book.MatrixState;
 import com.opengles.book.ShaderUtil;
+import com.opengles.book.framework.Pool;
 import com.opengles.book.framework.gl.CubeTexture;
+import com.opengles.book.math.AABB3;
 import com.opengles.book.math.MathUtils;
+import com.opengles.book.math.Vector3;
 import com.opengles.book.objects.CubeDrawer;
 import com.opengles.book.objects.RectangleViewObject;
 import com.opengles.book.objects.SphereObject;
@@ -36,7 +39,8 @@ public class World {
     private static final  String TAG="World";
 
 
-    public static final int MAX_AABB_LENGTH = 10000;
+    public static final int MAX_AABB_LENGTH = 1000;
+    private AABB3 boundary;
     //立方体的边长。
     public static final int BOX_SIZE = 4;
     public static final int BULLET_SIZE=1;
@@ -54,9 +58,10 @@ public class World {
 
 
     private CubeDrawer cubeDrawer;
+    private CubeDrawer bulletDrawer;
     //球体绘制对象
     private SphereObject sphereObject;
-    private RectangleViewObject object;
+    private RectangleViewObject planObject;
     //物理模拟频率
     public static final float TIME_STEP = 1 / 60f;
     //最大迭代子步数
@@ -64,6 +69,7 @@ public class World {
 
 
     private List<RigidBody> bodies;
+    private List<RigidBody> tempBodies=new ArrayList<RigidBody>();
     private TexFloor floor;
 
     int floorTextureId;
@@ -75,21 +81,36 @@ public class World {
     CubeTexture textureGrass;
     CubeTexture textureRock;
 
+
+    //山地绘制类
+    Mountain mountain;
+    //灰度地图顶点索引数据
+    GrayMap grayMap ;
+
+    CollisionShape mountainShape;
+
+
     public World(Context context) {
 
 
         cubeDrawer = new CubeDrawer(context, BOX_SIZE);
-        object = new RectangleViewObject(context, MAX_AABB_LENGTH, MAX_AABB_LENGTH);
+        bulletDrawer=new CubeDrawer(context,BULLET_SIZE);
+        planObject = new RectangleViewObject(context, MAX_AABB_LENGTH, MAX_AABB_LENGTH);
         sphereObject=new SphereObject(context,"sky/sky.png",SPHERE_RADIUS);
 
         floorTextureId = ShaderUtil.loadTextureWithUtils(context, "sky/sky.png", false);
         textureGrass = new CubeTexture(context.getResources(), "gray_map/grass.png");
         textureRock = new CubeTexture(context.getResources(), "gray_map/rock.png");
 
-        init();
+
+        grayMap=   GrayMap.load(context,"gray_map/land.png");
+
+
+        mountain=new Mountain(context,grayMap);
+        init(context);
     }
 
-    public void init() {
+    public void init(Context context) {
         //检测配置信息对象
         CollisionConfiguration collisionConfiguration = new DefaultCollisionConfiguration();
         //算法分配对象
@@ -101,6 +122,8 @@ public class World {
         int maxProxies = 1024;
         //创建碰撞检测粗测阶段的加速算法对象
         AxisSweep3 overlappingPairCache = new AxisSweep3(worlddAabbMin, worldAabbMax, maxProxies);
+        boundary=new AABB3(  Vector3.create(-MAX_AABB_LENGTH, -MAX_AABB_LENGTH, -MAX_AABB_LENGTH),  Vector3.create(MAX_AABB_LENGTH, MAX_AABB_LENGTH, MAX_AABB_LENGTH));
+
         //创建推动约束解决这对象
         SequentialImpulseConstraintSolver solver = new SequentialImpulseConstraintSolver();
 
@@ -117,7 +140,7 @@ public class World {
 
 
         //创建共用的平面碰撞形状。
-        planeShape = new StaticPlaneShape(new Vector3f(0, 1, 0), -10);
+        planeShape = new StaticPlaneShape(new Vector3f(0, 0, 1), -MAX_AABB_LENGTH);
 
 
         //创建集合
@@ -131,7 +154,7 @@ public class World {
 
         bodies.add(body);
         dynamicsWorld.addRigidBody(body);
-        body.forceActivationState(RigidBody.WANTS_DEACTIVATION);
+        //body.forceActivationState(RigidBody.WANTS_DEACTIVATION);
 
 
         //添加平面
@@ -140,6 +163,35 @@ public class World {
         floor = TexFloor.create(0, planeShape);
 
         dynamicsWorld.addRigidBody(floor);
+
+
+
+        //创建山地纹理碰撞体
+        //三角形顶点数组
+//        grayMap=   GrayMap.load(context,"gray_map/land.png");
+//        TriangleIndexVertexArray indexVertexArray=new TriangleIndexVertexArray();
+//
+//       IndexedMesh indexedMesh=new IndexedMesh();
+//
+//        indexedMesh.numTriangles= grayMap.triangleCount;
+//
+//        indexedMesh.numVertices= grayMap.vertexCount;
+//        indexedMesh.triangleIndexBase=grayMap.indexData;
+//        indexedMesh.vertexBase=grayMap.vertexData;
+//        indexedMesh.vertexStride=grayMap.vertexStrideWidth;
+//        indexedMesh.triangleIndexStride=grayMap.indexStrideWidth;
+//
+//
+//        indexVertexArray.addIndexedMesh(indexedMesh,ScalarType.SHORT);
+//        //创建地形对应的碰撞形状
+//
+//        mountainShape=new BvhTriangleMeshShape(indexVertexArray,true,true);
+//
+//        RigidBody mountainBody=BodyCreator.createMountain(mountainShape, new Vector3f(0, 0, 0));
+//        //设置非运动提
+//        mountainBody.setCollisionFlags(mountainBody.getCollisionFlags()&~CollisionFlags.KINEMATIC_OBJECT);
+//        mountainBody.forceActivationState(CollisionObject.ACTIVE_TAG);
+//        dynamicsWorld.addRigidBody(mountainBody);
 
 
     }
@@ -162,19 +214,42 @@ public class World {
         }
 
 
+        tempBodies.clear();
+        for (RigidBody body : bodies) {
+
+
+
+
+            //从物理世界中获取这个箱子对应刚体的变换信息对象
+              body.getMotionState().getWorldTransform(tempTransform);
+            if(!boundary.contains(tempTransform.origin.x,tempTransform.origin.y,tempTransform.origin.z))
+            {
+            //该物体超出边界～
+                dynamicsWorld.removeRigidBody(body);
+                tempBodies.add(body);
+            }
+
+
+//           tempTransform.origin.x, tempTransform.origin.y, tempTransform.origin.z ;
+//
+//            if( tempTransform.origin.z)
+
+
+        }
+        bodies.removeAll(tempBodies);
+        for(RigidBody body:tempBodies)
+        {
+            bulletPool.free(body );
+        }
+        tempBodies.clear();
 
     }
 
 
     public void onPresent(float deltaData) {
-
         //清除颜色缓存于深度缓存
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-
-
         for (RigidBody body : bodies) {
-
-
             MatrixState.pushMatrix();
             //从物理世界中获取这个箱子对应刚体的变换信息对象
             Transform transform = body.getMotionState().getWorldTransform(new Transform());
@@ -200,13 +275,23 @@ public class World {
         MatrixState.pushMatrix();
 
 
-       MatrixState.translate(0,   planeShape.getPlaneConstant()-2, 0);
-        MatrixState.rotate(90, 1, 0, 0);
-      object.draw(floorTextureId);
+       MatrixState.translate(0, 0   , planeShape.getPlaneConstant());
+    //     MatrixState.rotate(90, 1, 0, 0);
+      planObject.draw(floorTextureId);
 
         MatrixState.popMatrix();
 
 
+
+
+        //绘制山地
+        MatrixState.pushMatrix();
+
+        MatrixState.translate(0, 0   , -30);
+        //     MatrixState.rotate(90, 1, 0, 0);
+        mountain.draw();
+
+        MatrixState.popMatrix();
     }
 
 
@@ -233,8 +318,20 @@ public class World {
                 texture = textureRock;
 
             }
-            //绘制立方体代码
-            cubeDrawer.draw(texture);
+
+            if(collisionShape==bulletShape)
+            {
+                //绘制子弹
+
+                bulletDrawer.draw(texture);
+            }else
+            {
+                //绘制立方体代码
+                cubeDrawer.draw(texture);
+            }
+
+
+
         }else
         {
 
@@ -271,8 +368,10 @@ public class World {
 
 
         cubeDrawer.bind();
-        object.bind();
+        bulletDrawer.bind();
+        planObject.bind();
         sphereObject.bind();
+        mountain.bind();
 
         //设置屏幕背景色黑色RGBA
         GLES20.glClearColor(0, 0, 0, 0);
@@ -286,8 +385,10 @@ public class World {
     public void onPause() {
 
         cubeDrawer.unBind();
-        object.unBind();
+        bulletDrawer.unBind();
+        planObject.unBind();
         sphereObject.unBind();
+        mountain.unBind();
     }
 
     public void onDispose() {
@@ -339,11 +440,26 @@ public class World {
     {
 
         RigidBody body=null;
-        body = BodyCreator.createCube(bulletShape, 1, newPosition);
+        body =// BodyCreator.createCube(bulletShape, 1, newPosition);
+
+        bulletPool.newObject();
 
         //设置子弹的初始速度
         Vector3f velocity=new Vector3f(newDirection);
-        velocity.scale(1000);
+        velocity.scale(500);
+        //创建刚体初始变换对象
+
+        //变换初始化
+        tempTransform.setIdentity();
+        //设置刚体初始位置
+        tempTransform.origin.set(newPosition.x,newPosition.y,newPosition.z);
+
+
+          body.setWorldTransform(tempTransform);
+
+
+        body.setCollisionShape(bulletShape);
+
 
 
 
@@ -353,4 +469,24 @@ public class World {
         bodies.add(body);
         dynamicsWorld.addRigidBody(body);
     }
+
+
+
+
+    private Pool<RigidBody> bulletPool=new Pool<RigidBody>(new Pool.PoolObjectFactory<RigidBody>() {
+        @Override
+        public RigidBody createObject() {
+            return new RigidBody(1, new DefaultMotionState() ,null  );
+        }
+    },20);
+
+
+
+     Transform tempTransform=new Transform();
+
+    private void configBulletInitialState()
+    {
+
+    }
+
 }

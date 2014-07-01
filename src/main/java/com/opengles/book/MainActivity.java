@@ -26,6 +26,7 @@ public class MainActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
+
 		List<MenuInfo> datas = new ArrayList<MainActivity.MenuInfo>();
 		MenuInfo info = new MenuInfo("菜单界面", MainScreen.class.getName());
 
