@@ -8,36 +8,33 @@ import android.opengl.GLES20;
 import com.opengles.book.FloatUtils;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
-import static com.opengles.book.screen.GrayMapScreen.UNIT_SIZE;
 
 /**
  *
  *
- * 灰度地图数据
+ * 灰度地图生成工具类
  * Created by Administrator on 2014/6/26.
  */
 public class GrayMap {
     //读取灰度图
     final static float LAND_HIGH_ADJUST=-2f;//陆地的高度调整值
     final static float LAND_HIGHEST=20f;//陆地最大高差
-
+    final static int DEFAULT_UNIT_SIZE=1;
 
     public int drawType= GLES20.GL_TRIANGLES;
 
     public static final  int VERTEX_COUNT_PER_TRIANGLE=3;
 
-    public ByteBuffer  vertexData;
-    public ByteBuffer  indexData;
+    public float[]  vertexData;
+    public short[]  indexData;
 
-    public int vertexStrideWidth;
-    public int indexStrideWidth;
+//    public int vertexStrideWidth;
+//    public int indexStrideWidth;
     public int triangleCount;
     public int vertexCount;
-    public int vertexBuffSize;
-    public int indexBuffSize;
+  //  public int vertexBuffSize;
+   // public int indexBuffSize;
 
     //关闭法向量
     protected static final int VERTEX_POS_SIZE = 3;// xyz
@@ -51,11 +48,14 @@ public class GrayMap {
 
 
 
-        return load(context,fileName,LAND_HIGHEST,LAND_HIGH_ADJUST);
+        return load(context,fileName,DEFAULT_UNIT_SIZE);
 
     }
-
-    public static GrayMap load(Context context,String fileName,float maxHeight, float adjustHeight    )
+    public static GrayMap load(Context context,String fileName,int unitSize  )
+    {
+        return load(context,fileName,unitSize,LAND_HIGHEST,LAND_HIGH_ADJUST);
+    }
+    public static GrayMap load(Context context,String fileName,int unitSize, float maxHeight, float adjustHeight    )
     {
 
         GrayMap grayMap=new GrayMap();
@@ -84,6 +84,11 @@ public class GrayMap {
         }
 
 
+
+        bt.recycle();
+        bt=null;
+
+
         int rows=result.length;
         int cols=result[0].length;
         int vCount=cols*rows ;//共有点数  共有方块数
@@ -101,9 +106,9 @@ public class GrayMap {
             {
 
                 //xyz
-                vertices[count++]=(i-halfCols)*UNIT_SIZE;
-                vertices[count++]=result[j][i];
-                vertices[count++]=(j-halfRows)*UNIT_SIZE;
+                vertices[count++]=(i-halfCols)*unitSize;
+                vertices[count++]=result[j][i]*unitSize/2;
+                vertices[count++]=(j-halfRows)*unitSize;
                 //st
                 vertices[count++]=i*sizew;
                 vertices[count++]=j*sizeh;
@@ -141,20 +146,18 @@ public class GrayMap {
 
         }
 
-        grayMap.vertexBuffSize   = vertices.length * FloatUtils.RATIO_FLOATTOBYTE ;
-        grayMap.vertexData=ByteBuffer.allocateDirect(grayMap.vertexBuffSize)
-                .order(ByteOrder.nativeOrder());
-        grayMap.vertexData.asFloatBuffer().put(vertices).flip();
+
+        grayMap.vertexData=vertices;
+       // grayMap.vertexData.asFloatBuffer().put(vertices).flip();
 
 
-        grayMap.indexBuffSize = indexData.length * FloatUtils.RATIO_SHORTTOBYTE ;
-        grayMap.indexData=ByteBuffer.allocateDirect(grayMap.indexBuffSize)
-                .order(ByteOrder.nativeOrder());
-        grayMap.vertexData.asShortBuffer().put(indexData).flip();
+
+        grayMap.indexData=indexData;
+
         grayMap.triangleCount= indexData.length/VERTEX_COUNT_PER_TRIANGLE;
         grayMap.vertexCount= vertices.length/VERTEX_SIZE;
-        grayMap.vertexStrideWidth= VERTEX_STRIP_SIZE_OF_BUFFER;
-        grayMap.indexStrideWidth=VERTEX_COUNT_PER_TRIANGLE*FloatUtils.RATIO_SHORTTOBYTE;   //3 表示一个
+//        grayMap.vertexStrideWidth= VERTEX_STRIP_SIZE_OF_BUFFER;
+//        grayMap.indexStrideWidth=VERTEX_COUNT_PER_TRIANGLE*FloatUtils.RATIO_SHORTTOBYTE;
         return  grayMap;
 
 

@@ -103,7 +103,7 @@ public class World {
         textureRock = new CubeTexture(context.getResources(), "gray_map/rock.png");
 
 
-        grayMap=   GrayMap.load(context,"gray_map/land.png");
+        grayMap=   GrayMap.load(context,"gray_map/land.png",10);
 
 
         mountain=new Mountain(context,grayMap);
@@ -168,7 +168,7 @@ public class World {
 
         //创建山地纹理碰撞体
         //三角形顶点数组
-//        grayMap=   GrayMap.load(context,"gray_map/land.png");
+//
 //        TriangleIndexVertexArray indexVertexArray=new TriangleIndexVertexArray();
 //
 //       IndexedMesh indexedMesh=new IndexedMesh();
@@ -287,7 +287,7 @@ public class World {
         //绘制山地
         MatrixState.pushMatrix();
 
-        MatrixState.translate(0, 0   , -30);
+        MatrixState.translate(0, -20   , -32);
         //     MatrixState.rotate(90, 1, 0, 0);
         mountain.draw();
 
@@ -425,7 +425,7 @@ public class World {
         //设置箱子的初始速度
         Vector3f velocity=new Vector3f(newDirection);
         velocity.scale(10);
-        velocity.add(new Vector3f(0,20,0));
+        velocity.add(new Vector3f(0,random.nextInt(30),0));
 
 
 //        //设置箱子的初始速度
@@ -484,9 +484,6 @@ public class World {
 
      Transform tempTransform=new Transform();
 
-    private void configBulletInitialState()
-    {
 
-    }
 
 }
