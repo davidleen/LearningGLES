@@ -68,8 +68,8 @@ public class CubeCollisionDemoScreen extends FrameBufferScreen {
                  Vector3f newPosition=new Vector3f();
                  Vector3f direction=new Vector3f();
                  simulateTouch(touchEvent.x,touchEvent.y,newPosition,direction);
-                 world.addBullet(newPosition, direction);
-
+              //   world.addBullet(newPosition, direction);
+                  world.addTeapot(newPosition, direction);
 
              }
         }
@@ -90,7 +90,7 @@ public class CubeCollisionDemoScreen extends FrameBufferScreen {
             Vector3f newPosition=new Vector3f();
             Vector3f direction=new Vector3f();
             simulateTouch(x,y,newPosition,direction);
-        world.add(newPosition, direction);
+          //  world.add(newPosition, direction);
         }
 
 

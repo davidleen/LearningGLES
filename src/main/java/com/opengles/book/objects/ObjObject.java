@@ -82,12 +82,23 @@ public class ObjObject implements ObjectDrawable {
 		this(context, "tz/", "tz.obj");
 	}
 
-	public ObjObject(Context context, String path, String fileName)
+
+
+    public ObjObject(Context context, String path, String fileName){
+
+
+
+        this( context, ObjectParser.parse(context, path, fileName));
+    }
+
+    public ObjObject(Context context,ObjModel objModel )
+
 	{
 
 		this.context = context;
+        this.model=objModel;
 
-		model = ObjectParser.parse(context, path, fileName);
+
 
 
 

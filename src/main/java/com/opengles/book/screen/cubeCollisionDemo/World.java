@@ -9,9 +9,11 @@ import com.bulletphysics.collision.shapes.*;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
+import com.bulletphysics.extras.gimpact.GImpactMeshShape;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 
+import com.opengles.book.FloatUtils;
 import com.opengles.book.MatrixState;
 import com.opengles.book.ShaderUtil;
 import com.opengles.book.framework.Pool;
@@ -25,6 +27,9 @@ import com.opengles.book.objects.SphereObject;
 
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -43,7 +48,7 @@ public class World {
     private AABB3 boundary;
     //立方体的边长。
     public static final int BOX_SIZE = 4;
-    public static final int BULLET_SIZE=1;
+    public static final int BULLET_SIZE=2;
 
     public  static final  int SPHERE_RADIUS=4;
 
@@ -74,10 +79,12 @@ public class World {
 
     int floorTextureId;
 
+
     //子弹的框架
     private BoxShape bulletShape;
 
-
+    //子弹纹理
+    CubeTexture bulletTexture;
     CubeTexture textureGrass;
     CubeTexture textureRock;
 
@@ -88,6 +95,13 @@ public class World {
     GrayMap grayMap ;
 
     CollisionShape mountainShape;
+
+    RigidBody mountainBody;
+
+    Random random = new Random();
+
+
+    private TeapotObject teapotObject;
 
 
     public World(Context context) {
@@ -101,10 +115,10 @@ public class World {
         floorTextureId = ShaderUtil.loadTextureWithUtils(context, "sky/sky.png", false);
         textureGrass = new CubeTexture(context.getResources(), "gray_map/grass.png");
         textureRock = new CubeTexture(context.getResources(), "gray_map/rock.png");
-
+        bulletTexture = new CubeTexture(context.getResources(), "teapot.png");
 
         grayMap=   GrayMap.load(context,"gray_map/land.png",10);
-
+        teapotObject=new TeapotObject(context);
 
         mountain=new Mountain(context,grayMap);
         init(context);
@@ -168,30 +182,51 @@ public class World {
 
         //创建山地纹理碰撞体
         //三角形顶点数组
+
+      TriangleIndexVertexArray indexVertexArray=new TriangleIndexVertexArray();
+
+        IndexedMesh indexedMesh=new IndexedMesh();
+
+         indexedMesh.numTriangles= grayMap.triangleCount;
+
+        indexedMesh.numVertices= grayMap.vertexCount;
+
+        int indexSize=grayMap.indexData.length;
+        ByteBuffer indexBuff= ByteBuffer.allocateDirect(indexSize * FloatUtils.RATIO_SHORTTOBYTE).order(ByteOrder.nativeOrder());
+
+        for(int i=0;i<indexSize;i++)
+        {
+            indexBuff.putShort(grayMap.indexData[i]);
+        }
+        indexBuff.flip();
+       indexedMesh.triangleIndexBase=indexBuff;
+
+
+
+        int  vertexSize=grayMap.vertexData.length;
+        ByteBuffer vertexBuff= ByteBuffer.allocateDirect(vertexSize* FloatUtils.RATIO_FLOATTOBYTE).order(ByteOrder.nativeOrder());
+
+        for(int i=0;i<vertexSize;i++)
+        {
+            vertexBuff.putFloat(grayMap.vertexData[i]);
+        }
+        vertexBuff.flip();
+        indexedMesh.vertexBase=vertexBuff;
+        indexedMesh.vertexStride=GrayMap.VERTEX_STRIP_SIZE_OF_BUFFER;
+       indexedMesh.triangleIndexStride=3*FloatUtils.RATIO_SHORTTOBYTE;
 //
-//        TriangleIndexVertexArray indexVertexArray=new TriangleIndexVertexArray();
 //
-//       IndexedMesh indexedMesh=new IndexedMesh();
-//
-//        indexedMesh.numTriangles= grayMap.triangleCount;
-//
-//        indexedMesh.numVertices= grayMap.vertexCount;
-//        indexedMesh.triangleIndexBase=grayMap.indexData;
-//        indexedMesh.vertexBase=grayMap.vertexData;
-//        indexedMesh.vertexStride=grayMap.vertexStrideWidth;
-//        indexedMesh.triangleIndexStride=grayMap.indexStrideWidth;
-//
-//
-//        indexVertexArray.addIndexedMesh(indexedMesh,ScalarType.SHORT);
+        //  indexVertexArray.addIndexedMesh(indexedMesh );
+       indexVertexArray.addIndexedMesh(indexedMesh,ScalarType.SHORT);
 //        //创建地形对应的碰撞形状
 //
-//        mountainShape=new BvhTriangleMeshShape(indexVertexArray,true,true);
-//
-//        RigidBody mountainBody=BodyCreator.createMountain(mountainShape, new Vector3f(0, 0, 0));
-//        //设置非运动提
-//        mountainBody.setCollisionFlags(mountainBody.getCollisionFlags()&~CollisionFlags.KINEMATIC_OBJECT);
-//        mountainBody.forceActivationState(CollisionObject.ACTIVE_TAG);
-//        dynamicsWorld.addRigidBody(mountainBody);
+        mountainShape=new BvhTriangleMeshShape(indexVertexArray,true,true);
+
+          mountainBody=BodyCreator.createMountain(mountainShape, new Vector3f(0, -20, -20));
+        //设置非运动提
+        mountainBody.setCollisionFlags(mountainBody.getCollisionFlags()&~CollisionFlags.KINEMATIC_OBJECT);
+        mountainBody.forceActivationState(CollisionObject.ACTIVE_TAG);
+        dynamicsWorld.addRigidBody(mountainBody);
 
 
     }
@@ -206,12 +241,7 @@ public class World {
 
 
 
-        timeCollapsed += deltaTime;
-        if (timeCollapsed > TIME_STEP) {
 
-            dynamicsWorld.stepSimulation(TIME_STEP, MAX_SUB_STEPS);
-            timeCollapsed -= TIME_STEP;
-        }
 
 
         tempBodies.clear();
@@ -225,6 +255,7 @@ public class World {
             if(!boundary.contains(tempTransform.origin.x,tempTransform.origin.y,tempTransform.origin.z))
             {
             //该物体超出边界～
+
                 dynamicsWorld.removeRigidBody(body);
                 tempBodies.add(body);
             }
@@ -243,16 +274,31 @@ public class World {
         }
         tempBodies.clear();
 
+
+
+
+        timeCollapsed += deltaTime;
+        if (timeCollapsed > TIME_STEP) {
+
+            dynamicsWorld.stepSimulation(TIME_STEP, MAX_SUB_STEPS);
+            timeCollapsed -= TIME_STEP;
+        }
+
     }
 
 
     public void onPresent(float deltaData) {
+
+
+
+
+
         //清除颜色缓存于深度缓存
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         for (RigidBody body : bodies) {
             MatrixState.pushMatrix();
             //从物理世界中获取这个箱子对应刚体的变换信息对象
-            Transform transform = body.getMotionState().getWorldTransform(new Transform());
+            Transform transform = body.getMotionState().getWorldTransform(tempTransform);
             //平移变换
             MatrixState.translate(transform.origin.x, transform.origin.y, transform.origin.z);
             //获取当前旋转变换信息进入四元数
@@ -263,10 +309,20 @@ public class World {
                 //旋转变换
                 MatrixState.rotate(fa[0], fa[1], fa[2], fa[3]);
             }
+            CollisionShape collisionShape=body.getCollisionShape();
+            if( collisionShape instanceof GImpactMeshShape)
+            {// 绘制茶壶
 
 
-            drawShape(body.getCollisionShape(),body.isActive());
+                teapotObject.draw(body);
 
+
+
+
+            }else {
+
+                drawShape(collisionShape, body.isActive());
+            }
 
             MatrixState.popMatrix();
         }
@@ -276,22 +332,15 @@ public class World {
 
 
        MatrixState.translate(0, 0   , planeShape.getPlaneConstant());
-    //     MatrixState.rotate(90, 1, 0, 0);
-      planObject.draw(floorTextureId);
-
-        MatrixState.popMatrix();
-
-
-
-
-        //绘制山地
-        MatrixState.pushMatrix();
-
-        MatrixState.translate(0, -20   , -32);
         //     MatrixState.rotate(90, 1, 0, 0);
-        mountain.draw();
+       planObject.draw(floorTextureId);
 
         MatrixState.popMatrix();
+
+
+
+        ConcreateObject.draw(mountain,mountainBody);
+
     }
 
 
@@ -323,7 +372,7 @@ public class World {
             {
                 //绘制子弹
 
-                bulletDrawer.draw(texture);
+                bulletDrawer.draw(bulletTexture);
             }else
             {
                 //绘制立方体代码
@@ -333,7 +382,7 @@ public class World {
 
 
         }else
-        {
+
 
            if(collisionShape instanceof  CompoundShape)
            {
@@ -357,7 +406,6 @@ public class World {
 
 
 
-           }
 
 
 
@@ -366,7 +414,7 @@ public class World {
 
     public void onResume() {
 
-
+        teapotObject.bind();
         cubeDrawer.bind();
         bulletDrawer.bind();
         planObject.bind();
@@ -375,7 +423,7 @@ public class World {
 
         //设置屏幕背景色黑色RGBA
         GLES20.glClearColor(0, 0, 0, 0);
-//启用深度测试
+        //启用深度测试
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         //设置为打开背面剪裁
         ///     GLES20.glEnable(GLES20.GL_CULL_FACE);
@@ -383,7 +431,7 @@ public class World {
     }
 
     public void onPause() {
-
+        teapotObject.unBind();
         cubeDrawer.unBind();
         bulletDrawer.unBind();
         planObject.unBind();
@@ -400,7 +448,7 @@ public class World {
 
         Log.d(TAG,"newPosition:"+newPosition.toString()+", newDirection:"+newDirection);
 
-        Random random = new Random();
+
         RigidBody body;
         int value=random.nextInt(3);
 
@@ -446,7 +494,7 @@ public class World {
 
         //设置子弹的初始速度
         Vector3f velocity=new Vector3f(newDirection);
-        velocity.scale(500);
+        velocity.scale(300);
         //创建刚体初始变换对象
 
         //变换初始化
@@ -466,6 +514,44 @@ public class World {
 //        //设置箱子的初始速度
         body.setLinearVelocity(velocity);//箱子直线运动的速度--Vx,Vy,Vz三个分量
         body.setAngularVelocity(new Vector3f(1,1,1)); //箱子自身旋转的速度--绕箱子自身的x,y,x三轴旋转的速度
+        bodies.add(body);
+        dynamicsWorld.addRigidBody(body);
+    }
+
+
+    /**
+     * 往屏幕丢掷茶壶
+     * @param newPosition
+     * @param newDirection
+     */
+    public void addTeapot(Vector3f newPosition,Vector3f newDirection)
+    {
+
+        RigidBody body=null;
+        body = bulletPool.newObject();
+
+                 teapotObject.configCollisionShape(body);
+
+        //设置子弹的初始速度
+        Vector3f velocity=new Vector3f(newDirection);
+        velocity.scale(1000);
+      //  velocity.add(new Vector3f(0,random.nextInt(30),0));
+        //创建刚体初始变换对象
+
+
+        //变换初始化
+        tempTransform.setIdentity();
+        //设置刚体初始位置
+        tempTransform.origin.set(newPosition.x,newPosition.y,newPosition.z);
+
+
+        body.setWorldTransform(tempTransform);
+
+
+
+//        //设置箱子的初始速度
+        body.setLinearVelocity(velocity);//箱子直线运动的速度--Vx,Vy,Vz三个分量
+         body.setAngularVelocity(new Vector3f(1,1,1)); //箱子自身旋转的速度--绕箱子自身的x,y,x三轴旋转的速度
         bodies.add(body);
         dynamicsWorld.addRigidBody(body);
     }
