@@ -9,6 +9,7 @@ import com.bulletphysics.collision.shapes.*;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
+import com.bulletphysics.extras.gimpact.GImpactCollisionAlgorithm;
 import com.bulletphysics.extras.gimpact.GImpactMeshShape;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
@@ -102,6 +103,7 @@ public class World {
 
 
     private TeapotObject teapotObject;
+    private CollisionDispatcher collisionDispatcher;
 
 
     public World(Context context) {
@@ -128,7 +130,7 @@ public class World {
         //检测配置信息对象
         CollisionConfiguration collisionConfiguration = new DefaultCollisionConfiguration();
         //算法分配对象
-        CollisionDispatcher collisionDispatcher = new CollisionDispatcher(collisionConfiguration);
+        collisionDispatcher = new CollisionDispatcher(collisionConfiguration);
         //构建物理世界边框
         Vector3f worlddAabbMin = new Vector3f(-MAX_AABB_LENGTH, -MAX_AABB_LENGTH, -MAX_AABB_LENGTH);
         Vector3f worldAabbMax = new Vector3f(MAX_AABB_LENGTH, MAX_AABB_LENGTH, MAX_AABB_LENGTH);
@@ -154,7 +156,7 @@ public class World {
 
 
         //创建共用的平面碰撞形状。
-        planeShape = new StaticPlaneShape(new Vector3f(0, 0, 1), -MAX_AABB_LENGTH);
+        planeShape = new StaticPlaneShape(new Vector3f(0, 1, 0), -10);
 
 
         //创建集合
@@ -168,7 +170,12 @@ public class World {
 
         bodies.add(body);
         dynamicsWorld.addRigidBody(body);
-        //body.forceActivationState(RigidBody.WANTS_DEACTIVATION);
+         body.forceActivationState(RigidBody.WANTS_DEACTIVATION);
+
+        addTeapot(new Vector3f(0,6,-20),new Vector3f(0,0,0));
+
+
+
 
 
         //添加平面
@@ -179,54 +186,54 @@ public class World {
         dynamicsWorld.addRigidBody(floor);
 
 
-
-        //创建山地纹理碰撞体
-        //三角形顶点数组
-
-      TriangleIndexVertexArray indexVertexArray=new TriangleIndexVertexArray();
-
-        IndexedMesh indexedMesh=new IndexedMesh();
-
-         indexedMesh.numTriangles= grayMap.triangleCount;
-
-        indexedMesh.numVertices= grayMap.vertexCount;
-
-        int indexSize=grayMap.indexData.length;
-        ByteBuffer indexBuff= ByteBuffer.allocateDirect(indexSize * FloatUtils.RATIO_SHORTTOBYTE).order(ByteOrder.nativeOrder());
-
-        for(int i=0;i<indexSize;i++)
-        {
-            indexBuff.putShort(grayMap.indexData[i]);
-        }
-        indexBuff.flip();
-       indexedMesh.triangleIndexBase=indexBuff;
-
-
-
-        int  vertexSize=grayMap.vertexData.length;
-        ByteBuffer vertexBuff= ByteBuffer.allocateDirect(vertexSize* FloatUtils.RATIO_FLOATTOBYTE).order(ByteOrder.nativeOrder());
-
-        for(int i=0;i<vertexSize;i++)
-        {
-            vertexBuff.putFloat(grayMap.vertexData[i]);
-        }
-        vertexBuff.flip();
-        indexedMesh.vertexBase=vertexBuff;
-        indexedMesh.vertexStride=GrayMap.VERTEX_STRIP_SIZE_OF_BUFFER;
-       indexedMesh.triangleIndexStride=3*FloatUtils.RATIO_SHORTTOBYTE;
+//
+//        //创建山地纹理碰撞体
+//        //三角形顶点数组
+//
+//      TriangleIndexVertexArray indexVertexArray=new TriangleIndexVertexArray();
+//
+//        IndexedMesh indexedMesh=new IndexedMesh();
+//
+//         indexedMesh.numTriangles= grayMap.triangleCount;
+//
+//        indexedMesh.numVertices= grayMap.vertexCount;
+//
+//        int indexSize=grayMap.indexData.length;
+//        ByteBuffer indexBuff= ByteBuffer.allocateDirect(indexSize * FloatUtils.RATIO_SHORTTOBYTE).order(ByteOrder.nativeOrder());
+//
+//        for(int i=0;i<indexSize;i++)
+//        {
+//            indexBuff.putShort(grayMap.indexData[i]);
+//        }
+//        indexBuff.flip();
+//       indexedMesh.triangleIndexBase=indexBuff;
 //
 //
-        //  indexVertexArray.addIndexedMesh(indexedMesh );
-       indexVertexArray.addIndexedMesh(indexedMesh,ScalarType.SHORT);
-//        //创建地形对应的碰撞形状
 //
-        mountainShape=new BvhTriangleMeshShape(indexVertexArray,true,true);
-
-          mountainBody=BodyCreator.createMountain(mountainShape, new Vector3f(0, -20, -20));
-        //设置非运动提
-        mountainBody.setCollisionFlags(mountainBody.getCollisionFlags()&~CollisionFlags.KINEMATIC_OBJECT);
-        mountainBody.forceActivationState(CollisionObject.ACTIVE_TAG);
-        dynamicsWorld.addRigidBody(mountainBody);
+//        int  vertexSize=grayMap.vertexData.length;
+//        ByteBuffer vertexBuff= ByteBuffer.allocateDirect(vertexSize* FloatUtils.RATIO_FLOATTOBYTE).order(ByteOrder.nativeOrder());
+//
+//        for(int i=0;i<vertexSize;i++)
+//        {
+//            vertexBuff.putFloat(grayMap.vertexData[i]);
+//        }
+//        vertexBuff.flip();
+//        indexedMesh.vertexBase=vertexBuff;
+//        indexedMesh.vertexStride=GrayMap.VERTEX_STRIP_SIZE_OF_BUFFER;
+//       indexedMesh.triangleIndexStride=3*FloatUtils.RATIO_SHORTTOBYTE;
+////
+////
+//        //  indexVertexArray.addIndexedMesh(indexedMesh );
+//       indexVertexArray.addIndexedMesh(indexedMesh,ScalarType.SHORT);
+////        //创建地形对应的碰撞形状
+////
+//        mountainShape=new BvhTriangleMeshShape(indexVertexArray,true,true);
+//
+//          mountainBody=BodyCreator.createMountain(mountainShape, new Vector3f(0, -20, -20));
+//        //设置非运动提
+//        mountainBody.setCollisionFlags(mountainBody.getCollisionFlags()&~CollisionFlags.KINEMATIC_OBJECT);
+//        mountainBody.forceActivationState(CollisionObject.ACTIVE_TAG);
+//       // dynamicsWorld.addRigidBody(mountainBody);
 
 
     }
@@ -241,7 +248,12 @@ public class World {
 
 
 
+        timeCollapsed += deltaTime;
+        if (timeCollapsed > TIME_STEP) {
 
+            dynamicsWorld.stepSimulation(TIME_STEP, MAX_SUB_STEPS);
+            timeCollapsed -= TIME_STEP;
+        }
 
 
         tempBodies.clear();
@@ -256,7 +268,7 @@ public class World {
             {
             //该物体超出边界～
 
-                dynamicsWorld.removeRigidBody(body);
+               // dynamicsWorld.removeRigidBody(body);
                 tempBodies.add(body);
             }
 
@@ -277,12 +289,7 @@ public class World {
 
 
 
-        timeCollapsed += deltaTime;
-        if (timeCollapsed > TIME_STEP) {
 
-            dynamicsWorld.stepSimulation(TIME_STEP, MAX_SUB_STEPS);
-            timeCollapsed -= TIME_STEP;
-        }
 
     }
 
@@ -331,15 +338,15 @@ public class World {
         MatrixState.pushMatrix();
 
 
-       MatrixState.translate(0, 0   , planeShape.getPlaneConstant());
-        //     MatrixState.rotate(90, 1, 0, 0);
+       MatrixState.translate(0,planeShape.getPlaneConstant()   ,0 );
+          MatrixState.rotate(90, 1, 0, 0);
        planObject.draw(floorTextureId);
 
         MatrixState.popMatrix();
 
 
 
-        ConcreateObject.draw(mountain,mountainBody);
+       // ConcreateObject.draw(mountain,mountainBody);
 
     }
 
@@ -530,29 +537,32 @@ public class World {
         RigidBody body=null;
         body = bulletPool.newObject();
 
-                 teapotObject.configCollisionShape(body);
+
+
 
         //设置子弹的初始速度
         Vector3f velocity=new Vector3f(newDirection);
-        velocity.scale(1000);
-      //  velocity.add(new Vector3f(0,random.nextInt(30),0));
+        velocity.scale(10);
+      velocity.add(new Vector3f(0,random.nextInt(30),0));
         //创建刚体初始变换对象
 
 
         //变换初始化
         tempTransform.setIdentity();
         //设置刚体初始位置
-        tempTransform.origin.set(newPosition.x,newPosition.y,newPosition.z);
+        tempTransform.origin.set(newPosition.x, newPosition.y, newPosition.z);
 
 
         body.setWorldTransform(tempTransform);
-
+        body.setCollisionShape(teapotObject.teapotShape);
 
 
 //        //设置箱子的初始速度
         body.setLinearVelocity(velocity);//箱子直线运动的速度--Vx,Vy,Vz三个分量
-         body.setAngularVelocity(new Vector3f(1,1,1)); //箱子自身旋转的速度--绕箱子自身的x,y,x三轴旋转的速度
+       //  body.setAngularVelocity(new Vector3f(1,1,1)); //箱子自身旋转的速度--绕箱子自身的x,y,x三轴旋转的速度
         bodies.add(body);
+        GImpactCollisionAlgorithm.registerAlgorithm(collisionDispatcher);
+        if(!body.isInWorld())
         dynamicsWorld.addRigidBody(body);
     }
 

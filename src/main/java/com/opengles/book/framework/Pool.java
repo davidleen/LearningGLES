@@ -37,7 +37,7 @@ public class Pool<T> {
         else {
             object = freeObjects.remove(freeObjects.size() - 1);
 
-          // Log.d(TAG,"reuse "+object.getClass().getName()+" time :"+(++reuseCount));
+         //   Log.d(TAG,"reuse "+object.getClass().getName()+" time :"+(++reuseCount));
         }
         return object;
     }
