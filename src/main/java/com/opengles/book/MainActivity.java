@@ -102,6 +102,8 @@ public class MainActivity extends ListActivity {
 //        });
 
 
+        RelativeLayout layout;
+
 	}
     @Override
     public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
