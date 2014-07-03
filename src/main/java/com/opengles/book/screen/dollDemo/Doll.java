@@ -80,8 +80,10 @@ public class Doll {
     float rightLowerLegTH=2.0f;//右小腿胶囊总长度
 
 
-    public Doll()
+    public Doll(RigidObjObject []  bodyForDraws)
     {
+        this.bodyForDraws=bodyForDraws;
+        initShape();
 
     }
 

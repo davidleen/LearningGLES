@@ -45,9 +45,30 @@ public class DollDemoScreen extends FrameBufferScreen{
 
     public DollDemoScreen(Game game) {
         super(game);
+        rigidObjObjects=new RigidObjObject[Doll.BodyPartIndex.BODYPART_COUNT.ordinal()] ;
+
+        doll=new Doll(rigidObjObjects);
 
 
 
+    }
+
+
+    public void initBodyForDraws(){
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_HEAD.ordinal()]=loadedModels[0];
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_SPINE.ordinal()]=loadedModels[1];
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_PELVIS.ordinal()]=loadedModels[2];
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_RIGHT_UPPER_ARM.ordinal()]=loadedModels[3];
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_LEFT_UPPER_ARM.ordinal()]=loadedModels[3].clone();
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_LEFT_LOWER_ARM.ordinal()]=loadedModels[4];
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_RIGHT_LOWER_ARM.ordinal()]=loadedModels[4].clone();
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_RIGHT_UPPER_LEG.ordinal()]=loadedModels[5];
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_LEFT_UPPER_LEG.ordinal()]=loadedModels[5].clone();
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_RIGHT_LOWER_LEG.ordinal()]=loadedModels[6];
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_LEFT_LOWER_LEG.ordinal()]=loadedModels[6].clone();
+//        for(int i=0;i<rigidObjObjects.length;i++){
+//            lovnList.add(bodyForDraws[i]);
+//        }
     }
 
     @Override
