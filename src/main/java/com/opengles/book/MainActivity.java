@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.MenuItem;
+import android.view.*;
 import android.widget.*;
 import com.opengles.book.galaxy.GalaxyGame;
 import com.opengles.book.screen.*;
@@ -15,8 +14,6 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
 import com.opengles.book.screen.cubeCollisionDemo.CubeCollisionDemoScreen;
 import com.opengles.book.testFBO.TestFboActivity;
 
@@ -26,6 +23,8 @@ public class MainActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
+
+
 
 		List<MenuInfo> datas = new ArrayList<MainActivity.MenuInfo>();
 		MenuInfo info = new MenuInfo("菜单界面", MainScreen.class.getName());
@@ -91,20 +90,27 @@ public class MainActivity extends ListActivity {
 		setListAdapter(adapter);
 
 
-        getListView().setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
-                                                      @Override
-                                                      public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                registerForContextMenu(getListView());
-                return false;
-            }
-        });
+
+//        getListView().setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
+//                                                      @Override
+//                                                      public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+//
+//                registerForContextMenu(getListView());
+//                return false;
+//            }
+//        });
+
+
 	}
     @Override
     public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
         contextMenu.setHeaderTitle("运动治疗");
         contextMenu.add(0, 0, 0, "完成");
     }
+
+
+
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
