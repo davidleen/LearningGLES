@@ -12,6 +12,7 @@ import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.opengles.book.MatrixState;
 import com.opengles.book.objects.ObjObject;
+import com.opengles.book.screen.cubeCollisionDemo.ConcreateObject;
 
 import javax.vecmath.Vector3f;
 
@@ -28,7 +29,7 @@ public class Doll {
     CollisionShape[] bodyShapes= new CollisionShape[BodyPartIndex.BODYPART_COUNT.ordinal()];;//碰撞形状数组
     RigidBody[] rigidBodies = new RigidBody[BodyPartIndex.BODYPART_COUNT.ordinal()];//刚体数组
 
-    RigidObjObject[] bodyForDraws;//用于绘制的物体的引用
+    ObjObject[] bodyForDraws;//用于绘制的物体的引用
     //========属性值===========
     float mass=1;//刚体的质量
     //=========位置==========
@@ -80,10 +81,17 @@ public class Doll {
     float rightLowerLegTH=2.0f;//右小腿胶囊总长度
 
 
-    public Doll(RigidObjObject []  bodyForDraws)
+    /**
+     *
+     * @param dynamicsWorld  物体世界
+     * @param bodyForDraws  //各部位的绘制对象
+     */
+    public Doll(DynamicsWorld dynamicsWorld,ObjObject []  bodyForDraws)
     {
         this.bodyForDraws=bodyForDraws;
+        this.dynamicsWorld=dynamicsWorld;
         initShape();
+        initRigidBodys();
 
     }
 
@@ -300,13 +308,13 @@ public class Doll {
     public void drawSelf(int checkedIndex){
         MatrixState.pushMatrix();
         for(int i=0;i<bodyForDraws.length;i++){
-            RigidObjObject objObject = bodyForDraws[i];
+            ObjObject objObject = bodyForDraws[i];
             if(i==checkedIndex){
                // objObject.changeColor(true);
-                objObject.draw(rigidBodies[i]);
+              ConcreateObject.draw(objObject,rigidBodies[i]);
             }else{
                // objObject.changeColor(false);
-                objObject.draw(rigidBodies[i]);
+                ConcreateObject.draw(objObject,rigidBodies[i]);
             }
         }
         MatrixState.popMatrix();

@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import com.opengles.book.screen.cubeCollisionDemo.CubeCollisionDemoScreen;
+import com.opengles.book.screen.dollDemo.DollDemoScreen;
 import com.opengles.book.testFBO.TestFboActivity;
 
 public class MainActivity extends ListActivity {
@@ -78,6 +79,9 @@ public class MainActivity extends ListActivity {
 
         datas.add(info);
 
+        info = new MenuInfo("人偶展示", DollDemoScreen.class.getName());
+
+        datas.add(info);
 
 
         info = new MenuInfo("测试fbo",  null);
