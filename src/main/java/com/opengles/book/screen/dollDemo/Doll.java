@@ -23,7 +23,8 @@ import javax.vecmath.Vector3f;
  */
 public class Doll {
 
-
+    //被拾取的部位标识
+    private int pickIndex=-1;
 
    DynamicsWorld dynamicsWorld;
     CollisionShape[] bodyShapes= new CollisionShape[BodyPartIndex.BODYPART_COUNT.ordinal()];;//碰撞形状数组

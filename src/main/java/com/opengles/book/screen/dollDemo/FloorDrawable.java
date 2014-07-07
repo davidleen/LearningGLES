@@ -42,6 +42,8 @@ public class FloorDrawable implements ObjectDrawable {
          MatrixState.pushMatrix();
 
 
+        //绕x旋转90度  面板的默认是 朝前面那的。
+
          MatrixState.rotate(90,1,0,0);
         planObject.draw(floorTextureId);
         MatrixState.popMatrix();
@@ -49,6 +51,9 @@ public class FloorDrawable implements ObjectDrawable {
 
     @Override
     public void update(float deltaTime) {
+
+
+
 
     }
 

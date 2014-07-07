@@ -3,6 +3,11 @@ package com.opengles.book.screen.dollDemo;
 import android.content.Context;
 import android.hardware.Camera;
 import android.opengl.GLES20;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.dispatch.CollisionConfiguration;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
@@ -19,6 +24,7 @@ import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.opengles.book.MatrixState;
 import com.opengles.book.framework.Game;
+import com.opengles.book.framework.Input;
 import com.opengles.book.framework.gl.Camera3D;
 import com.opengles.book.framework.gl.ProjectInfo;
 import com.opengles.book.math.AABB3;
@@ -65,6 +71,9 @@ public class DollDemoScreen extends FrameBufferScreen{
     public static final int MAX_SUB_STEPS = 5;
     public float timeCollapsed = 0;
 
+
+
+
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
@@ -76,6 +85,38 @@ public class DollDemoScreen extends FrameBufferScreen{
             dynamicsWorld.stepSimulation(TIME_STEP, MAX_SUB_STEPS);
             timeCollapsed -= TIME_STEP;
         }
+
+        ListView listView;
+        List<Input.TouchEvent> touchEvents = glGame.getInput().getTouchEvents();
+
+
+
+        for (Input.TouchEvent event:touchEvents)
+        {
+            switch (event.type)
+            {
+                case Input.TouchEvent.TOUCH_DOWN:
+
+
+
+                    break;
+                case
+                        Input.TouchEvent.TOUCH_DRAGGED:
+
+
+                    break;
+
+                case    Input.TouchEvent.TOUCH_UP:
+
+                    break;
+            }
+        }
+
+
+
+
+
+
     }
 
     @Override

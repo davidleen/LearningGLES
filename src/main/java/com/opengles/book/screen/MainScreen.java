@@ -6,6 +6,7 @@ import java.util.List;
 import android.opengl.GLES20;
 import android.util.Log;
 
+import android.view.View;
 import com.opengles.book.MatrixState;
 import com.opengles.book.framework.Game;
 import com.opengles.book.framework.Input.TouchEvent;
@@ -25,6 +26,9 @@ public class MainScreen extends FrameBufferScreen{
 	 
 	public MainScreen(Game game) {
 		super(game);
+
+
+
 		menus=new ArrayList<MenuObject>();
 		MenuObject 	menu=new MenuObject(game.getContext(),300, 50,0,300,"太阳系");
 		 menu.setListener(new MenuClickListner() {
