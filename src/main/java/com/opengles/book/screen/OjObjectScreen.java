@@ -49,17 +49,15 @@ public   class OjObjectScreen extends GLScreen {
 
 
         objects=new ArrayList<ObjObject>();
-        //                      objects.add(new ObjObject(game.getContext(),"","teapot.obj"));
-       objects.add(new ObjObject(game.getContext(), "eager/","eager.obj"));
-        objects.add(new ObjObject(game.getContext(), "eager/","eager1.obj"));
-        objects.add(new ObjObject(game.getContext(), "eager/","eager2.obj"));
+                            objects.add(new ObjObject(game.getContext(),"","teapot.obj"));
+
 //
-//     objects.add(new ObjObject(game.getContext(), "tz/","tz.obj"));
-//            objects.add(new ObjObject(game.getContext(),"cuboid"+ File.separator,"cuboid.obj"));
-//                      objects.add(new TwistCuboid(game.getContext() ));
-//         objects.add(new ObjObject(game.getContext(),"","shot.obj"));
-//             objects.add(new ObjObject(game.getContext(),"","cube.obj"));
-//         objects.add(new ObjObject(game.getContext(),"","invader.obj"));
+     objects.add(new ObjObject(game.getContext(), "tz/","tz.obj"));
+            objects.add(new ObjObject(game.getContext(),"cuboid"+ File.separator,"cuboid.obj"));
+                    objects.add(new TwistCuboid(game.getContext() ));
+        objects.add(new ObjObject(game.getContext(),"","shot.obj"));
+             objects.add(new ObjObject(game.getContext(),"","cube.obj"));
+        objects.add(new ObjObject(game.getContext(),"","invader.obj"));
        currentObjectIndex=0;
 
 

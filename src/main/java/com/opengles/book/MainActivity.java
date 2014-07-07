@@ -83,6 +83,10 @@ public class MainActivity extends ListActivity {
 
         datas.add(info);
 
+        info = new MenuInfo("老鹰动画", FlyingEagerScreen.class.getName());
+
+        datas.add(info);
+
 
         info = new MenuInfo("测试fbo",  null);
 
@@ -96,17 +100,7 @@ public class MainActivity extends ListActivity {
 
 
 
-//        getListView().setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
-//                                                      @Override
-//                                                      public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//                registerForContextMenu(getListView());
-//                return false;
-//            }
-//        });
 
-
-        RelativeLayout layout;
 
 	}
     @Override

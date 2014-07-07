@@ -12,11 +12,11 @@ import java.util.List;
 public class ObjModel {
 
     //关闭法向量
-    protected static final int VERTEX_POS_SIZE = 3;// xyz
-     protected static final int VERTEX_NORMAL_SIZE = 3;// xyz
-    protected static final int VERTEX_TEXTURE_SIZE = 2;// s t
-    protected static final int VERTEX_STRIP_SIZE=VERTEX_POS_SIZE+VERTEX_NORMAL_SIZE+VERTEX_TEXTURE_SIZE;
-    protected static final int VERTEX_STRIP_SIZE_OF_BUFFER = VERTEX_STRIP_SIZE
+    public static final int VERTEX_POS_SIZE = 3;// xyz
+    public static final int VERTEX_NORMAL_SIZE = 3;// xyz
+    public static final int VERTEX_TEXTURE_SIZE = 2;// s t
+    public static final int VERTEX_STRIP_SIZE=VERTEX_POS_SIZE+VERTEX_NORMAL_SIZE+VERTEX_TEXTURE_SIZE;
+    public static final int VERTEX_STRIP_SIZE_OF_BUFFER = VERTEX_STRIP_SIZE
             * FloatUtils.RATIO_FLOATTOBYTE;
 
 	public String path; 
