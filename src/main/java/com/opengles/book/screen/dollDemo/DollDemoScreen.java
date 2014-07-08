@@ -27,6 +27,7 @@ import com.opengles.book.framework.Game;
 import com.opengles.book.framework.Input;
 import com.opengles.book.framework.gl.Camera3D;
 import com.opengles.book.framework.gl.ProjectInfo;
+import com.opengles.book.galaxy.CameraController;
 import com.opengles.book.math.AABB3;
 import com.opengles.book.math.Vector3;
 import com.opengles.book.objLoader.ObjModel;
@@ -47,16 +48,16 @@ public class DollDemoScreen extends FrameBufferScreen{
 
     private static final float MAX_AABB_LENGTH = 100;
     final static float EYE_X=0;//观察者的位置x
-    final static float EYE_Y=10 ;//观察者的位置y
-    final static float EYE_Z= 30;//观察者的位置z
+    final static float EYE_Y=  5 ;//观察者的位置y
+    final static float EYE_Z= 3;//观察者的位置z
 
     final static float TARGET_X=0;//目标的位置x
     final static float TARGET_Y=0;//目的位置Y
     final static float TARGET_Z=0;//目标的位置Z
     final static float NEAR=1;
-    final static float FAR=10000;
+    final static float FAR=100;
     private Doll doll;
-    private ObjObject[]  rigidObjObjects;
+    private DollPartObjObject[]  rigidObjObjects;
     private DynamicsWorld dynamicsWorld;
     private RigidBody floor;
 
@@ -73,6 +74,9 @@ public class DollDemoScreen extends FrameBufferScreen{
 
 
 
+
+    float previousX;
+    float previousY;
 
     @Override
     public void update(float deltaTime) {
@@ -93,20 +97,59 @@ public class DollDemoScreen extends FrameBufferScreen{
 
         for (Input.TouchEvent event:touchEvents)
         {
+
+
+
+
             switch (event.type)
             {
                 case Input.TouchEvent.TOUCH_DOWN:
 
 
+                    if(!doll.isPicking()) {
 
+                        float[][] nearFar = projectInfo.calculateNearFarPosition(event.x, event.y, glGraphics.getWidth(), glGraphics.getHeight());
+                        Vector3 near=Vector3.create(nearFar[0][0],nearFar[0][1],nearFar[0][2]);
+                        Vector3 far=Vector3.create(nearFar[1][0],nearFar[1][1],nearFar[1][2]);
+                        doll.intersectSegment(near, far);
+                        Vector3.recycle(near);
+                        Vector3.recycle(far);
+
+                    }
+                    previousX=event.x;
+                    previousY=event.y;
                     break;
                 case
                         Input.TouchEvent.TOUCH_DRAGGED:
 
+                    boolean isMoveFlag=false;
+                    //移动大于指定阀值 才认为是移动；
+                    if(Math.abs(event.x-previousX)>10)
+                        isMoveFlag=true;
 
+                    if(doll.isPicking()&&isMoveFlag)
+                    {
+
+                        //计算上新触控点在世界坐标系中的位置
+                        float[][] newXY = projectInfo.calculateNearFarPosition(event.x, event.y, glGraphics.getWidth(), glGraphics.getHeight());
+                        //计算上一触控点在世界坐标系中的位置
+                        float[][] oldXY = projectInfo.calculateNearFarPosition(previousX, previousY, glGraphics.getWidth(), glGraphics.getHeight());
+                    Vector3 moveDir=Vector3.create().set(newXY[0][0]-oldXY[0][0],newXY[0][1]-oldXY[0][1],newXY[0][2]-oldXY[0][2]);
+                        float moveFactory=0.5f;
+                        moveDir.mul(moveFactory);
+                        doll.addMove(moveDir);
+
+
+                    }
+                    previousX=event.x;
+                    previousY=event.y;
                     break;
 
                 case    Input.TouchEvent.TOUCH_UP:
+                    if(doll.isPicking())
+                    {
+                        doll.releasePick();
+                    }
 
                     break;
             }
@@ -152,10 +195,10 @@ public class DollDemoScreen extends FrameBufferScreen{
                 0);
 
         if(rigidObjObjects!=null)
-        for (ObjObject objObject:rigidObjObjects)
-        {
-            objObject.bind();
-        }
+            for (ObjObject objObject:rigidObjObjects)
+            {
+                objObject.bind();
+            }
         floorDrawable.bind();
 
 
@@ -175,7 +218,7 @@ public class DollDemoScreen extends FrameBufferScreen{
 
         ConcreateObject.draw(floorDrawable,floor);
 
-        doll.drawSelf(0);
+        doll.drawSelf(doll.pickIndex);
     }
 
 
@@ -187,7 +230,7 @@ public class DollDemoScreen extends FrameBufferScreen{
     public DollDemoScreen(Game game) {
         super(game);
         dynamicsWorld=generateDynamicsWorld();
-        rigidObjObjects=new ObjObject[Doll.BodyPartIndex.BODYPART_COUNT.ordinal()] ;
+        rigidObjObjects=new DollPartObjObject[Doll.BodyPartIndex.BODYPART_COUNT.ordinal()] ;
        initBodyForDraws();
          doll=new Doll(dynamicsWorld,rigidObjObjects);
         //创建地板绘制对象
@@ -214,17 +257,17 @@ public class DollDemoScreen extends FrameBufferScreen{
 
 
 
-        rigidObjObjects[Doll.BodyPartIndex.BODYPART_HEAD.ordinal()]=new ObjObject(context,headModel);
-        rigidObjObjects[Doll.BodyPartIndex.BODYPART_SPINE.ordinal()]=new ObjObject(context,spineModel);
-        rigidObjObjects[Doll.BodyPartIndex.BODYPART_PELVIS.ordinal()]=new ObjObject(context,pelvisModel);
-        rigidObjObjects[Doll.BodyPartIndex.BODYPART_RIGHT_UPPER_ARM.ordinal()]=new ObjObject(context,upperArmModel);
-        rigidObjObjects[Doll.BodyPartIndex.BODYPART_LEFT_UPPER_ARM.ordinal()]=new ObjObject(context,upperArmModel);
-        rigidObjObjects[Doll.BodyPartIndex.BODYPART_LEFT_LOWER_ARM.ordinal()]=new ObjObject(context,lowerArmModel);
-        rigidObjObjects[Doll.BodyPartIndex.BODYPART_RIGHT_LOWER_ARM.ordinal()]=new ObjObject(context,lowerArmModel);
-        rigidObjObjects[Doll.BodyPartIndex.BODYPART_RIGHT_UPPER_LEG.ordinal()]=new ObjObject(context,upperLegModel);
-        rigidObjObjects[Doll.BodyPartIndex.BODYPART_LEFT_UPPER_LEG.ordinal()]=new ObjObject(context,upperLegModel);
-        rigidObjObjects[Doll.BodyPartIndex.BODYPART_RIGHT_LOWER_LEG.ordinal()]=new ObjObject(context,lowerLegModel);
-        rigidObjObjects[Doll.BodyPartIndex.BODYPART_LEFT_LOWER_LEG.ordinal()]=new ObjObject(context,lowerLegModel);
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_HEAD.ordinal()]=new DollPartObjObject(context,headModel);
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_SPINE.ordinal()]=new DollPartObjObject(context,spineModel);
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_PELVIS.ordinal()]=new DollPartObjObject(context,pelvisModel);
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_RIGHT_UPPER_ARM.ordinal()]=new DollPartObjObject(context,upperArmModel);
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_LEFT_UPPER_ARM.ordinal()]=new DollPartObjObject(context,upperArmModel);
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_LEFT_LOWER_ARM.ordinal()]=new DollPartObjObject(context,lowerArmModel);
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_RIGHT_LOWER_ARM.ordinal()]=new DollPartObjObject(context,lowerArmModel);
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_RIGHT_UPPER_LEG.ordinal()]=new DollPartObjObject(context,upperLegModel);
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_LEFT_UPPER_LEG.ordinal()]=new DollPartObjObject(context,upperLegModel);
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_RIGHT_LOWER_LEG.ordinal()]=new DollPartObjObject(context,lowerLegModel);
+        rigidObjObjects[Doll.BodyPartIndex.BODYPART_LEFT_LOWER_LEG.ordinal()]=new DollPartObjObject(context,lowerLegModel);
 //        for(int i=0;i<rigidObjObjects.length;i++){
 //            lovnList.add(bodyForDraws[i]);
 //        }
@@ -276,7 +319,7 @@ public class DollDemoScreen extends FrameBufferScreen{
     private RigidBody generateFloor(DynamicsWorld dynamicsWorld)
     {
 
-        int yOffset=-10;
+        int yOffset=-1 ;
         //创建共用的平面碰撞形状。
         CollisionShape planeShape = new StaticPlaneShape(new Vector3f(0,1  , 0), yOffset);
 

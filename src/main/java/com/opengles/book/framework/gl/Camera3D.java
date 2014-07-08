@@ -12,6 +12,9 @@ public class Camera3D {
     public float eyeX;
     public float eyeY;
     public float eyeZ;
+
+
+
     public float targetX;
     public float targetY;
     public float targetZ;

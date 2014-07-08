@@ -1,5 +1,6 @@
 package com.opengles.book.screen.dollDemo;
 
+import android.util.Log;
 import com.bulletphysics.BulletGlobals;
 import com.bulletphysics.collision.shapes.CapsuleShape;
 import com.bulletphysics.collision.shapes.CapsuleShapeX;
@@ -8,9 +9,13 @@ import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.dynamics.constraintsolver.Generic6DofConstraint;
+
+import com.bulletphysics.dynamics.constraintsolver.Point2PointConstraint;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 import com.opengles.book.MatrixState;
+import com.opengles.book.math.AABB3;
+import com.opengles.book.math.Vector3;
 import com.opengles.book.objects.ObjObject;
 import com.opengles.book.screen.cubeCollisionDemo.ConcreateObject;
 
@@ -23,14 +28,17 @@ import javax.vecmath.Vector3f;
  */
 public class Doll {
 
-    //被拾取的部位标识
-    private int pickIndex=-1;
+    private static final String TAG = "Doll";
+    /**
+     * 当前被点击的部件索引值。
+     */
+    public int pickIndex=-1;
 
    DynamicsWorld dynamicsWorld;
     CollisionShape[] bodyShapes= new CollisionShape[BodyPartIndex.BODYPART_COUNT.ordinal()];;//碰撞形状数组
     RigidBody[] rigidBodies = new RigidBody[BodyPartIndex.BODYPART_COUNT.ordinal()];//刚体数组
 
-    ObjObject[] bodyForDraws;//用于绘制的物体的引用
+    DollPartObjObject[] bodyForDraws;//用于绘制的物体的引用
     //========属性值===========
     float mass=1;//刚体的质量
     //=========位置==========
@@ -87,7 +95,7 @@ public class Doll {
      * @param dynamicsWorld  物体世界
      * @param bodyForDraws  //各部位的绘制对象
      */
-    public Doll(DynamicsWorld dynamicsWorld,ObjObject []  bodyForDraws)
+    public Doll(DynamicsWorld dynamicsWorld,DollPartObjObject []  bodyForDraws)
     {
         this.bodyForDraws=bodyForDraws;
         this.dynamicsWorld=dynamicsWorld;
@@ -309,16 +317,119 @@ public class Doll {
     public void drawSelf(int checkedIndex){
         MatrixState.pushMatrix();
         for(int i=0;i<bodyForDraws.length;i++){
-            ObjObject objObject = bodyForDraws[i];
-            if(i==checkedIndex){
-               // objObject.changeColor(true);
+            DollPartObjObject objObject = bodyForDraws[i];
+
+               objObject.setPick(i==checkedIndex);
               ConcreateObject.draw(objObject,rigidBodies[i]);
-            }else{
-               // objObject.changeColor(false);
-                ConcreateObject.draw(objObject,rigidBodies[i]);
-            }
+
         }
         MatrixState.popMatrix();
+    }
+
+    //点对点关节约束对象
+    Point2PointConstraint p2p;
+    /**
+     * 添加点对点约束
+     */
+    public void addPickedConstraint(){
+
+        if(pickIndex>-1&&pickIndex<rigidBodies.length) {
+            rigidBodies[pickIndex].activate();
+            p2p = new Point2PointConstraint(rigidBodies[pickIndex], new Vector3f(0, 0, 0));
+            dynamicsWorld.addConstraint(p2p, true);
+
+        }
+
+    }
+
+    /**
+     * 移出点对点约束
+     */
+    public void removePickedConstraint(){
+        if(p2p!=null){
+            dynamicsWorld.removeConstraint(p2p);
+        }
+        p2p=null;
+
+    }
+
+
+    //是否正在点击状态
+    public boolean isPicking() {
+
+             return pickIndex!=-1;
+    }
+
+    public void releasePick() {
+        pickIndex=-1;
+        removePickedConstraint();
+    }
+
+    //用于计算立方体相交的对象
+    AABB3 aabb3=new AABB3( );
+    /**
+     * 判断场景中物体 与线段是否有交点
+     * @param near
+     * @param far
+     */
+
+    public void intersectSegment(Vector3 near, Vector3 far) {
+
+
+        Vector3 dir=Vector3.create().set(far).sub(near);
+        Vector3 normal=Vector3.create();
+
+
+        float t=1;
+        int size=rigidBodies.length;
+       int temPickIndex=-1;
+        for (int i=0;i<size;i++)
+        {
+            RigidBody rigidBody=rigidBodies[i];
+            Vector3f min=new Vector3f();
+            Vector3f max=new Vector3f();
+             rigidBody.getAabb(min,max);
+
+            aabb3.reset(min.x, min.y, min.z,max.x, max.y, max.z);
+
+
+         float   newT=   aabb3.rayIntersect(near,dir,normal);
+            Log.d(TAG,"newT:"+newT);
+        if(newT>=0&&newT<=1) {   //该物体相交
+            if (newT < t) {//更靠近起点。
+                t = newT;
+                Log.d(TAG,"touch t:"+t);
+                temPickIndex = i;
+            }
+            }
+
+
+
+
+        }
+        //释放资源
+        Vector3.recycle(dir);
+        Vector3.recycle(normal);
+        pickIndex=temPickIndex;
+        addPickedConstraint();
+    }
+
+
+    /**
+     * 对选中的关节 添加上拖动动作。
+     * @param moveDir
+     */
+    public void addMove(Vector3 moveDir) {
+
+
+        if(p2p!=null)
+        {
+            Vector3f currentPivot=p2p.getPivotInB(new Vector3f());
+            currentPivot.add(new Vector3f(moveDir.x,moveDir.y,moveDir.z));
+            p2p.setPivotB(currentPivot);
+        }
+
+
     }
 
     /**

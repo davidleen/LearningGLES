@@ -10,7 +10,7 @@ import com.opengles.book.framework.gl.ProjectInfo;
 import com.opengles.book.framework.impl.GLGame;
 import com.opengles.book.framework.impl.GLScreen;
 import com.opengles.book.math.Vector3;
-import com.opengles.book.objects.IntersectUtil;
+
 import com.opengles.book.screen.FrameBufferScreen;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -107,7 +107,7 @@ public class CubeCollisionDemoScreen extends FrameBufferScreen {
      */
     private void simulateTouch(float x, float y,Vector3f newPosition,Vector3f direction)
     {
-        float[][]  positions=    IntersectUtil.calculateNearFarPosition(x,y,glGraphics.getWidth(),glGraphics.getHeight(),projectInfo);
+        float[][]  positions=    projectInfo.calculateNearFarPosition(x,y,glGraphics.getWidth(),glGraphics.getHeight() );
 
 
         newPosition.set(positions[0][0],positions[0][1],positions[0][2]);
