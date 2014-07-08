@@ -17,20 +17,44 @@ public class MVP {
 
 
 
-    Camera camera;
-    ViewPort viewPort;
-    Project project;
+ public   Camera camera=new Camera();
+ public   ViewPort viewPort ;
+  public  Project project  ;
 
 
+
+   public void setCamera(float eyeX, float eyeY, float eyeZ, float targetX, float targetY, float targetZ, float upX, float upY, float upZ)
+   {
+       camera.set(  eyeX,   eyeY,   eyeZ,   targetX,   targetY,   targetZ,   upX,   upY,   upZ);
+   }
+
+    public void setViewPort(float left,float bottom, float width,float height)
+    {
+        viewPort=new ViewPort(left,bottom,width,height);
+    }
+
+
+    public void setProject(float left, float right, float bottom, float top, float near, float far)
+    {
+
+        project=new Project(left, right, bottom, top, near, far);
+    }
     /**
      * 摄像机类
      */
     public static class Camera
     {
-        Vector3 eye;
-        Vector3 lookAt;
-        Vector3 up;
+        Vector3 eye=Vector3.create();
+        Vector3 lookAt=Vector3.create();
+        Vector3 up=Vector3.create();
 
+
+        public void set(float eyeX, float eyeY, float eyeZ, float targetX, float targetY, float targetZ, float upX, float upY, float upZ)
+        {
+            eye.set(eyeX, eyeY, eyeZ);
+            lookAt.set(targetX,targetY,targetZ);
+            up.set(upX,upY,upZ);
+        }
     }
 
     /**
@@ -96,9 +120,9 @@ public class MVP {
 
 
 
-    public void  updateCamera(){}
-    public void setViewPort(){}
-    public void setProject(){}
+    public void  applyCamera(){}
+    public void applyViewPort(){}
+    public void applyProject(){}
 
 
     /**
