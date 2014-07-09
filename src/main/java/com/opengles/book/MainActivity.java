@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.opengles.book.screen.cubeCollisionDemo.CubeCollisionDemoScreen;
 import com.opengles.book.screen.dollDemo.DollDemoScreen;
+import com.opengles.book.screen.snooker.SnookerScreen;
 import com.opengles.book.testFBO.TestFboActivity;
 
 public class MainActivity extends ListActivity {
@@ -84,6 +85,11 @@ public class MainActivity extends ListActivity {
         datas.add(info);
 
         info = new MenuInfo("老鹰动画", FlyingEagerScreen.class.getName());
+
+        datas.add(info);
+
+
+        info = new MenuInfo("桌球游戏", SnookerScreen.class.getName());
 
         datas.add(info);
 

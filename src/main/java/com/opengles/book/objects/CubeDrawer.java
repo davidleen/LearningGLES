@@ -27,7 +27,17 @@ public class CubeDrawer extends AbstractSimple3DObject{
     {
         this(context,DEFAULT_UNIT_SIZE);
     }
+
+
+
 	public CubeDrawer(Context context,int unitSize)
+    {
+
+        this(context,unitSize,unitSize,unitSize);
+    }
+
+
+    public CubeDrawer(Context context,float xLength,float yLength,float zLength)
 	{
 		super(context);
 		  vertexData=new float[]{
@@ -45,10 +55,15 @@ public class CubeDrawer extends AbstractSimple3DObject{
 			 
 				
 		};
-		  for(int i=0;i<vertexData.length;i++)
-		  {
-			  vertexData[i]*=unitSize;
-		  }
+        /**
+         * 重置3个边的长度
+         */
+         for(int i=0;i<8;i++)
+        {
+            vertexData[i*6+0] *=xLength/2;
+            vertexData[i*6+1] *=yLength/2;
+            vertexData[i*6+2] *=zLength/2;
+        }
 			
 		 indexData=new short[]{
 				
@@ -81,6 +96,9 @@ public class CubeDrawer extends AbstractSimple3DObject{
 		
 
 	}
+
+
+
 
 
     @Override

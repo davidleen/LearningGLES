@@ -1,12 +1,37 @@
 package com.opengles.book.screen.snooker;
 
 import android.opengl.GLES20;
+import com.bulletphysics.collision.broadphase.AxisSweep3;
+import com.bulletphysics.collision.dispatch.CollisionConfiguration;
+import com.bulletphysics.collision.dispatch.CollisionDispatcher;
+import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
+import com.bulletphysics.collision.shapes.BoxShape;
+import com.bulletphysics.collision.shapes.CollisionShape;
+import com.bulletphysics.collision.shapes.StaticPlaneShape;
+import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
+import com.bulletphysics.dynamics.DynamicsWorld;
+import com.bulletphysics.dynamics.RigidBody;
+import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
+import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver;
+import com.bulletphysics.linearmath.DefaultMotionState;
+import com.bulletphysics.linearmath.MotionState;
+import com.bulletphysics.linearmath.Transform;
+import com.opengles.book.MatrixState;
 import com.opengles.book.framework.Game;
-import com.opengles.book.framework.MVP;
+import com.opengles.book.framework.Input;
 import com.opengles.book.framework.gl.Camera3D;
 import com.opengles.book.framework.gl.ProjectInfo;
 import com.opengles.book.framework.gl.ViewPort;
+import com.opengles.book.math.AABB3;
+import com.opengles.book.math.Vector3;
 import com.opengles.book.screen.FrameBufferScreen;
+import com.opengles.book.screen.cubeCollisionDemo.BodyCreator;
+import com.opengles.book.screen.cubeCollisionDemo.ConcreateObject;
+import com.opengles.book.screen.dollDemo.FloorDrawable;
+
+import javax.vecmath.Vector3f;
+import java.util.EventListener;
+import java.util.List;
 
 /**
  * 桌球游戏界面
@@ -15,19 +40,53 @@ import com.opengles.book.screen.FrameBufferScreen;
 public class SnookerScreen  extends FrameBufferScreen{
     private static final float MAX_AABB_LENGTH = 100;
     final static float EYE_X=0;//观察者的位置x
-    final static float EYE_Y=  5 ;//观察者的位置y
-    final static float EYE_Z= 3;//观察者的位置z
+    final static float EYE_Y=  12 ;//观察者的位置y
+    final static float EYE_Z= 15;//观察者的位置z
 
     final static float TARGET_X=0;//目标的位置x
-    final static float TARGET_Y=0;//目的位置Y
+    final static float TARGET_Y=8;//目的位置Y
     final static float TARGET_Z=0;//目标的位置Z
     final static float NEAR=1;
     final static float FAR=100;
+
+
+    final static float ROOM_WIDTH=20;
+    final static float ROOM_LONG=30;
+    final static float ROOM_HEIGHT=20;
+
+
+    final static Vector3 TABLE_SIZE=Vector3.create(6,1,10);
+
+    //桌腿尺寸大小设置。
+    Vector3 tableLegSize=Vector3.create(0.5f,6,0.5f);
+
     private ProjectInfo projectInfo;
     private Camera3D camera;
     private ViewPort viewPort;
+    //地板类绘制。
+    private FloorDrawable floorDrawable;
+    private LegDrawable legDrawer;
+    //地板刚体对象
+    private RigidBody floor;
+    //桌子腿 4个
+    private RigidBody[] legs;
+    private RigidBody tablePlane;
+    //物理世界模型
+    private DynamicsWorld dynamicsWorld;
 
-   // private MVP mvp;
+
+
+    //摄像机 帮助 控制类。
+    private CameraHelper cameraHelper;
+
+
+
+    //桌面类绘制。
+    private TablePlaneDrawable tablePlanDrawable;
+
+
+
+
     public SnookerScreen(Game game) {
         super(game);
 
@@ -48,19 +107,61 @@ public class SnookerScreen  extends FrameBufferScreen{
                 0,
                 20,
                 0);
+        cameraHelper=new CameraHelper(camera,new AABB3(Vector3.create(-ROOM_WIDTH/2, ROOM_HEIGHT/2,-ROOM_LONG/2),Vector3.create(ROOM_WIDTH/2,ROOM_HEIGHT,ROOM_LONG/2)));
+        dynamicsWorld= generateDynamicsWorld();
+        //地板绘制。
+        floorDrawable=new FloorDrawable(game.getContext(),80,60);
+        //桌腿绘制对象
+        legDrawer =new LegDrawable(game.getContext(),tableLegSize.x,tableLegSize.y,tableLegSize.z);
+        //桌面对象3D纹理
+        tablePlanDrawable=new TablePlaneDrawable(game.getContext(),TABLE_SIZE.x,TABLE_SIZE.y,TABLE_SIZE.z);
 
 
+        floor=generateFloor(dynamicsWorld);
+       // legs=generateTableLeg(dynamicsWorld);
+        tablePlane=generateTablePlane
+                (dynamicsWorld);
 
+        MatrixState.setInitStack();
     }
-
+    //物理模拟频率
+    public static final float TIME_STEP = 1 / 60f;
+    //最大迭代子步数
+    public static final int MAX_SUB_STEPS = 5;
+    public float timeCollapsed = 0;
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
+
+
+
+        timeCollapsed += deltaTime;
+        if (timeCollapsed > TIME_STEP) {
+
+            dynamicsWorld.stepSimulation(TIME_STEP, MAX_SUB_STEPS);
+            timeCollapsed -= TIME_STEP;
+        }
+
+         List<Input.TouchEvent> touchEvents =
+                glGame.getInput().getTouchEvents();
+        for (Input.TouchEvent event:touchEvents) {
+
+            cameraHelper.onEvent(event);
+
+
+        }
+
+
+
+        dynamicsWorld.stepSimulation(deltaTime, MAX_SUB_STEPS);
     }
 
     @Override
     public void pause() {
         super.pause();
+        floorDrawable.unBind();
+        legDrawer.unBind();
+        tablePlanDrawable.unBind();
     }
 
     @Override
@@ -71,7 +172,9 @@ public class SnookerScreen  extends FrameBufferScreen{
         projectInfo.setFrustum();
         camera.setCamera();
 
-
+        floorDrawable.bind();
+        legDrawer.bind();
+        tablePlanDrawable.bind();
     }
 
     @Override
@@ -83,6 +186,162 @@ public class SnookerScreen  extends FrameBufferScreen{
 
     @Override
     protected void onPresent(float deltaData) {
+
+        //调用此方法计算产生透视投影矩阵
+        projectInfo.setFrustum();
+        camera.setCamera();
+
+        //清除颜色缓存于深度缓存
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+
+        //绘制地板
+        ConcreateObject.draw(floorDrawable, floor);
+        //绘制桌腿
+        if(legs!=null)
+        for(RigidBody leg:legs)
+            ConcreateObject.draw(legDrawer, leg);
+
+        //绘制桌面
+        ConcreateObject.draw(tablePlanDrawable, tablePlane);
+
+
+    }
+
+
+
+
+    /**
+     * 生成地板刚体
+     * @param dynamicsWorld
+     * @return
+     */
+    private RigidBody generateFloor(DynamicsWorld dynamicsWorld)
+    {
+
+        int yOffset=-1 ;
+        //创建共用的平面碰撞形状。
+        CollisionShape planeShape = new StaticPlaneShape(new Vector3f(0,1  , 0), yOffset);
+
+        //创建刚体初始变换对象
+        Transform groundTransform=new Transform();
+        groundTransform.setIdentity();
+        //设置初始 的平移变换
+        groundTransform.origin.set(new Vector3f(0.0f,yOffset,0));
+//       groundTransform.basis.rotX(90);
+        //存储惯性向量
+        Vector3f localIneria=new Vector3f(0,0,0);
+
+        MotionState motionState=new DefaultMotionState(groundTransform);
+        // o 质量的物体 表示静止的物体
+        RigidBodyConstructionInfo rbInfo=new RigidBodyConstructionInfo(0,motionState,planeShape,localIneria);
+        RigidBody body=new RigidBody(rbInfo);
+        body.setRestitution(0.4f);
+        body.setFriction(0.8f);
+        dynamicsWorld.addRigidBody(body);
+
+        return body;
+    }
+    /**
+     * 生成动态世界
+     * @return
+     */
+    public DynamicsWorld generateDynamicsWorld()
+    {
+
+
+
+
+        //检测配置信息对象
+        CollisionConfiguration collisionConfiguration = new DefaultCollisionConfiguration();
+        //算法分配对象
+        CollisionDispatcher collisionDispatcher = new CollisionDispatcher(collisionConfiguration);
+        //构建物理世界边框
+        Vector3f worlddAabbMin = new Vector3f(-MAX_AABB_LENGTH, -MAX_AABB_LENGTH, -MAX_AABB_LENGTH);
+        Vector3f worldAabbMax = new Vector3f(MAX_AABB_LENGTH, MAX_AABB_LENGTH, MAX_AABB_LENGTH);
+        //最大代理数量
+        int maxProxies = 1024;
+        //创建碰撞检测粗测阶段的加速算法对象
+        AxisSweep3 overlappingPairCache = new AxisSweep3(worlddAabbMin, worldAabbMax, maxProxies);
+        AABB3 boundary=new AABB3(  Vector3.create(-MAX_AABB_LENGTH, -MAX_AABB_LENGTH, -MAX_AABB_LENGTH),  Vector3.create(MAX_AABB_LENGTH, MAX_AABB_LENGTH, MAX_AABB_LENGTH));
+
+        //创建推动约束解决这对象
+        SequentialImpulseConstraintSolver solver = new SequentialImpulseConstraintSolver();
+
+        //创建物理世界对象。
+        DynamicsWorld dynamicsWorld = new DiscreteDynamicsWorld(collisionDispatcher, overlappingPairCache, solver, collisionConfiguration);
+        //设置重力加速度
+        Vector3f gravity = new Vector3f(0, -9.8f, 0);
+        dynamicsWorld.setGravity(gravity);
+        return dynamicsWorld;
+
+    }
+
+
+    /**
+     * 添加桌子 腿  4个  位置
+     * @param dynamicsWorld
+     * @return
+     */
+
+    public RigidBody[] generateTableLeg(DynamicsWorld dynamicsWorld)
+    {
+        Vector3f halfExtend=new Vector3f(tableLegSize.x/2,tableLegSize.y/2,tableLegSize.z/2);
+
+        //创建box形状。
+        CollisionShape legShape = new BoxShape(halfExtend);
+
+        //创建刚体初始变换对象
+        Transform groundTransform=new Transform();
+
+        int legsCount=4;
+
+        Vector3f[] legPosition=new Vector3f[legsCount];
+        legPosition[0]=new Vector3f(-2,tableLegSize.y/2,-4);
+        legPosition[1]=new Vector3f(-2,tableLegSize.y/2, 4);
+        legPosition[2]=new Vector3f( 2,tableLegSize.y/2,-4);
+        legPosition[3]=new Vector3f( 2,tableLegSize.y/2, 4);
+        RigidBody[] legs=new RigidBody[legsCount];
+        for(int i=0;i<legsCount;i++) {
+            groundTransform.setIdentity();
+            //设置初始 的平移变换
+            groundTransform.origin.set(legPosition[i]);
+//       groundTransform.basis.rotX(90);
+            //存储惯性向量
+            Vector3f localIneria = new Vector3f(0, 0, 0);
+
+            MotionState motionState = new DefaultMotionState(groundTransform);
+            // o 质量的物体 表示静止的物体
+            RigidBodyConstructionInfo rbInfo = new RigidBodyConstructionInfo(0, motionState, legShape, localIneria);
+            RigidBody body = new RigidBody(rbInfo);
+            body.setRestitution(0.4f);
+            body.setFriction(0.8f);
+            dynamicsWorld.addRigidBody(body);
+            legs[i]=body;
+        }
+        return legs;
+
+    }
+
+
+    /**
+     * 添加桌子面 刚体对象
+     * @param dynamicsWorld
+     * @return
+     */
+
+    public RigidBody generateTablePlane(DynamicsWorld dynamicsWorld)
+    {
+        Vector3f halfExtend=new Vector3f(TABLE_SIZE.x/2,TABLE_SIZE.y/2,TABLE_SIZE.z/2);
+
+        //创建box形状。
+        CollisionShape planeShape = new BoxShape(halfExtend);
+
+       RigidBody body=  BodyCreator.create(planeShape,3,new Vector3f(0,tableLegSize.y+TABLE_SIZE.y/2,0),0.2f,0.8f);
+
+        body.setLinearVelocity(new Vector3f(0,0,0));//箱子直线运动的速度--Vx,Vy,Vz三个分量
+
+        return body;
+
 
     }
 }

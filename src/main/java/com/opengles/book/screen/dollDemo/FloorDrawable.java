@@ -19,7 +19,9 @@ import java.util.HashMap;
 public class FloorDrawable implements ObjectDrawable {
 
 
-          private RectangleViewObject planObject;
+    public static final int WIDTH = 10000;
+    public static final int HEIGHT = 10000;
+    private RectangleViewObject planObject;
           private int floorTextureId;
 
     @Override
@@ -56,9 +58,13 @@ public class FloorDrawable implements ObjectDrawable {
 
 
     }
-
-
     public FloorDrawable(Context context)
+    {
+
+        this(context,WIDTH,HEIGHT);
+    }
+
+    public FloorDrawable(Context context,int width, int height)
     {
 
 
@@ -66,6 +72,6 @@ public class FloorDrawable implements ObjectDrawable {
 
 
         floorTextureId = ShaderUtil.loadTextureWithUtils(context, "sky/sky.png", false);
-        planObject= new RectangleViewObject(context, 10000, 10000);
+        planObject= new RectangleViewObject(context, width, height);
     }
 }

@@ -8,8 +8,8 @@ package com.opengles.book.math;
 public class AABB3 {
 
     //公共数据
-    Vector3 min=Vector3.create();
-    Vector3 max=Vector3.create();
+   public Vector3 min=Vector3.create();
+    public Vector3 max=Vector3.create();
 
     //Vector3 size(){}
     public AABB3( ) {
@@ -265,6 +265,13 @@ public class AABB3 {
     }
 
 
-
+//    /**
+//     * 获取某一轴的周长
+//     * @return
+//     */
+//    public float getPerimeter()
+//    {
+//
+//    }
 
 }
