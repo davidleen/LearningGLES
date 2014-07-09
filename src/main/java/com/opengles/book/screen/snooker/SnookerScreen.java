@@ -4,9 +4,11 @@ import android.opengl.GLES20;
 import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.dispatch.CollisionConfiguration;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
+import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
+import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.collision.shapes.StaticPlaneShape;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.DynamicsWorld;
@@ -20,17 +22,18 @@ import com.opengles.book.MatrixState;
 import com.opengles.book.framework.Game;
 import com.opengles.book.framework.Input;
 import com.opengles.book.framework.gl.Camera3D;
+import com.opengles.book.framework.gl.CubeTexture;
 import com.opengles.book.framework.gl.ProjectInfo;
 import com.opengles.book.framework.gl.ViewPort;
 import com.opengles.book.math.AABB3;
 import com.opengles.book.math.Vector3;
+import com.opengles.book.objects.SphereObject;
 import com.opengles.book.screen.FrameBufferScreen;
 import com.opengles.book.screen.cubeCollisionDemo.BodyCreator;
 import com.opengles.book.screen.cubeCollisionDemo.ConcreateObject;
 import com.opengles.book.screen.dollDemo.FloorDrawable;
 
 import javax.vecmath.Vector3f;
-import java.util.EventListener;
 import java.util.List;
 
 /**
@@ -49,30 +52,54 @@ public class SnookerScreen  extends FrameBufferScreen{
     final static float NEAR=1;
     final static float FAR=100;
 
+    final static float BALL_RADIUS=0.25f;
+
 
     final static float ROOM_WIDTH=20;
     final static float ROOM_LONG=30;
     final static float ROOM_HEIGHT=20;
 
 
-    final static Vector3 TABLE_SIZE=Vector3.create(6,1,10);
+    //桌面尺寸
+    final static Vector3 TABLE_SIZE=Vector3.create(6,0.5f,10);
 
     //桌腿尺寸大小设置。
     Vector3 tableLegSize=Vector3.create(0.5f,6,0.5f);
+
+    //长围栏尺寸
+    Vector3 LONG_BAR_SIZE=Vector3.create(0.5f,0.25f,9);
+    //短围栏的尺寸
+    Vector3 SHORT_BAR_SIZE=Vector3.create(5,0.25f,0.5f);
 
     private ProjectInfo projectInfo;
     private Camera3D camera;
     private ViewPort viewPort;
     //地板类绘制。
     private FloorDrawable floorDrawable;
-    private LegDrawable legDrawer;
+    private CuboidDrawable legDrawer;
     //地板刚体对象
     private RigidBody floor;
     //桌子腿 4个
     private RigidBody[] legs;
+    //桌面
     private RigidBody tablePlane;
+    //桌子长边栏
+    RigidBody[] longBars;
+    //桌子短边栏
+    RigidBody[] shortBars;
+    //球体模型
+    RigidBody[] balls;
+
     //物理世界模型
     private DynamicsWorld dynamicsWorld;
+
+
+    //边框的立体贴图
+    private CubeTexture barCuboidTexture;
+    //桌面的立体贴图。
+    private CubeTexture planeCuboidTexture;
+    //桌脚的立体贴图
+    private CubeTexture legCuboidTexture;
 
 
 
@@ -82,8 +109,17 @@ public class SnookerScreen  extends FrameBufferScreen{
 
 
     //桌面类绘制。
-    private TablePlaneDrawable tablePlanDrawable;
+    private CuboidDrawable tablePlanDrawable;
 
+    //桌面长边栏绘制
+    private CuboidDrawable tableLongBarDrawable;
+    //桌面短边栏绘制
+    private CuboidDrawable tableShortBarDrawable;
+
+
+
+    //球体绘制类。
+    private SphereObject ballDrawable;
 
 
 
@@ -111,16 +147,29 @@ public class SnookerScreen  extends FrameBufferScreen{
         dynamicsWorld= generateDynamicsWorld();
         //地板绘制。
         floorDrawable=new FloorDrawable(game.getContext(),80,60);
-        //桌腿绘制对象
-        legDrawer =new LegDrawable(game.getContext(),tableLegSize.x,tableLegSize.y,tableLegSize.z);
-        //桌面对象3D纹理
-        tablePlanDrawable=new TablePlaneDrawable(game.getContext(),TABLE_SIZE.x,TABLE_SIZE.y,TABLE_SIZE.z);
 
+        //立方体纹理定义
+        legCuboidTexture=new CubeTexture(game.getContext().getResources(),"crystalball/blue.png");
+        barCuboidTexture=new CubeTexture(game.getContext().getResources(),"crystalball/water.png");
+        planeCuboidTexture=new CubeTexture(game.getContext().getResources(),"teapot.png");
+
+        //桌腿绘制对象
+        legDrawer =new CuboidDrawable(game.getContext(),tableLegSize.x,tableLegSize.y,tableLegSize.z,legCuboidTexture);
+        //桌面对象3D纹理
+        tablePlanDrawable=new CuboidDrawable(game.getContext(),TABLE_SIZE.x,TABLE_SIZE.y,TABLE_SIZE.z,planeCuboidTexture);
+
+        tableLongBarDrawable=new CuboidDrawable(game.getContext(),LONG_BAR_SIZE.x,LONG_BAR_SIZE.y,LONG_BAR_SIZE.z,barCuboidTexture);
+        tableShortBarDrawable=new CuboidDrawable(game.getContext(),SHORT_BAR_SIZE.x,SHORT_BAR_SIZE.y,SHORT_BAR_SIZE.z,barCuboidTexture);
+        ballDrawable=new SphereObject(game.getContext(),"crystalball/blue.png",BALL_RADIUS);
 
         floor=generateFloor(dynamicsWorld);
-       // legs=generateTableLeg(dynamicsWorld);
+       legs=generateTableLeg(dynamicsWorld);
         tablePlane=generateTablePlane
                 (dynamicsWorld);
+        longBars=generateTableLongBar(dynamicsWorld);
+        shortBars=generateTableShortBar(dynamicsWorld);
+
+        balls=generateSnookerBalls(dynamicsWorld);
 
         MatrixState.setInitStack();
     }
@@ -162,6 +211,14 @@ public class SnookerScreen  extends FrameBufferScreen{
         floorDrawable.unBind();
         legDrawer.unBind();
         tablePlanDrawable.unBind();
+
+        tableLongBarDrawable.unBind();
+        tableShortBarDrawable.unBind();
+        ballDrawable.unBind();
+
+        legCuboidTexture.dispose();
+        planeCuboidTexture.dispose();
+        barCuboidTexture.dispose();
     }
 
     @Override
@@ -175,6 +232,14 @@ public class SnookerScreen  extends FrameBufferScreen{
         floorDrawable.bind();
         legDrawer.bind();
         tablePlanDrawable.bind();
+        ballDrawable.bind();
+
+        tableLongBarDrawable.bind();
+        tableShortBarDrawable.bind();
+
+        legCuboidTexture.reload();
+        planeCuboidTexture.reload();
+        barCuboidTexture.reload();
     }
 
     @Override
@@ -203,8 +268,15 @@ public class SnookerScreen  extends FrameBufferScreen{
 
         //绘制桌面
         ConcreateObject.draw(tablePlanDrawable, tablePlane);
+        for(RigidBody bar:longBars)
+            ConcreateObject.draw(tableLongBarDrawable, bar);
+
+        for(RigidBody bar:shortBars)
+            ConcreateObject.draw(tableShortBarDrawable, bar);
 
 
+        for(RigidBody ball:balls)
+            ConcreateObject.draw(ballDrawable, ball);
     }
 
 
@@ -331,17 +403,115 @@ public class SnookerScreen  extends FrameBufferScreen{
 
     public RigidBody generateTablePlane(DynamicsWorld dynamicsWorld)
     {
-        Vector3f halfExtend=new Vector3f(TABLE_SIZE.x/2,TABLE_SIZE.y/2,TABLE_SIZE.z/2);
+        Vector3f halfExtend=new Vector3f(TABLE_SIZE.x/2 ,TABLE_SIZE.y/2 ,TABLE_SIZE.z/2 );
 
         //创建box形状。
         CollisionShape planeShape = new BoxShape(halfExtend);
 
-       RigidBody body=  BodyCreator.create(planeShape,3,new Vector3f(0,tableLegSize.y+TABLE_SIZE.y/2,0),0.2f,0.8f);
-
+       RigidBody body=  BodyCreator.createCube(planeShape, 0, 0, tableLegSize.y + TABLE_SIZE.y / 2, 0);
+        dynamicsWorld.addRigidBody(body);
         body.setLinearVelocity(new Vector3f(0,0,0));//箱子直线运动的速度--Vx,Vy,Vz三个分量
 
         return body;
 
 
     }
+
+
+    /**
+     * 添加桌子长边栏
+     * @param dynamicsWorld
+     * @return
+     */
+
+    public RigidBody[] generateTableLongBar(DynamicsWorld dynamicsWorld)
+    {
+        Vector3f halfExtend=new Vector3f(LONG_BAR_SIZE.x/2 ,LONG_BAR_SIZE.y/2 ,LONG_BAR_SIZE.z/2 );
+
+        //创建box形状。
+        CollisionShape planeShape = new BoxShape(halfExtend);
+
+        RigidBody[] bodies=new RigidBody[2];
+
+        RigidBody body=  BodyCreator.createCube(planeShape,0, TABLE_SIZE.x/2
+                ,tableLegSize.y+TABLE_SIZE.y+LONG_BAR_SIZE.y/2 ,0 );
+        dynamicsWorld.addRigidBody(body);
+
+        bodies[0]=body;
+
+        body=  BodyCreator.createCube(planeShape,0, -TABLE_SIZE.x/2,tableLegSize.y+TABLE_SIZE.y+LONG_BAR_SIZE.y/2 ,0);
+        dynamicsWorld.addRigidBody(body);
+
+        bodies[1]=body;
+        return bodies;
+
+
+    }
+
+    /**
+     * 生成短边栏刚体模型
+     * @param dynamicsWorld
+     * @return
+     */
+    public RigidBody[] generateTableShortBar(DynamicsWorld dynamicsWorld)
+    {
+        Vector3f halfExtend=new Vector3f(SHORT_BAR_SIZE.x/2 ,SHORT_BAR_SIZE.y/2 ,SHORT_BAR_SIZE.z/2 );
+
+        //创建box形状。
+        CollisionShape planeShape = new BoxShape(halfExtend);
+
+        RigidBody[] bodies=new RigidBody[2];
+
+        RigidBody body=  BodyCreator.createCube(planeShape,0, 0,tableLegSize.y+TABLE_SIZE.y+SHORT_BAR_SIZE.y/2 ,TABLE_SIZE.z/2  );
+        dynamicsWorld.addRigidBody(body);
+
+        bodies[0]=body;
+
+        body=  BodyCreator.createCube(planeShape,0, 0,tableLegSize.y+TABLE_SIZE.y+SHORT_BAR_SIZE.y/2 , -TABLE_SIZE.z/2 );
+        dynamicsWorld.addRigidBody(body);
+
+        bodies[1]=body;
+        return bodies;
+
+
+    }
+
+    /**
+     * 生成球模型。
+     * @param dynamicsWorld
+     * @return
+     */
+    public RigidBody[] generateSnookerBalls(DynamicsWorld dynamicsWorld)
+    {
+
+
+        //创建box形状。
+        CollisionShape planeShape = new SphereShape(BALL_RADIUS);
+
+        RigidBody[] bodies=new RigidBody[15];
+
+        int index;
+        int row;
+        int rowSize=3;
+        for(int i=0;i<15;i++) {
+
+            row=i/rowSize;
+            index=i%rowSize;
+            RigidBody body = BodyCreator.create(planeShape, 1, new Vector3f((index-1)*1, tableLegSize.y + TABLE_SIZE.y + BALL_RADIUS, (row -2)*-1), 0.8f, 0.2f);
+            dynamicsWorld.addRigidBody(body);
+            body.setLinearVelocity(new Vector3f(0,0,0));
+            body.forceActivationState(CollisionObject.WANTS_DEACTIVATION);
+
+            bodies[i] = body;
+
+        }
+
+
+
+        return bodies;
+
+
+    }
+
+
 }

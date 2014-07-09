@@ -20,7 +20,7 @@ public class SphereObject extends AbstractSimpleObject{
 	float[] vertexData;
 	short[] indexData;
 	int textureId=-1;
-	public SphereObject(Context context, String textureFileName,int radius) {
+	public SphereObject(Context context, String textureFileName,float radius) {
 		super(context);
 		 this.textureFileName=textureFileName;
 		 initData(radius);
@@ -29,7 +29,7 @@ public class SphereObject extends AbstractSimpleObject{
 		 
 	}
 	
-	private void initData(int radius )
+	private void initData(float radius )
 	{
 		
 		Sphere sphere=new Sphere(radius);

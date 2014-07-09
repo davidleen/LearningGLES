@@ -6,17 +6,18 @@ import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.objects.CubeDrawer;
 
 /**
- * 卓卖弄对象绘制类。
+ * 长方体对象绘制类。
  * Created by davidleen29   qq:67320337
  * on 2014-7-9.
  */
-public class TablePlaneDrawable extends CubeDrawer implements ObjectDrawable {
+public class CuboidDrawable extends CubeDrawer implements ObjectDrawable {
 
 
     CubeTexture cubeTexture;
-    public TablePlaneDrawable(Context context, float xLength, float yLength, float zLength) {
+    public CuboidDrawable(Context context, float xLength, float yLength, float zLength,CubeTexture texture) {
         super(context, xLength, yLength, zLength);
-        cubeTexture=new CubeTexture(context.getResources(),"teapot.png");
+        this.cubeTexture=texture;
+
     }
 
 
