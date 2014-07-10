@@ -2,10 +2,7 @@ package com.opengles.book.screen.snooker;
 
 import android.opengl.GLES20;
 import com.bulletphysics.collision.broadphase.AxisSweep3;
-import com.bulletphysics.collision.dispatch.CollisionConfiguration;
-import com.bulletphysics.collision.dispatch.CollisionDispatcher;
-import com.bulletphysics.collision.dispatch.CollisionObject;
-import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
+import com.bulletphysics.collision.dispatch.*;
 import com.bulletphysics.collision.shapes.BoxShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.SphereShape;
@@ -43,8 +40,8 @@ import java.util.List;
 public class SnookerScreen  extends FrameBufferScreen{
     private static final float MAX_AABB_LENGTH = 100;
     final static float EYE_X=0;//观察者的位置x
-    final static float EYE_Y=  12 ;//观察者的位置y
-    final static float EYE_Z= 15;//观察者的位置z
+    final static float EYE_Y=  10 ;//观察者的位置y
+    final static float EYE_Z= 5;//观察者的位置z
 
     final static float TARGET_X=0;//目标的位置x
     final static float TARGET_Y=8;//目的位置Y
@@ -61,13 +58,13 @@ public class SnookerScreen  extends FrameBufferScreen{
 
 
     //桌面尺寸
-    final static Vector3 TABLE_SIZE=Vector3.create(6,0.5f,10);
+    final static Vector3 TABLE_SIZE=Vector3.create(6,0.25f,10);
 
     //桌腿尺寸大小设置。
     Vector3 tableLegSize=Vector3.create(0.5f,6,0.5f);
 
     //长围栏尺寸
-    Vector3 LONG_BAR_SIZE=Vector3.create(0.5f,0.25f,9);
+    Vector3 LONG_BAR_SIZE=Vector3.create(0.5f,0.25f,10);
     //短围栏的尺寸
     Vector3 SHORT_BAR_SIZE=Vector3.create(5,0.25f,0.5f);
 
@@ -143,7 +140,7 @@ public class SnookerScreen  extends FrameBufferScreen{
                 0,
                 20,
                 0);
-        cameraHelper=new CameraHelper(camera,new AABB3(Vector3.create(-ROOM_WIDTH/2, ROOM_HEIGHT/2,-ROOM_LONG/2),Vector3.create(ROOM_WIDTH/2,ROOM_HEIGHT,ROOM_LONG/2)));
+        cameraHelper=new CameraHelper(camera,new AABB3(Vector3.create(-TABLE_SIZE.x/2-2, tableLegSize.y*1.5f,-TABLE_SIZE.z/2-2),Vector3.create(TABLE_SIZE.x/2+2,tableLegSize.y*2,TABLE_SIZE.z/2+2)));
         dynamicsWorld= generateDynamicsWorld();
         //地板绘制。
         floorDrawable=new FloorDrawable(game.getContext(),80,60);
@@ -199,7 +196,18 @@ public class SnookerScreen  extends FrameBufferScreen{
 
 
         }
+        for (Input.TouchEvent event:touchEvents) {
 
+            if(event.type== Input.TouchEvent.TOUCH_DOWN)
+            {
+             Vector3f  newValue=   balls[15].getLinearVelocity(new Vector3f( ));
+                newValue.add(new Vector3f(2,0,-10));
+             balls[15].setLinearVelocity( newValue);
+                //    balls[15].applyForce(new Vector3f(0,0,10),new Vector3f());
+            }
+
+
+        }
 
 
         dynamicsWorld.stepSimulation(deltaTime, MAX_SUB_STEPS);
@@ -408,9 +416,14 @@ public class SnookerScreen  extends FrameBufferScreen{
         //创建box形状。
         CollisionShape planeShape = new BoxShape(halfExtend);
 
-       RigidBody body=  BodyCreator.createCube(planeShape, 0, 0, tableLegSize.y + TABLE_SIZE.y / 2, 0);
+       RigidBody body=  BodyCreator.createCube(planeShape, 100, 0, tableLegSize.y + TABLE_SIZE.y / 2, 0);
+        //设置非运动
+        body.setCollisionFlags( CollisionFlags.STATIC_OBJECT);
+       body.forceActivationState(CollisionObject.ACTIVE_TAG);
+
         dynamicsWorld.addRigidBody(body);
-        body.setLinearVelocity(new Vector3f(0,0,0));//箱子直线运动的速度--Vx,Vy,Vz三个分量
+
+       // body.setLinearVelocity(new Vector3f(0,0,0));//箱子直线运动的速度--Vx,Vy,Vz三个分量
 
         return body;
 
@@ -426,20 +439,27 @@ public class SnookerScreen  extends FrameBufferScreen{
 
     public RigidBody[] generateTableLongBar(DynamicsWorld dynamicsWorld)
     {
-        Vector3f halfExtend=new Vector3f(LONG_BAR_SIZE.x/2 ,LONG_BAR_SIZE.y/2 ,LONG_BAR_SIZE.z/2 );
+        Vector3f halfExtend=new Vector3f(LONG_BAR_SIZE.x/2  ,LONG_BAR_SIZE.y /2 ,LONG_BAR_SIZE.z  /2);
 
         //创建box形状。
         CollisionShape planeShape = new BoxShape(halfExtend);
 
+
         RigidBody[] bodies=new RigidBody[2];
 
-        RigidBody body=  BodyCreator.createCube(planeShape,0, TABLE_SIZE.x/2
+        RigidBody body=  BodyCreator.createCube(planeShape,100, TABLE_SIZE.x/2
                 ,tableLegSize.y+TABLE_SIZE.y+LONG_BAR_SIZE.y/2 ,0 );
+        //设置非运动
+        body.setCollisionFlags( CollisionFlags.STATIC_OBJECT);
+        body.forceActivationState(CollisionObject.ACTIVE_TAG);
         dynamicsWorld.addRigidBody(body);
 
         bodies[0]=body;
 
-        body=  BodyCreator.createCube(planeShape,0, -TABLE_SIZE.x/2,tableLegSize.y+TABLE_SIZE.y+LONG_BAR_SIZE.y/2 ,0);
+        body=  BodyCreator.createCube(planeShape,100, -TABLE_SIZE.x/2,tableLegSize.y+TABLE_SIZE.y+LONG_BAR_SIZE.y/2 ,0);
+        //设置非运动
+        body.setCollisionFlags( CollisionFlags.STATIC_OBJECT);
+        body.forceActivationState(CollisionObject.ACTIVE_TAG);
         dynamicsWorld.addRigidBody(body);
 
         bodies[1]=body;
@@ -462,12 +482,18 @@ public class SnookerScreen  extends FrameBufferScreen{
 
         RigidBody[] bodies=new RigidBody[2];
 
-        RigidBody body=  BodyCreator.createCube(planeShape,0, 0,tableLegSize.y+TABLE_SIZE.y+SHORT_BAR_SIZE.y/2 ,TABLE_SIZE.z/2  );
+        RigidBody body=  BodyCreator.createCube(planeShape,100, 0,tableLegSize.y+TABLE_SIZE.y+SHORT_BAR_SIZE.y/2 ,TABLE_SIZE.z/2  );
+        //设置非运动
+        body.setCollisionFlags( CollisionFlags.STATIC_OBJECT);
+        body.forceActivationState(CollisionObject.ACTIVE_TAG);
         dynamicsWorld.addRigidBody(body);
 
         bodies[0]=body;
 
-        body=  BodyCreator.createCube(planeShape,0, 0,tableLegSize.y+TABLE_SIZE.y+SHORT_BAR_SIZE.y/2 , -TABLE_SIZE.z/2 );
+        body=  BodyCreator.createCube(planeShape,100, 0,tableLegSize.y+TABLE_SIZE.y+SHORT_BAR_SIZE.y/2 , -TABLE_SIZE.z/2 );
+        //设置非运动
+        body.setCollisionFlags( CollisionFlags.STATIC_OBJECT);
+        body.forceActivationState(CollisionObject.ACTIVE_TAG);
         dynamicsWorld.addRigidBody(body);
 
         bodies[1]=body;
@@ -488,16 +514,18 @@ public class SnookerScreen  extends FrameBufferScreen{
         //创建box形状。
         CollisionShape planeShape = new SphereShape(BALL_RADIUS);
 
-        RigidBody[] bodies=new RigidBody[15];
+        RigidBody[] bodies=new RigidBody[16];
 
-        int index;
-        int row;
-        int rowSize=3;
+
+
+        Vector3 origin=Vector3.create( 0,tableLegSize.y + TABLE_SIZE.y + BALL_RADIUS,0);
+
+        List<Vector3> locations=BallLocation.calculate(origin);
+
         for(int i=0;i<15;i++) {
 
-            row=i/rowSize;
-            index=i%rowSize;
-            RigidBody body = BodyCreator.create(planeShape, 1, new Vector3f((index-1)*1, tableLegSize.y + TABLE_SIZE.y + BALL_RADIUS, (row -2)*-1), 0.8f, 0.2f);
+            Vector3 location=locations.get(i);
+            RigidBody body = BodyCreator.create(planeShape, 1, new Vector3f(location.x, location.y  ,location.z), 0.8f, 0.2f);
             dynamicsWorld.addRigidBody(body);
             body.setLinearVelocity(new Vector3f(0,0,0));
             body.forceActivationState(CollisionObject.WANTS_DEACTIVATION);
@@ -507,11 +535,20 @@ public class SnookerScreen  extends FrameBufferScreen{
         }
 
 
+        //白色球体
+        RigidBody body = BodyCreator.create(planeShape, 1,new Vector3f(0  , tableLegSize.y + TABLE_SIZE.y + BALL_RADIUS ,3 ), 0.2f, 0.8f);
+        dynamicsWorld.addRigidBody(body);
+        body.setLinearVelocity(new Vector3f(0,0,0));
+       // body.forceActivationState(CollisionObject.WANTS_DEACTIVATION);
+        bodies[15]=body;
 
         return bodies;
 
 
     }
+
+
+
 
 
 }

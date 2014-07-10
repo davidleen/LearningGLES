@@ -236,9 +236,11 @@ public class World {
         mountainShape=new BvhTriangleMeshShape(indexVertexArray,true,true);
 
           mountainBody=BodyCreator.createMountain(mountainShape, new Vector3f(0, -20, -20));
-        //设置非运动提
-        mountainBody.setCollisionFlags(mountainBody.getCollisionFlags()&~CollisionFlags.KINEMATIC_OBJECT);
+        //设置非运动
+        mountainBody.setCollisionFlags(CollisionFlags.STATIC_OBJECT);
+        //  mountainBody.setCollisionFlags(mountainBody.getCollisionFlags()&~CollisionFlags.KINEMATIC_OBJECT);
         mountainBody.forceActivationState(CollisionObject.ACTIVE_TAG);
+     //   mountainBody.setGravity(new Vector3f(0,9.8f,0));
         dynamicsWorld.addRigidBody(mountainBody);
 
 
