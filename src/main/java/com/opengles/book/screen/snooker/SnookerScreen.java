@@ -416,10 +416,47 @@ public class SnookerScreen  extends FrameBufferScreen{
         //创建box形状。
         CollisionShape planeShape = new BoxShape(halfExtend);
 
-       RigidBody body=  BodyCreator.createCube(planeShape, 100, 0, tableLegSize.y + TABLE_SIZE.y / 2, 0);
-        //设置非运动
-        body.setCollisionFlags( CollisionFlags.STATIC_OBJECT);
-       body.forceActivationState(CollisionObject.ACTIVE_TAG);
+     //  RigidBody body=  BodyCreator.createCube(planeShape, 100, 0, tableLegSize.y + TABLE_SIZE.y / 2, 0);
+        Vector3f localInertia=new Vector3f(0,0,0);
+
+            //计算惯性
+
+     //   planeShape.calculateLocalInertia(0,localInertia);
+
+
+
+        //创建刚体初始变换对象
+        Transform startTransform=new Transform();
+        //变换初始化
+        startTransform.setIdentity();
+        //设置刚体初始位置
+        startTransform.origin.set( 0, tableLegSize.y + TABLE_SIZE.y / 2, 0);
+
+        //创建刚体的运动状态对象
+        DefaultMotionState motionState=new DefaultMotionState(startTransform);
+
+        //创建刚体描述信息对象
+        RigidBodyConstructionInfo rbInfo=new RigidBodyConstructionInfo(0,motionState,planeShape,localInertia);
+
+
+
+
+
+        //创建刚体
+        RigidBody body= new RigidBody(rbInfo);
+
+
+
+//        //设置反弹系数
+//        body.setRestitution(0.2f);
+//        //设置摩擦系数
+//        body.setFriction(0.8f);
+
+
+
+//        //设置非运动
+//        body.setCollisionFlags( CollisionFlags.STATIC_OBJECT);
+//       body.forceActivationState(CollisionObject.DISABLE_DEACTIVATION);
 
         dynamicsWorld.addRigidBody(body);
 
@@ -484,16 +521,16 @@ public class SnookerScreen  extends FrameBufferScreen{
 
         RigidBody body=  BodyCreator.createCube(planeShape,100, 0,tableLegSize.y+TABLE_SIZE.y+SHORT_BAR_SIZE.y/2 ,TABLE_SIZE.z/2  );
         //设置非运动
-        body.setCollisionFlags( CollisionFlags.STATIC_OBJECT);
-        body.forceActivationState(CollisionObject.ACTIVE_TAG);
+       // body.setCollisionFlags( CollisionFlags.STATIC_OBJECT);
+    //    body.forceActivationState(CollisionObject.ACTIVE_TAG);
         dynamicsWorld.addRigidBody(body);
 
         bodies[0]=body;
 
         body=  BodyCreator.createCube(planeShape,100, 0,tableLegSize.y+TABLE_SIZE.y+SHORT_BAR_SIZE.y/2 , -TABLE_SIZE.z/2 );
         //设置非运动
-        body.setCollisionFlags( CollisionFlags.STATIC_OBJECT);
-        body.forceActivationState(CollisionObject.ACTIVE_TAG);
+      //  body.setCollisionFlags( CollisionFlags.STATIC_OBJECT);
+     //   body.forceActivationState(CollisionObject.ACTIVE_TAG);
         dynamicsWorld.addRigidBody(body);
 
         bodies[1]=body;
@@ -536,7 +573,7 @@ public class SnookerScreen  extends FrameBufferScreen{
 
 
         //白色球体
-        RigidBody body = BodyCreator.create(planeShape, 1,new Vector3f(0  , tableLegSize.y + TABLE_SIZE.y + BALL_RADIUS ,3 ), 0.2f, 0.8f);
+        RigidBody body = BodyCreator.create(planeShape, 1,new Vector3f(0  , tableLegSize.y + TABLE_SIZE.y + BALL_RADIUS*5 ,2 ), 0.9f, 0.8f);
         dynamicsWorld.addRigidBody(body);
         body.setLinearVelocity(new Vector3f(0,0,0));
        // body.forceActivationState(CollisionObject.WANTS_DEACTIVATION);
