@@ -1,6 +1,8 @@
 package com.opengles.book.screen.snooker;
 
+import android.content.Context;
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
 import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
@@ -20,10 +22,7 @@ import com.bulletphysics.linearmath.Transform;
 import com.opengles.book.MatrixState;
 import com.opengles.book.framework.Game;
 import com.opengles.book.framework.Input;
-import com.opengles.book.framework.gl.Camera3D;
-import com.opengles.book.framework.gl.CubeTexture;
-import com.opengles.book.framework.gl.ProjectInfo;
-import com.opengles.book.framework.gl.ViewPort;
+import com.opengles.book.framework.gl.*;
 import com.opengles.book.math.AABB3;
 import com.opengles.book.math.Vector3;
 import com.opengles.book.objects.SphereObject;
@@ -61,16 +60,16 @@ public class SnookerScreen  extends FrameBufferScreen{
     final static float ROOM_HEIGHT=20;
 
 
-    //桌面尺寸
-    final static Vector3 TABLE_SIZE=Vector3.create(6,0.25f,10);
+
 
     //桌腿尺寸大小设置。
     Vector3 tableLegSize=Vector3.create(0.5f,6,0.5f);
-
+    //桌面尺寸
+    final static Vector3 TABLE_SIZE=Vector3.create(6,0.25f,10);
     //长围栏尺寸
-    Vector3 LONG_BAR_SIZE=Vector3.create(0.25f,0.25f,9);
+    Vector3 LONG_BAR_SIZE=Vector3.create(0.25f,0.25f,9f);
     //短围栏的尺寸
-    Vector3 SHORT_BAR_SIZE=Vector3.create(5,0.25f,0.25f);
+    Vector3 SHORT_BAR_SIZE=Vector3.create(5f,0.25f,0.25f);
 
     private ProjectInfo projectInfo;
     private Camera3D camera;
@@ -120,7 +119,9 @@ public class SnookerScreen  extends FrameBufferScreen{
 
 
     //球体绘制类。
-    private SphereObject ballDrawable;
+    private BallDrawable[] ballDrawables;
+
+    private Texture  ballTexture ;
 
 
 
@@ -161,7 +162,24 @@ public class SnookerScreen  extends FrameBufferScreen{
 
         tableLongBarDrawable=new CuboidDrawable(game.getContext(),LONG_BAR_SIZE.x,LONG_BAR_SIZE.y,LONG_BAR_SIZE.z,barCuboidTexture);
         tableShortBarDrawable=new CuboidDrawable(game.getContext(),SHORT_BAR_SIZE.x,SHORT_BAR_SIZE.y,SHORT_BAR_SIZE.z,barCuboidTexture);
-        ballDrawable=new SphereObject(game.getContext(),"crystalball/blue.png",BALL_RADIUS);
+
+        ballTexture=new Texture(game.getContext().getResources(),"balls.png",false);
+        ballDrawables=new BallDrawable[16];
+        for(int i=0;i<15;i++)
+        {
+
+            int x=i%5*(ballTexture.width/5);
+            int y=i/5*(ballTexture.height/3);
+
+            TextureRegion region=new TextureRegion(ballTexture,x,y,ballTexture.width/5,ballTexture.height/3);
+            ballDrawables[i]=new BallDrawable(game.getContext(),BALL_RADIUS,region);
+
+
+        }
+        ballDrawables[15]=new BallDrawable(game.getContext(), BALL_RADIUS);
+
+
+
 
         floor=generateFloor(dynamicsWorld);
        legs=generateTableLeg(dynamicsWorld);
@@ -229,11 +247,14 @@ public class SnookerScreen  extends FrameBufferScreen{
 
         tableLongBarDrawable.unBind();
         tableShortBarDrawable.unBind();
+        for(BallDrawable ballDrawable:ballDrawables)
         ballDrawable.unBind();
 
         legCuboidTexture.dispose();
         planeCuboidTexture.dispose();
         barCuboidTexture.dispose();
+
+        ballTexture.dispose();
     }
 
     @Override
@@ -247,6 +268,7 @@ public class SnookerScreen  extends FrameBufferScreen{
         floorDrawable.bind();
         legDrawer.bind();
         tablePlanDrawable.bind();
+        for(BallDrawable ballDrawable:ballDrawables)
         ballDrawable.bind();
 
         tableLongBarDrawable.bind();
@@ -255,6 +277,8 @@ public class SnookerScreen  extends FrameBufferScreen{
         legCuboidTexture.reload();
         planeCuboidTexture.reload();
         barCuboidTexture.reload();
+
+        ballTexture.reload();
     }
 
     @Override
@@ -290,8 +314,18 @@ public class SnookerScreen  extends FrameBufferScreen{
             ConcreateObject.draw(tableShortBarDrawable, bar);
 
 
-        for(RigidBody ball:balls)
-            ConcreateObject.draw(ballDrawable, ball);
+
+
+        //绑定球纹理
+        ballTexture.bind();
+
+        for(int i=0;i<15;i++) {
+
+            ConcreateObject.draw(ballDrawables[i], balls[i], ballTexture.textureId);
+        }
+        //绘制白色球
+
+        ConcreateObject.draw(ballDrawables[15], balls[15], ballTexture.textureId);
     }
 
 
@@ -464,16 +498,9 @@ public class SnookerScreen  extends FrameBufferScreen{
         body.setFriction(1f);
 
 
-      //  body.setGravity(new Vector3f(0,0,0));
 
-
-//        //设置非运动
- //     body.setCollisionFlags( CollisionFlags.STATIC_OBJECT);
-//       body.forceActivationState(CollisionObject.DISABLE_DEACTIVATION);
 
         dynamicsWorld.addRigidBody(body);
-
-       // body.setLinearVelocity(new Vector3f(0,0,0));//箱子直线运动的速度--Vx,Vy,Vz三个分量
 
         return body;
 

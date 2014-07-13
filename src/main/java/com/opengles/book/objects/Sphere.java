@@ -79,9 +79,8 @@ public class Sphere {
 			float sinRow = (float) Math.sin(rowAngle);
 			float cosRow = (float) Math.cos(rowAngle);
 
-			Log.d(TAG, "row:" + i);
-			Log.d(TAG, "sinRow:" + sinRow + ",cosRow:" + cosRow);
-			y = (float) (sinRow);
+
+			y = sinRow ;
 			for (int j = 0; j < columnCount; j++)
 			{
 				float columnAngle = j * angleSpanInRadian;
@@ -105,7 +104,7 @@ public class Sphere {
 				attributes[position++] = y ;
 				attributes[position++] =z ;
                 }
-				// �������
+				//纹理
 				float s = 1 - j * pieceofImageS; 
 				float t = 1 - i * pieceofImageT ;
 				attributes[position++] = s;
