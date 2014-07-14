@@ -43,9 +43,9 @@ public class SphereWithLimitTexture {
         ;
 
         int angleSpanIndegree = 10;
-        int rowCount = 180 / angleSpanIndegree + 1;
-        int columnCount = 360 / angleSpanIndegree + 1;
-        int totalCount = rowCount * columnCount;
+        int rowCount = 180 / angleSpanIndegree ;
+        int columnCount = 360 / angleSpanIndegree ;
+        int totalCount = (rowCount+1) * (columnCount+1);
         int triangleCount = totalCount*2 ; // 一个方形// 2个三角形
 
         int indicesCount = triangleCount * 3;// 一个三角形3个点
@@ -94,11 +94,11 @@ public class SphereWithLimitTexture {
                 startU=textureRegion.u1;
                 startV=textureRegion.v1;
             }
-            float pieceofImageS = width / (columnCount);
-            float pieceofImageT =height/ (rowCount);
+            float pieceofImageS = width / (columnCount+1);
+            float pieceofImageT =height/ (rowCount+1);
            // Log.d(TAG, "totalCount:" + totalCount);
             int position = 0, indexPosition = 0;
-            for (int i = 0; i < rowCount; i++)
+            for (int i = 0; i <=rowCount; i++)
             {
                 float rowAngle = (float) (i * angleSpanInRadian - Math.PI / 2);
                 float sinRow = (float) Math.sin(rowAngle);
@@ -106,7 +106,7 @@ public class SphereWithLimitTexture {
 
 
                 y = sinRow ;
-                for (int j = 0; j < columnCount; j++)
+                for (int j = 0; j <= columnCount; j++)
                 {
                     float columnAngle = j * angleSpanInRadian;
                     x = (float) (cosRow
@@ -131,8 +131,8 @@ public class SphereWithLimitTexture {
                     }
                     //纹理
                     //+0.5 偏移量 使其纹理不至于在边沿上。
-                    float s =   (j+0.5f) * pieceofImageS+startU;
-                    float t = ( i+0.5f) * pieceofImageT +startV;
+                    float s =   (j) * pieceofImageS+startU;
+                    float t = ( i) * pieceofImageT +startV;
                     attributes[position++] = s;
                     attributes[position++] = t;
 
@@ -141,10 +141,10 @@ public class SphereWithLimitTexture {
                 }
             }
 
-            for (int i = 0; i < rowCount - 1; i++)
+            for (int i = 0; i < rowCount  ; i++)
             {
 
-                for (int j = 0; j < columnCount - 1; j++)
+                for (int j = 0; j < columnCount  ; j++)
                 {
 
                     // 划分四边形 变成2个三角形

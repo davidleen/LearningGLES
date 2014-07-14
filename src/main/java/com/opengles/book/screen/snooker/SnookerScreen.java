@@ -7,10 +7,7 @@ import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.dispatch.*;
-import com.bulletphysics.collision.shapes.BoxShape;
-import com.bulletphysics.collision.shapes.CollisionShape;
-import com.bulletphysics.collision.shapes.SphereShape;
-import com.bulletphysics.collision.shapes.StaticPlaneShape;
+import com.bulletphysics.collision.shapes.*;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
 import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
@@ -71,6 +68,8 @@ public class SnookerScreen  extends FrameBufferScreen{
     //短围栏的尺寸
     Vector3 SHORT_BAR_SIZE=Vector3.create(5f,0.5f,0.25f);
 
+    Vector3 BALL_STICK_SIZE=Vector3.create(6,0.1f,0.1f);
+
     private ProjectInfo projectInfo;
     private Camera3D camera;
     private ViewPort viewPort;
@@ -89,6 +88,8 @@ public class SnookerScreen  extends FrameBufferScreen{
     RigidBody[] shortBars;
     //球体模型
     RigidBody[] balls;
+
+    RigidBody ballStick;
 
     //物理世界模型
     private DynamicsWorld dynamicsWorld;
@@ -116,6 +117,8 @@ public class SnookerScreen  extends FrameBufferScreen{
     //桌面短边栏绘制
     private CuboidDrawable tableShortBarDrawable;
 
+    //木棍绘制类
+    private CuboidDrawable ballStickDrawable ;
 
 
     //球体绘制类。
@@ -166,6 +169,8 @@ public class SnookerScreen  extends FrameBufferScreen{
         tableLongBarDrawable=new CuboidDrawable(game.getContext(),LONG_BAR_SIZE.x,LONG_BAR_SIZE.y,LONG_BAR_SIZE.z,barCuboidTexture);
         tableShortBarDrawable=new CuboidDrawable(game.getContext(),SHORT_BAR_SIZE.x,SHORT_BAR_SIZE.y,SHORT_BAR_SIZE.z,barCuboidTexture);
 
+        ballStickDrawable=new CuboidDrawable(game.getContext(),BALL_STICK_SIZE.x,BALL_STICK_SIZE.y,BALL_STICK_SIZE.z,legCuboidTexture);
+
         //桌球纹理
         ballTexture=new Texture(game.getContext().getResources(),"balls.png",false);
         //桌球绘制对象。
@@ -192,6 +197,7 @@ public class SnookerScreen  extends FrameBufferScreen{
                 (dynamicsWorld);
         longBars=generateTableLongBar(dynamicsWorld);
         shortBars=generateTableShortBar(dynamicsWorld);
+        ballStick=generateBallStick(dynamicsWorld);
 
         balls=generateSnookerBalls(dynamicsWorld);
 
@@ -275,6 +281,8 @@ public class SnookerScreen  extends FrameBufferScreen{
         for(BallDrawable ballDrawable:ballDrawables)
         ballDrawable.unBind();
 
+        ballStickDrawable.unBind();
+
         legCuboidTexture.dispose();
         planeCuboidTexture.dispose();
         barCuboidTexture.dispose();
@@ -293,6 +301,7 @@ public class SnookerScreen  extends FrameBufferScreen{
         floorDrawable.bind();
         legDrawer.bind();
         tablePlanDrawable.bind();
+        ballStickDrawable.bind();
         for(BallDrawable ballDrawable:ballDrawables)
         ballDrawable.bind();
 
@@ -332,6 +341,9 @@ public class SnookerScreen  extends FrameBufferScreen{
 
         //绘制桌面
         ConcreateObject.draw(tablePlanDrawable, tablePlane);
+
+        //绘制球棍
+        ConcreateObject.draw(ballStickDrawable, ballStick);
         for(RigidBody bar:longBars)
             ConcreateObject.draw(tableLongBarDrawable, bar);
 
@@ -349,7 +361,6 @@ public class SnookerScreen  extends FrameBufferScreen{
             ConcreateObject.draw(ballDrawables[i], balls[i], ballTexture.textureId);
         }
         //绘制白色球
-
         ConcreateObject.draw(ballDrawables[15], balls[15], ballTexture.textureId);
     }
 
@@ -646,7 +657,22 @@ public class SnookerScreen  extends FrameBufferScreen{
     }
 
 
-        
+    /**
+     * 生成桌球棍。
+     */
+    public RigidBody generateBallStick(DynamicsWorld dynamicsWorld )
+    {
+
+        //创建box形状。
+        CollisionShape stickShape = new CapsuleShape(0.1f,4);
+        RigidBody body=  BodyCreator.create(stickShape, 0, new Vector3f(0,10,0), 0.2f, 0.5f);
+        dynamicsWorld.addRigidBody(body);
+        return body;
+
+
+
+    }
+
 
 
 }
