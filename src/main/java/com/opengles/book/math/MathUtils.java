@@ -16,6 +16,10 @@ public class MathUtils {
         float ny=(float) (q4.y/Math.sin(sitaHalf));
         float nz=(float) (q4.z/Math.sin(sitaHalf));
 
+//        float nx=(float)Math.acos (q4.x/Math.sin(sitaHalf)));
+//        float ny=(float) (q4.y  );
+//        float nz=(float) (q4.z  );
+
         return new float[]{(float) Math.toDegrees(sitaHalf*2),nx,ny,nz};
     }
 }

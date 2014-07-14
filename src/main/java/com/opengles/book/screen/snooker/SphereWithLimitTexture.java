@@ -94,9 +94,9 @@ public class SphereWithLimitTexture {
                 startU=textureRegion.u1;
                 startV=textureRegion.v1;
             }
-            float pieceofImageS = width / (rowCount - 1);
-            float pieceofImageT =height/ (columnCount - 1);
-            Log.d(TAG, "totalCount:" + totalCount);
+            float pieceofImageS = width / (columnCount);
+            float pieceofImageT =height/ (rowCount);
+           // Log.d(TAG, "totalCount:" + totalCount);
             int position = 0, indexPosition = 0;
             for (int i = 0; i < rowCount; i++)
             {
@@ -130,8 +130,9 @@ public class SphereWithLimitTexture {
                         attributes[position++] =z ;
                     }
                     //纹理
-                    float s = width - j * pieceofImageS+startU;
-                    float t = height- i * pieceofImageT +startV;
+                    //+0.5 偏移量 使其纹理不至于在边沿上。
+                    float s =   (j+0.5f) * pieceofImageS+startU;
+                    float t = ( i+0.5f) * pieceofImageT +startV;
                     attributes[position++] = s;
                     attributes[position++] = t;
 

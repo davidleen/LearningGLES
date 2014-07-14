@@ -67,9 +67,9 @@ public class SnookerScreen  extends FrameBufferScreen{
     //桌面尺寸
     final static Vector3 TABLE_SIZE=Vector3.create(6,0.25f,10);
     //长围栏尺寸
-    Vector3 LONG_BAR_SIZE=Vector3.create(0.25f,0.25f,9f);
+    Vector3 LONG_BAR_SIZE=Vector3.create(0.25f,0.5f,9f);
     //短围栏的尺寸
-    Vector3 SHORT_BAR_SIZE=Vector3.create(5f,0.25f,0.25f);
+    Vector3 SHORT_BAR_SIZE=Vector3.create(5f,0.5f,0.25f);
 
     private ProjectInfo projectInfo;
     private Camera3D camera;
@@ -124,6 +124,9 @@ public class SnookerScreen  extends FrameBufferScreen{
     private Texture  ballTexture ;
 
 
+    private ScreenClickHandler handler;
+
+
 
     public SnookerScreen(Game game) {
         super(game);
@@ -163,20 +166,22 @@ public class SnookerScreen  extends FrameBufferScreen{
         tableLongBarDrawable=new CuboidDrawable(game.getContext(),LONG_BAR_SIZE.x,LONG_BAR_SIZE.y,LONG_BAR_SIZE.z,barCuboidTexture);
         tableShortBarDrawable=new CuboidDrawable(game.getContext(),SHORT_BAR_SIZE.x,SHORT_BAR_SIZE.y,SHORT_BAR_SIZE.z,barCuboidTexture);
 
+        //桌球纹理
         ballTexture=new Texture(game.getContext().getResources(),"balls.png",false);
+        //桌球绘制对象。
         ballDrawables=new BallDrawable[16];
-        for(int i=0;i<15;i++)
+        for(int i=0;i<16;i++)
         {
 
-            int x=i%5*(ballTexture.width/5);
-            int y=i/5*(ballTexture.height/3);
+            int x=i%4*(ballTexture.width/4);
+            int y=i/4*(ballTexture.height/4);
 
-            TextureRegion region=new TextureRegion(ballTexture,x,y,ballTexture.width/5,ballTexture.height/3);
+            TextureRegion region=new TextureRegion(ballTexture,x,y,ballTexture.width/4,ballTexture.height/4);
             ballDrawables[i]=new BallDrawable(game.getContext(),BALL_RADIUS,region);
 
 
         }
-        ballDrawables[15]=new BallDrawable(game.getContext(), BALL_RADIUS);
+
 
 
 
@@ -189,6 +194,37 @@ public class SnookerScreen  extends FrameBufferScreen{
         shortBars=generateTableShortBar(dynamicsWorld);
 
         balls=generateSnookerBalls(dynamicsWorld);
+
+        //初始化屏幕点击事件
+        handler=new ScreenClickHandler( new ScreenClickHandler.OnClickListener() {
+            @Override
+            public void onClick(Input.TouchEvent event) {
+                    //执行代码
+                //推动白球
+
+                //获取当前白球位置
+                //从物理世界中山地的位置。
+                Transform transform =  balls[15].getMotionState().getWorldTransform(new Transform());
+                Vector3f ballPosition=transform.origin;
+
+                //计算球前行方向
+               Vector3f direction=new Vector3f(ballPosition.x-camera.eyeX,0,ballPosition.z-camera.eyeZ);
+
+                direction.normalize();
+
+
+             Vector3f  newValue=   balls[15].getLinearVelocity(new Vector3f( ));
+                //计算球速度
+              direction.scale(random.nextInt(10)+10);
+             newValue.add(direction);
+              balls[15].setLinearVelocity( newValue);
+                if(!balls[15].isActive())
+              balls[15].activate();
+
+
+
+            }
+        });
 
         MatrixState.setInitStack();
     }
@@ -219,20 +255,9 @@ public class SnookerScreen  extends FrameBufferScreen{
 
 
         }
-        for (Input.TouchEvent event:touchEvents) {
-
-            if(event.type== Input.TouchEvent.TOUCH_DOWN)
-            {
-             Vector3f  newValue=   balls[15].getLinearVelocity(new Vector3f( ));
-
-             newValue.add(new Vector3f(  random.nextInt(6)-3,0,-30));
-             balls[15].setLinearVelocity( newValue);
-              balls[15].activate();
-            //   balls[15].applyForce(new Vector3f(0,0,10),new Vector3f());
-            }
 
 
-        }
+        handler.handleTouchEvents(touchEvents);
 
 
         dynamicsWorld.stepSimulation(deltaTime, MAX_SUB_STEPS);
@@ -260,7 +285,7 @@ public class SnookerScreen  extends FrameBufferScreen{
     @Override
     public void resume() {
         super.resume();
-
+        GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         viewPort.apply();
         projectInfo.setFrustum();
         camera.setCamera();
@@ -493,7 +518,7 @@ public class SnookerScreen  extends FrameBufferScreen{
 
 
 //        //设置反弹系数
-        body.setRestitution(1f);
+        body.setRestitution(0f);
         //设置摩擦系数
         body.setFriction(1f);
 
@@ -621,7 +646,7 @@ public class SnookerScreen  extends FrameBufferScreen{
     }
 
 
-
+        
 
 
 }

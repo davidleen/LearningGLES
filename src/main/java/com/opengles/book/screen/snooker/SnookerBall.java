@@ -69,7 +69,7 @@ public class SnookerBall extends RigidBody {
         //设置反弹系数
         body.setRestitution(0.1f);
         //设置摩擦系数
-        body.setFriction(0.8f);
+        body.setFriction(1f);
 
 
         return body;
