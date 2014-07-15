@@ -107,7 +107,27 @@ public class Vector3 {
 		y = outVec[1];
 		z = outVec[2];
 		return this;
+
+
+
 	}
+
+
+    /**
+     * 计算向量的旋转角度。
+     *
+     * @param desVector
+     * @param xyzRotation
+     */
+    public void getRotation(Vector3 desVector,float[] xyzRotation)
+    {
+        //计算向量的点乘值。
+        float dotValue=Vector3.dotValue(this,desVector);
+
+
+
+
+    }
 
 	public float dist(Vector3 other) {
 		float distX = this.x - other.x;

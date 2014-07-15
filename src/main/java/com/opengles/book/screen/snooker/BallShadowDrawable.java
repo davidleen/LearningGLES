@@ -1,44 +1,42 @@
 package com.opengles.book.screen.snooker;
 
 
-import android.opengl.GLES20;
-import com.opengles.book.FloatUtils;
-import com.opengles.book.MatrixState;
-import com.opengles.book.ShaderUtil;
-
 import android.content.Context;
-import com.opengles.book.Vertices;
-
+import android.opengl.GLES20;
+import com.opengles.book.*;
 import com.opengles.book.framework.gl.TextureRegion;
 import com.opengles.book.glsl.Uniform;
 import com.opengles.book.glsl.Uniform1fv;
+import com.opengles.book.glsl.Uniform3fv;
 import com.opengles.book.glsl.UniformMatrix4F;
+
+import java.nio.FloatBuffer;
 
 
 /**
- * 球体通用对象通用对象
+ * 绘制阴影用的球体    记录到光线的距离。
  *
- * @author Administrator
+ * @author davidleen29
  */
-public class BallDrawable {
+public class BallShadowDrawable {
 
 
     float[] vertexData;
     short[] indexData;
 
 
-    public BallDrawable(Context context, float radius) {
+    public BallShadowDrawable(Context context, float radius) {
 
         this(context, radius, null);
     }
 
-    public BallDrawable(Context context, float radius, TextureRegion region) {
+    public BallShadowDrawable(Context context, float radius, TextureRegion region) {
 
 //初始化shader
         initShader(context);
 
 
-        vertices = new Vertices(new String[]{"aPosition", "aTexCoor"}, new int[]{VERTEX_POS_SIZE, VERTEX_TEXCOORD_SIZE}, mProgram);
+        vertices = new Vertices(new String[]{"aPosition" }, new int[]{VERTEX_POS_SIZE},VERTEX_POS_SIZE+VERTEX_TEXCOORD_SIZE, mProgram);
         initData(radius, region);
 
         // this.index=index;
@@ -84,9 +82,10 @@ public class BallDrawable {
 
     // 总变换矩阵属性
     private UniformMatrix4F finalMatrix;
-    //物体变换矩阵属性
-    private Uniform1fv alphaThreadHoldUniform;
-    private int textureHandler;
+    private UniformMatrix4F uMMatrix;
+
+    private Uniform3fv uLightLocationUniform;
+
 
     //透明度检测的阀值 （0-1）
     private float[] alphaThreadHoldValue = new float[]{0.0f};
@@ -106,18 +105,17 @@ public class BallDrawable {
     }
 
 
-    public void draw(int textureId,int shadowTextureId) {
+    public void draw( ) {
         //指定使用某套shader程序
         GLES20.glUseProgram(mProgram);
 
 
-//        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-//        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
-        // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
-        GLES20.glUniform1i(textureHandler, 0);
+
+
         //将最终变换矩阵传入shader程序
         finalMatrix.bind();
-        alphaThreadHoldUniform.bind();
+        uLightLocationUniform.bind();
+        uMMatrix.bind();
 
 
         vertices.bind();
@@ -131,9 +129,9 @@ public class BallDrawable {
     //初始化shader
     public void initShader(Context mv) {
         //加载顶点着色器的脚本内容
-        mVertexShader = ShaderUtil.loadFromAssetsFile("abstract_simple_object/vertex.glsl", mv.getResources());
+        mVertexShader = ShaderUtil.loadFromAssetsFile("shadow_buffer/vertex.glsl", mv.getResources());
         //加载片元着色器的脚本内容
-        mFragmentShader = ShaderUtil.loadFromAssetsFile("abstract_simple_object/frag.glsl", mv.getResources());
+        mFragmentShader = ShaderUtil.loadFromAssetsFile("shadow_buffer/frag.glsl", mv.getResources());
         //基于顶点着色器与片元着色器创建程序
         mProgram = ShaderUtil.createProgram(mVertexShader, mFragmentShader);
 
@@ -147,14 +145,23 @@ public class BallDrawable {
             }
         });
 
-        alphaThreadHoldUniform = new Uniform1fv(mProgram, "alphaThreadHold", new Uniform.UniformBinder<float[]>() {
+        uLightLocationUniform = new Uniform3fv(mProgram, " uLightLocation", new Uniform.UniformBinder<FloatBuffer>() {
             @Override
-            public float[] getBindValue() {
-                return alphaThreadHoldValue;
+            public FloatBuffer getBindValue() {
+                return LightSources.lightPositionFBSun;
             }
         });
 
-        textureHandler = GLES20.glGetUniformLocation(mProgram, "sTexture");
+
+        uMMatrix = new UniformMatrix4F(mProgram, "uMMatrix", new Uniform.UniformBinder<float[]>() {
+            @Override
+            public float[] getBindValue() {
+
+
+                return MatrixState.getMMatrix();
+            }
+        });
+
 
 
     }

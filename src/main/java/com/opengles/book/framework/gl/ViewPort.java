@@ -13,7 +13,7 @@ public class ViewPort {
      * 视窗类。
      */
 
-    int left;int bottom; int width; int height;
+   public int left; public int bottom; public int width; public int height;
 
     public ViewPort(int left, int bottom, int width, int height) {
         this.left = left;

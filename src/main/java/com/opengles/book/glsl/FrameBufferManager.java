@@ -38,7 +38,7 @@ public class FrameBufferManager {
         Bitmap bitmap;
         int width;
         int height;
-     int testTextId;
+        int testTextId;
         FPSCounter counter;
         Paint pain;
         public FrameBuffer(Context context,int width,int height)

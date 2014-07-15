@@ -1,8 +1,11 @@
 package com.opengles.book.screen.snooker;
 
 import android.content.Context;
+import android.graphics.Matrix;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
+import android.view.View;
+import android.widget.ListView;
 import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
@@ -16,12 +19,15 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
+import com.opengles.book.LightSources;
 import com.opengles.book.MatrixState;
 import com.opengles.book.framework.Game;
 import com.opengles.book.framework.Input;
 import com.opengles.book.framework.gl.*;
+import com.opengles.book.framework.impl.GLScreen;
 import com.opengles.book.math.AABB3;
 import com.opengles.book.math.Vector3;
+import com.opengles.book.objects.ShadowFrameBuffer;
 import com.opengles.book.objects.SphereObject;
 import com.opengles.book.screen.FrameBufferScreen;
 import com.opengles.book.screen.cubeCollisionDemo.BodyCreator;
@@ -37,7 +43,7 @@ import java.util.Random;
  * 桌球游戏界面
  * Created by davidleen29 on 2014/7/8.
  */
-public class SnookerScreen  extends FrameBufferScreen{
+public class SnookerScreen  extends GLScreen{
     private static final float MAX_AABB_LENGTH = 100;
     final static float EYE_X=0;//观察者的位置x
     final static float EYE_Y=  10 ;//观察者的位置y
@@ -130,6 +136,10 @@ public class SnookerScreen  extends FrameBufferScreen{
     private ScreenClickHandler handler;
 
 
+    //阴影缓冲区控制对象。
+    private ShadowFrameBuffer buffer;
+
+
 
     public SnookerScreen(Game game) {
         super(game);
@@ -138,6 +148,7 @@ public class SnookerScreen  extends FrameBufferScreen{
         int width=glGraphics.getWidth();
         int height=glGraphics.getHeight();
         viewPort=new ViewPort(0,0,width,height);
+        buffer=new ShadowFrameBuffer(viewPort);
 
         //计算透视投影的比例
         float  ratio = (float) width / height;
@@ -208,6 +219,14 @@ public class SnookerScreen  extends FrameBufferScreen{
                     //执行代码
                 //推动白球
 
+                if(balls[15].isActive())
+                { return;}
+
+
+
+
+
+
                 //获取当前白球位置
                 //从物理世界中山地的位置。
                 Transform transform =  balls[15].getMotionState().getWorldTransform(new Transform());
@@ -218,7 +237,27 @@ public class SnookerScreen  extends FrameBufferScreen{
 
                 direction.normalize();
 
+//                //求出棍子近白球的起点
+//                Vector3 stickStart=Vector3.create(direction.x,direction.y,direction.z).mul(BALL_RADIUS).add(ballPosition.x,ballPosition.y,ballPosition.z);
+//
+//                //计算3个轴的旋转方向。
+//               double  rx= Math.acos( direction.x);
+//                double ry=Math.acos(direction.y);
+//                double  rz= Math.acos( direction.z);
+//
+//
+//                //获取球棍当前位置
+//                  transform =  ballStick.getMotionState().getWorldTransform(transform);
+//                Vector3 position=Vector3.create(direction.x,direction.y,direction.z).mul(BALL_STICK_SIZE.x/2).add(stickStart);
+//                transform.origin.set(position.x,position.y,position.z);
+//                transform.basis.rotX(30);
+//                ballStick.setWorldTransform(transform);
 
+
+
+
+//                 Vector3.
+//
              Vector3f  newValue=   balls[15].getLinearVelocity(new Vector3f( ));
                 //计算球速度
               direction.scale(random.nextInt(10)+10);
@@ -294,9 +333,11 @@ public class SnookerScreen  extends FrameBufferScreen{
     public void resume() {
         super.resume();
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+
         viewPort.apply();
         projectInfo.setFrustum();
         camera.setCamera();
+        buffer.create();
 
         floorDrawable.bind();
         legDrawer.bind();
@@ -323,10 +364,37 @@ public class SnookerScreen  extends FrameBufferScreen{
 
 
     @Override
-    protected void onPresent(float deltaData) {
+    public void present(float deltaData) {
+
+
+
+       // viewPort.apply();
 
         //调用此方法计算产生透视投影矩阵
         projectInfo.setFrustum();
+        //绘制阴影。
+
+        //绑定绘制阴影映射的fbo
+        buffer.bind();
+
+        //将摄像机移动到光源位置。
+        MatrixState.setCamera(LightSources.lightPositionSun[0],LightSources.lightPositionSun[1],LightSources.lightPositionSun[2],0,0,0,1,0,0);
+        //绘制各物体阴影深度绘制。
+
+
+        for(int i=0;i<16;i++) {
+
+            //SnookerDraw.draw(ballDrawables[i], balls[i]  );
+        }
+
+       int  shadowBufferId=buffer.getBufferId();
+       buffer.unBind();
+        //关闭buffer;
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+
+
+
+
         camera.setCamera();
 
         //清除颜色缓存于深度缓存
@@ -356,12 +424,12 @@ public class SnookerScreen  extends FrameBufferScreen{
         //绑定球纹理
         ballTexture.bind();
 
-        for(int i=0;i<15;i++) {
+        for(int i=0;i<16;i++) {
 
-            ConcreateObject.draw(ballDrawables[i], balls[i], ballTexture.textureId);
+            SnookerDraw.draw(ballDrawables[i], balls[i], ballTexture.textureId,shadowBufferId);
         }
         //绘制白色球
-        ConcreateObject.draw(ballDrawables[15], balls[15], ballTexture.textureId);
+
     }
 
 
@@ -665,14 +733,22 @@ public class SnookerScreen  extends FrameBufferScreen{
 
         //创建box形状。
         CollisionShape stickShape = new CapsuleShape(0.1f,4);
-        RigidBody body=  BodyCreator.create(stickShape, 0, new Vector3f(0,10,0), 0.2f, 0.5f);
+        RigidBody body=  BodyCreator.create(stickShape, 1, new Vector3f(0,10,0), 0.2f, 0.5f);
         dynamicsWorld.addRigidBody(body);
+        body.forceActivationState(CollisionObject.WANTS_DEACTIVATION);
         return body;
-
 
 
     }
 
+
+    /**
+     * 绘制阴影贴图的距离缓冲。
+     */
+    public  void drawShadowBuffer()
+    {
+
+    }
 
 
 }

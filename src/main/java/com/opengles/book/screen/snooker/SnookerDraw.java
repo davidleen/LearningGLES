@@ -1,34 +1,32 @@
-package com.opengles.book.screen.cubeCollisionDemo;
+package com.opengles.book.screen.snooker;
 
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.Transform;
 import com.opengles.book.MatrixState;
-import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.math.MathUtils;
-import com.opengles.book.objects.NewAbstractSimpleObject;
-import com.opengles.book.screen.snooker.BallDrawable;
 
 import javax.vecmath.Quat4f;
 
 /**
- * 物体对象
+ * {简单描述用途}
  * Created by davidleen29   qq:67320337
- * on 2014-7-2.
+ * on 2014-7-15.
  */
-public class ConcreateObject {
+public class SnookerDraw {
 
 
 
+    public static Transform tempTransform=new Transform();
 
-   static Transform tempTransform=new Transform();
     /**
      * 绘制
      * 由物理世界的模型 获取该物体的位置参数
      * 通过矩阵转移
      * 绘制物体。
      */
-    public static void draw(ObjectDrawable drawable,
-                     RigidBody body//物理世界模型
+    public static void draw(BallDrawable drawable,
+                            RigidBody body//物理世界模型
+            ,int textureId,int shadowId
     )
     {
 
@@ -51,13 +49,9 @@ public class ConcreateObject {
         }
 
 
-        drawable.draw();
+        drawable.draw(textureId,shadowId);
 
         MatrixState.popMatrix();
 
     }
-
-
-
-
 }
