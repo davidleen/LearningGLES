@@ -14,7 +14,7 @@ import com.opengles.book.glsl.UniformMatrix4F;
 import java.nio.FloatBuffer;
 
 /**
- * {简单描述用途}
+ * 球体shader 类
  * Created by davidleen29   qq:67320337
  * on 2014-7-16.
  */
@@ -44,7 +44,7 @@ public class BallShader {
 
 
 
-    private Vertices vertices;
+    public Vertices vertices;
 
 
     // 总变换矩阵属性
@@ -80,10 +80,10 @@ public class BallShader {
     }
 
 
-    public void draw(float[]  vertexData,short[] indexData,int textureId,int shadowTextureId,float[] cameraViewProj) {
+    public void draw( int textureId,int shadowTextureId,float[] cameraViewProj) {
 
         MatrixState.copyMatrix(lightCameraViewProj,cameraViewProj);
-        vertices.create(vertexData,indexData);
+
         //指定使用某套shader程序
         GLES20.glUseProgram(mProgram);
 
@@ -118,7 +118,7 @@ public class BallShader {
         vertices.draw();
         vertices.unbind();
 
-        vertices.dispose();
+
     }
 
 

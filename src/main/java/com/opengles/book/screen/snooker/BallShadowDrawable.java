@@ -51,7 +51,7 @@ public class BallShadowDrawable {
 
 
     public void draw( ) {
-       shader.draw(vertexData,indexData);
+       shader.draw( );
 
 
     }
@@ -59,7 +59,15 @@ public class BallShadowDrawable {
 
 
 
+    public void bind() {
 
+        shader.vertices.create(vertexData,indexData);
+
+    }
+
+    public void unBind() {
+        shader.vertices.dispose();
+    }
 
 
 }

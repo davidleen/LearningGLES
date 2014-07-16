@@ -43,7 +43,16 @@ public class BallDrawable {
 
     public void draw( int textureId,int shadowTextureId,float[] cameraViewProj) {
 
-        ballShader.draw(vertexData,indexData,textureId,shadowTextureId,cameraViewProj);
+        ballShader.draw( textureId,shadowTextureId,cameraViewProj);
     }
 
+    public void bind() {
+
+        ballShader.vertices.create(vertexData,indexData);
+
+    }
+
+    public void unBind() {
+        ballShader.vertices.dispose();
+    }
 }

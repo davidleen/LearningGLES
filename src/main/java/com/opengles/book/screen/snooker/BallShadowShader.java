@@ -37,7 +37,7 @@ public class BallShadowShader {
     int mProgram;//自定义渲染管线程序id
 
 
-    private Vertices vertices;
+    public Vertices vertices;
 
 
     // 总变换矩阵属性
@@ -54,11 +54,10 @@ public class BallShadowShader {
 
 
 
-    public void draw(float[] vertexData,short[] indexData ) {
+    public void draw(  ) {
         //指定使用某套shader程序
         GLES20.glUseProgram(mProgram);
 
-        vertices.create(vertexData,indexData);
 
 
         //将最终变换矩阵传入shader程序
@@ -72,7 +71,7 @@ public class BallShadowShader {
         vertices.unbind();
 
 
-        vertices.dispose();
+
 
     }
 
