@@ -56,7 +56,7 @@ public class MatrixState
 		mStack.push(currentClone);
 	}
 
-	private static void copyMatrix(float[] src, float[] dest)
+	public static void copyMatrix(float[] src, float[] dest)
 	{
 
 		for (int i = 0; i < MATRIX_SIZE; i++)
@@ -88,13 +88,24 @@ public class MatrixState
 	 * 
 	 * @return
 	 */
-	private static float[] getNewMatrix()
+	public static float[] getNewMatrix()
 	{
 		float[] result = pool.newObject();
 		Matrix.setIdentityM(result, 0);
 		return result;
 
 	}
+
+    /**
+     * 生成新的矩阵 并且初始化 即设0
+     *
+     * @return
+     */
+    public static void freeMatrix(  float[] matrix)
+    {
+        pool.free(matrix);
+
+    }
 
 	public static void popMatrix()// 弹出矩阵
 	{
@@ -182,7 +193,7 @@ public class MatrixState
     	Matrix.orthoM(mProjMatrix, 0, left, right, bottom, top, near, far);
     }  
 
-	//获取具体物体的总变换矩阵
+	//获取具体物体的总变换矩阵   投影矩阵 X 摄像机矩阵 X 物体变换矩阵
 	public static float[] getFinalMatrix()
 	{
 		// mMVPMatrix ;
@@ -207,6 +218,17 @@ public class MatrixState
 
         Matrix.invertM(result,0,mVMatrix,0);
 
+    }
+
+    /**
+     * 获取摄像机投影组合矩阵。
+     */
+    public static float[] getViewProjMatrix()
+    {
+        float[] newViewProj=getNewMatrix();
+
+        Matrix.multiplyMM(newViewProj, 0, mProjMatrix, 0, mVMatrix, 0);
+        return newViewProj;
     }
 
     /**

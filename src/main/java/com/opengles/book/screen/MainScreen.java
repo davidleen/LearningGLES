@@ -17,7 +17,7 @@ import com.opengles.book.objects.MenuObject;
 import com.opengles.book.objects.MenuObject.MenuClickListner;
 import com.opengles.book.objects.RectangleObject;
 
-public class MainScreen extends FrameBufferScreen{
+public class MainScreen extends GLScreen{
 	
 	private List<MenuObject> menus;
 	 int width;
@@ -131,7 +131,8 @@ menu.setListener(new MenuClickListner() {
 	}
 
 	@Override
-	public void onPresent(float deltaTime) {
+	public void present(float deltaTime) {
+        super.present(deltaTime);
 		
 		// 清除颜色
 		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT

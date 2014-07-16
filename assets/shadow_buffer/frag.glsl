@@ -1,12 +1,10 @@
 precision mediump float;
-uniform vec3 uLightLocation;//光源位置。
+uniform    vec3 uLightLocation;//光源位置。
 //接收从顶点着色器过来的参数
 varying vec4 vPosition;
 
 void main()                         
 {    
-   //将计算出的颜色给此片元
-   vec4 finalColor=texture2D(mMapLoc, vTextureCoord);
 
 
    float dis=distance(vPosition.xyz,uLightLocation);
@@ -21,7 +19,7 @@ void main()
     float g=mod(integerPart,256.0);
 
     //放大小数部分取整
-    fragPart=floor(fragPart,1024.0);
+    fragPart=floor(fragPart*1024.0);
     float b=floor(fragPart/256.0);
     float a=mod(fragPart,256.0);
 

@@ -1,17 +1,6 @@
 package com.opengles.book.screen.snooker;
 
-import android.util.Log;
-
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-import java.util.Random;
-
-import android.util.Log;
-
-import com.opengles.book.BuildConfig;
-import com.opengles.book.FloatUtils;
 import com.opengles.book.framework.gl.TextureRegion;
-import com.opengles.book.math.Rectangle;
 
 /**
  * Created by Administrator on 2014/7/13.
@@ -37,7 +26,9 @@ public class SphereWithLimitTexture {
         public short[] indics;
         protected static final int VERTEX_POS_SIZE = 3;// xyz
         protected static final int VERTEX_NORMAL_SIZE = 3;// xyz
-        protected static final int VERTEX_TEXCOORD_SIZE = 2;// s t
+        protected static final int VERTEX_TEXTURE_SIZE = 2;// s t
+
+       public static final int VERTEX_SIZE=VERTEX_POS_SIZE+VERTEX_NORMAL_SIZE+VERTEX_TEXTURE_SIZE;
 
 
         ;
@@ -58,22 +49,22 @@ public class SphereWithLimitTexture {
 
         public SphereWithLimitTexture(float r)
         {
-            this(r, false,null
+            this(r, null
             );
         }
 
-        public SphereWithLimitTexture(float r,boolean hasNormal,TextureRegion textureRegion)
+        public SphereWithLimitTexture(float r,TextureRegion textureRegion)
         {
-            createData(r,hasNormal,textureRegion);
+            createData(r,textureRegion);
         }
 
-        public void createData(float r,boolean  hasNormal ,TextureRegion textureRegion)
+        public void createData(float r,TextureRegion textureRegion)
         {
 
             int 	stride =
                     VERTEX_POS_SIZE+
-                            (hasNormal? VERTEX_NORMAL_SIZE:0)+
-                            + VERTEX_TEXCOORD_SIZE;
+                           VERTEX_NORMAL_SIZE
+                            + VERTEX_TEXTURE_SIZE;
 
 
             float angleSpanInRadian = (float) Math.toRadians(angleSpanIndegree);
@@ -123,12 +114,11 @@ public class SphereWithLimitTexture {
                     // attributes[position++] = random.nextInt((int) r);
                     // attributes[position++] = random.nextInt((int) r);
                     // // 法向量值
-                    if(hasNormal)
-                    {
+
                         attributes[position++] = x ;
                         attributes[position++] = y ;
                         attributes[position++] =z ;
-                    }
+
                     //纹理
                     //+0.5 偏移量 使其纹理不至于在边沿上。
                     float s =   (j) * pieceofImageS+startU;

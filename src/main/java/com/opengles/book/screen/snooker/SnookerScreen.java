@@ -129,6 +129,7 @@ public class SnookerScreen  extends GLScreen{
 
     //球体绘制类。
     private BallDrawable[] ballDrawables;
+    private BallShadowDrawable[] ballShadowDrawables;
 
     private Texture  ballTexture ;
 
@@ -186,6 +187,11 @@ public class SnookerScreen  extends GLScreen{
         ballTexture=new Texture(game.getContext().getResources(),"balls.png",false);
         //桌球绘制对象。
         ballDrawables=new BallDrawable[16];
+        ballShadowDrawables=new BallShadowDrawable[16];
+
+
+        BallShader ballShader=new BallShader(game.getContext());
+        BallShadowShader ballShadowShader=new BallShadowShader(game.getContext());
         for(int i=0;i<16;i++)
         {
 
@@ -193,9 +199,9 @@ public class SnookerScreen  extends GLScreen{
             int y=i/4*(ballTexture.height/4);
 
             TextureRegion region=new TextureRegion(ballTexture,x,y,ballTexture.width/4,ballTexture.height/4);
-            ballDrawables[i]=new BallDrawable(game.getContext(),BALL_RADIUS,region);
 
-
+            ballShadowDrawables[i]=new BallShadowDrawable(BALL_RADIUS,region,ballShadowShader);
+            ballDrawables[i]=new BallDrawable( BALL_RADIUS,region,ballShader);
         }
 
 
@@ -318,7 +324,7 @@ public class SnookerScreen  extends GLScreen{
         tableLongBarDrawable.unBind();
         tableShortBarDrawable.unBind();
         for(BallDrawable ballDrawable:ballDrawables)
-        ballDrawable.unBind();
+         //ballDrawable.unBind();
 
         ballStickDrawable.unBind();
 
@@ -327,12 +333,19 @@ public class SnookerScreen  extends GLScreen{
         barCuboidTexture.dispose();
 
         ballTexture.dispose();
+
+
+        buffer.delete();
     }
 
     @Override
     public void resume() {
         super.resume();
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+
+
+        //设置光源位置。
+        LightSources.setSunLightPosition(1000,100,0);
 
         viewPort.apply();
         projectInfo.setFrustum();
@@ -344,7 +357,7 @@ public class SnookerScreen  extends GLScreen{
         tablePlanDrawable.bind();
         ballStickDrawable.bind();
         for(BallDrawable ballDrawable:ballDrawables)
-        ballDrawable.bind();
+       // ballDrawable.bind();
 
         tableLongBarDrawable.bind();
         tableShortBarDrawable.bind();
@@ -384,10 +397,12 @@ public class SnookerScreen  extends GLScreen{
 
         for(int i=0;i<16;i++) {
 
-            //SnookerDraw.draw(ballDrawables[i], balls[i]  );
+             SnookerDraw.draw(ballShadowDrawables[i], balls[i] );
         }
 
        int  shadowBufferId=buffer.getBufferId();
+        //获取以光线为摄像点的 虚拟矩阵。
+        float[] cameraViewProj=MatrixState.getViewProjMatrix();
        buffer.unBind();
         //关闭buffer;
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
@@ -426,7 +441,7 @@ public class SnookerScreen  extends GLScreen{
 
         for(int i=0;i<16;i++) {
 
-            SnookerDraw.draw(ballDrawables[i], balls[i], ballTexture.textureId,shadowBufferId);
+            SnookerDraw.draw(ballDrawables[i], balls[i], ballTexture.textureId,shadowBufferId,cameraViewProj);
         }
         //绘制白色球
 

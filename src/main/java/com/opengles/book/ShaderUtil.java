@@ -63,8 +63,8 @@ public class ShaderUtil {
 	// 创建shader程序的方法
 	public static int createProgram(String vertexSource, String fragmentSource) {
 		
-		Log.d(TAG, "vertexSource:"+vertexSource);
-		Log.d(TAG, "fragmentSource:"+fragmentSource);
+		//Log.d(TAG, "vertexSource:"+vertexSource);
+		//Log.d(TAG, "fragmentSource:"+fragmentSource);
 		
 		// 加载顶点着色器
 		int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexSource);
@@ -97,7 +97,7 @@ public class ShaderUtil {
 			// 若链接失败则报错并删除程序
 			if (linkStatus[0] != GLES20.GL_TRUE) {
 				Log.e("ES20_ERROR", "Could not link program: ");
-				Log.e("ES20_ERROR", GLES20.glGetProgramInfoLog(program));
+
 				GLES20.glDeleteProgram(program);
 				program = 0;
 			}

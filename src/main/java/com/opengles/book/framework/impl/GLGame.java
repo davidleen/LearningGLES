@@ -79,9 +79,11 @@ public abstract class GLGame extends Activity implements Game, Renderer {
 		synchronized (stateChanged) {
 			if (state == GLGameState.Initialized)
 				screen = getStartScreen();
-			state = GLGameState.Running;
-			screen.resume();
-			startTime = System.nanoTime();
+
+                state = GLGameState.Running;
+                screen.resume();
+                startTime = System.nanoTime();
+
 		}
 	}
 
