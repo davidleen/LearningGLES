@@ -28,7 +28,7 @@ void main()
     //将计算出的颜色给此片元
    vec4 finalColor=texture2D(sTexture, vTextureCoord);
     //若实际距离大于最小距离， 则在阴影中。  为修正值  根据具体情况调整， 否则会出现严重自身阴影问题。
-   bool isInshow=   s>=0.0 && s<=1.0 && t>=0.0 && t<=1.0  &&    minDis <= dis -0.3;
+   bool isInshow=   s>=0.0 && s<=1.0 && t>=0.0 && t<=1.0 && minDis>5.0  &&     minDis <= dis-2.5;
 
     if( isInshow)
     {
@@ -38,7 +38,7 @@ void main()
       }else
       {
    //给此片元颜色值
-       finalColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
+        finalColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
       }
 
     gl_FragColor =finalColor  ;

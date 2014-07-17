@@ -88,11 +88,11 @@ public class CubeBallShader {
 
         GLES20.glActiveTexture(GLES20.GL_TEXTURE_CUBE_MAP);
         cubeTexture.bind();
-
+       // GLES20.glUniform1i(textureHandler, 0);
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, shadowTextureId);
         // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
-       // GLES20.glUniform1i(textureHandler, 0);
+         GLES20.glUniform1i(shadowHandler, 0);
        // GLES20.glUniform1i(shadowHandler, 1);
 
 

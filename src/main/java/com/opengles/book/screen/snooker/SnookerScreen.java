@@ -44,7 +44,7 @@ public class SnookerScreen  extends GLScreen{
     final static float TARGET_Y=8;//目的位置Y
     final static float TARGET_Z=0;//目标的位置Z
     final static float NEAR=1;
-    final static float FAR=100;
+    final static float FAR=500;
 
     final static float BALL_RADIUS=0.25f;
 
@@ -349,15 +349,15 @@ public class SnookerScreen  extends GLScreen{
     public void resume() {
         super.resume();
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-        GLES20.glClearColor(0,0,0,1.0f);
+        GLES20.glClearColor(0,0,0,0.0f);
 
 
         //设置光源位置。
-        LightSources.setSunLightPosition(100, 100, 0);
+        LightSources.setSunLightPosition(10, 20, 0);
         // 设置 三种光线
         LightSources.setAmbient(0.15f, 0.15f, 0.15f, 1f);
-        LightSources.setDiffuse(0.8f, 0.8f, 0.8f, 1f);
-        LightSources.setSpecLight(0.8f, 0.8f, 0.8f, 1f);
+        LightSources.setDiffuse(0.25f, 0.22f, 0.25f, 1f);
+        LightSources.setSpecLight(0.6f, 0.6f, 0.6f, 1f);
 
         viewPort.apply();
         projectInfo.setFrustum();
@@ -408,11 +408,14 @@ public class SnookerScreen  extends GLScreen{
         //绘制阴影。
 
         //绑定绘制阴影映射的fbo
-        buffer.bind();
+       buffer.bind();
+
+        MatrixState.setCamera(LightSources.lightPositionSun[0],LightSources.lightPositionSun[1],LightSources.lightPositionSun[2],camera.targetX,camera.targetY,camera.targetZ,0,1,0);
+
+
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         //将摄像机移动到光源位置。
-        MatrixState.setCamera(LightSources.lightPositionSun[0],LightSources.lightPositionSun[1],LightSources.lightPositionSun[2],camera.targetX,camera.targetY,camera.targetZ,0,1,0);
-        //绘制各物体阴影深度绘制。
+       //绘制各物体阴影深度绘制。
 
 
         for(int i=0;i<16;i++) {
@@ -429,8 +432,8 @@ public class SnookerScreen  extends GLScreen{
 
 
         if(frameBuffer!=null) {
-            frameBuffer.bind();
 
+            frameBuffer.bind();
 
             camera.setCamera();
 
@@ -464,11 +467,12 @@ public class SnookerScreen  extends GLScreen{
                 SnookerDraw.draw(ballDrawables[i], balls[i], ballTexture.textureId, shadowBufferId, cameraViewProj);
             }
             //绘制白色球
-
-            //释放矩阵数据；
-            MatrixState.freeMatrix(cameraViewProj);
             frameBuffer.show();
+
+
         }
+        //释放矩阵数据；
+        MatrixState.freeMatrix(cameraViewProj);
     }
 
 

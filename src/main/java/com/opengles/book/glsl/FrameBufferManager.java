@@ -169,7 +169,7 @@ public class FrameBufferManager {
             GLES20.glDisable(GLES20.GL_CULL_FACE);
             //绘制视窗
             //清除深度缓冲
-            GLES20.glClearColor(0,0,0,1.0f);
+           // GLES20.glClearColor(0,0,0,1.0f);
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
             //调用此方法计算产生平行投影矩阵

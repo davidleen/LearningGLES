@@ -30,15 +30,15 @@ void main()
         float dis=distance(vPosition.xyz,uLightLocation);
         //将计算出的颜色给此片元
 
-       bool bigger= true ;
+       bool bigger=minDis>0.5 &&  minDis <= dis-0.5  ;
      //    &&
-      if( minDis<10.0 ) //若实际距离大于最小距离， 则在阴影中。 3.0为修正值  根据具体情况调整， 否则会出现严重自身阴影问题。
+      if( bigger) //若实际距离大于最小距离， 则在阴影中。 3.0为修正值  根据具体情况调整， 否则会出现严重自身阴影问题。
       {
        //阴影中 仅适用环境光计算
-          finalColor = finalColor*ambient*1.2;
+        finalColor = finalColor*ambient*1.2;
 
       //      finalColor=vec4(0.0,0.0,0.0,0.0);
-          // gl_FragColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
+          //   gl_FragColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
         }else
         {
      //给此片元颜色值
@@ -46,7 +46,7 @@ void main()
         }
      }else
      {
-             finalColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
+        //     finalColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
 
      }
 
