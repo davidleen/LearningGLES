@@ -5,7 +5,7 @@ import android.opengl.GLES20;
 import com.opengles.book.LightSources;
 import com.opengles.book.MatrixState;
 import com.opengles.book.ShaderUtil;
-import com.opengles.book.Vertices;
+
 import com.opengles.book.glsl.Uniform;
 import com.opengles.book.glsl.Uniform3fv;
 import com.opengles.book.glsl.Uniform4fv;
@@ -54,7 +54,7 @@ public class BallShadowShader {
 
 
 
-    public void draw(  ) {
+    public void draw(int[] bufferIds,int numElements  ) {
         //指定使用某套shader程序
         GLES20.glUseProgram(mProgram);
 
@@ -66,9 +66,9 @@ public class BallShadowShader {
         uMMatrix.bind();
 
 
-        vertices.bind();
-        vertices.draw();
-        vertices.unbind();
+
+        vertices.draw(bufferIds,numElements);
+
 
 
 

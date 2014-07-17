@@ -13,7 +13,7 @@ import java.io.InputStream;
 public class CubeTexture {
 
 	String[] fileNames;
-	int textureId;
+	public int textureId;
 	int minFilter;
 	int magFilter;
 

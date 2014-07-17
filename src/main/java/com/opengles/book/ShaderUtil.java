@@ -84,9 +84,12 @@ public class ShaderUtil {
 		if (program != 0) {
 			// 向程序中加入顶点着色器
 			GLES20.glAttachShader(program, vertexShader);
-			checkGlError("glAttachShader");
+            getLinkLogInfo(vertexShader,pixelShader);
+
 			// 向程序中加入片元着色器
 			GLES20.glAttachShader(program, pixelShader);
+
+
 			checkGlError("glAttachShader");
 			// 链接程序
 			GLES20.glLinkProgram(program);
@@ -97,7 +100,7 @@ public class ShaderUtil {
 			// 若链接失败则报错并删除程序
 			if (linkStatus[0] != GLES20.GL_TRUE) {
 				Log.e("ES20_ERROR", "Could not link program: ");
-
+                getLinkLogInfo(vertexShader,pixelShader);
 				GLES20.glDeleteProgram(program);
 				program = 0;
 			}
@@ -105,11 +108,23 @@ public class ShaderUtil {
 		return program;
 	}
 
+
+    private static void getLinkLogInfo(int vertexShader, int fragmentShader)
+    {
+
+
+       Log.e("ShaderInfo", "ShaderInfo:"+GLES20.glGetShaderInfoLog(vertexShader));
+
+        Log.e("ShaderInfo","ShaderInfo:"+ GLES20.glGetShaderInfoLog(fragmentShader));
+
+    }
+
 	// 检查每一步操作是否有错误的方法
 	public static void checkGlError(String op) {
 		int error;
 		while ((error = GLES20.glGetError()) != GLES20.GL_NO_ERROR) {
 			Log.e("ES20_ERROR", op + ": glError " + error);
+
 			throw new RuntimeException(op + ": glError " + error);
 		}
 	}

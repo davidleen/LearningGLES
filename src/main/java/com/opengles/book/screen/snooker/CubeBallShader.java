@@ -5,7 +5,7 @@ import android.opengl.GLES20;
 import com.opengles.book.LightSources;
 import com.opengles.book.MatrixState;
 import com.opengles.book.ShaderUtil;
-
+import com.opengles.book.framework.gl.CubeTexture;
 import com.opengles.book.glsl.Uniform;
 import com.opengles.book.glsl.Uniform3fv;
 import com.opengles.book.glsl.Uniform4fv;
@@ -14,18 +14,18 @@ import com.opengles.book.glsl.UniformMatrix4F;
 import java.nio.FloatBuffer;
 
 /**
- * 球体shader 类
+ *  shader 类  使用 cubeTexure
  * Created by davidleen29   qq:67320337
  * on 2014-7-16.
  */
-public class BallShader {
+public class CubeBallShader {
 
-    public BallShader(Context context) {
+    public CubeBallShader(Context context) {
 //初始化shader
         initShader(context);
 
 
-        vertices = new Vertices(new String[]{"aPosition","aNormal", "aTexCoor"}, new int[]{SphereWithLimitTexture.VERTEX_POS_SIZE,SphereWithLimitTexture.VERTEX_NORMAL_SIZE, SphereWithLimitTexture.VERTEX_TEXTURE_SIZE},SphereWithLimitTexture.VERTEX_SIZE, mProgram);
+        vertices = new Vertices(new String[]{"aPosition","aNormal" }, new int[]{SphereWithLimitTexture.VERTEX_POS_SIZE,SphereWithLimitTexture.VERTEX_NORMAL_SIZE}, mProgram);
 
 
         // this.index=index;
@@ -78,7 +78,7 @@ public class BallShader {
 
 
 
-    public void draw(int[] bufferIds,int numElement, int textureId,int shadowTextureId,float[] cameraViewProj) {
+    public void draw(int[] bufferIds,int numElement,CubeTexture cubeTexture,int shadowTextureId,float[] cameraViewProj) {
 
         MatrixState.copyMatrix(cameraViewProj,lightCameraViewProj);
 
@@ -86,14 +86,14 @@ public class BallShader {
         GLES20.glUseProgram(mProgram);
 
 
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE_CUBE_MAP);
+        cubeTexture.bind();
 
-        GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, shadowTextureId);
         // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
-        GLES20.glUniform1i(textureHandler, 0);
-        GLES20.glUniform1i(shadowHandler, 1);
+       // GLES20.glUniform1i(textureHandler, 0);
+       // GLES20.glUniform1i(shadowHandler, 1);
 
 
         //最终矩阵绑定
@@ -113,7 +113,7 @@ public class BallShader {
         specLightUniform.bind();// 反射光
         //属性绑定
 
-        vertices.draw(bufferIds,numElement);
+        vertices.draw(bufferIds, numElement);
 
 
 
@@ -127,7 +127,7 @@ public class BallShader {
         //加载顶点着色器的脚本内容
         String  mVertexShader = ShaderUtil.loadFromAssetsFile("snooker_ball/vertex.glsl", mv.getResources());
         //加载片元着色器的脚本内容
-        String    mFragmentShader = ShaderUtil.loadFromAssetsFile("snooker_ball/frag.glsl", mv.getResources());
+        String    mFragmentShader = ShaderUtil.loadFromAssetsFile("snooker_ball/frag_cube_map.glsl", mv.getResources());
         //基于顶点着色器与片元着色器创建程序
         mProgram = ShaderUtil.createProgram(mVertexShader, mFragmentShader);
 

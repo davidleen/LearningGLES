@@ -1,5 +1,5 @@
 precision mediump float;
-uniform    vec3 uLightLocation;//光源位置。
+uniform  highp  vec3 uLightLocation;//光源位置。
 //接收从顶点着色器过来的参数
 varying vec4 vPosition;
 
@@ -20,14 +20,14 @@ void main()
 
     //放大小数部分取整
     fragPart=floor(fragPart*1024.0);
-    float b=floor(fragPart/256.0);
-    float a=mod(fragPart,256.0);
+    float b=floor(fragPart/32.0);
+    float a=mod(fragPart,32.0);
 
     //压缩至0-1 间值
     r=r/256.0;
     g=g/256.0;
-    b=b/256.0;
-      a=a/256.0;
+    b=b/32.0;
+      a=a/32.0;
 
 
 

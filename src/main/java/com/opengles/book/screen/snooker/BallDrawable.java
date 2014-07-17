@@ -23,12 +23,14 @@ public class BallDrawable {
     float[] vertexData;
     short[] indexData;
     BallShader ballShader;
+    int[]  bufferIds;
 
     private void initData(float radius, TextureRegion region) {
 
         SphereWithLimitTexture sphere = new SphereWithLimitTexture(radius, region);
         vertexData = sphere.attributes;
         indexData = sphere.indics;
+
 
     }
 
@@ -37,22 +39,27 @@ public class BallDrawable {
 
         initData(radius,region);
         this.ballShader=shader;
+
     }
+
+
+
+
 
 
 
     public void draw( int textureId,int shadowTextureId,float[] cameraViewProj) {
 
-        ballShader.draw( textureId,shadowTextureId,cameraViewProj);
+        ballShader.draw( bufferIds,indexData.length,textureId,shadowTextureId,cameraViewProj);
     }
 
     public void bind() {
 
-        ballShader.vertices.create(vertexData,indexData);
+        bufferIds=   ballShader.vertices.create(vertexData,indexData);
 
     }
 
     public void unBind() {
-        ballShader.vertices.dispose();
+        ballShader.vertices.dispose(bufferIds);
     }
 }

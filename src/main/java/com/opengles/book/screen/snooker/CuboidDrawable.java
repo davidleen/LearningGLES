@@ -10,36 +10,46 @@ import com.opengles.book.objects.CubeDrawer;
  * Created by davidleen29   qq:67320337
  * on 2014-7-9.
  */
-public class CuboidDrawable extends CubeDrawer implements ObjectDrawable {
+public class CuboidDrawable   {
 
 
     CubeTexture cubeTexture;
-    public CuboidDrawable(Context context, float xLength, float yLength, float zLength,CubeTexture texture) {
-        super(context, xLength, yLength, zLength);
+    CubeBallShader shader;
+
+    float[] vertexData;
+    short[] indexData;
+    int numElements;
+    int[] bufferIds;
+
+    public CuboidDrawable(  float xLength, float yLength, float zLength,CubeTexture texture, CubeBallShader shader
+    ) {
+        CuboidWithCubeTexture   cuboidWithCubeTexture=new CuboidWithCubeTexture(xLength,yLength,zLength);
+        vertexData=cuboidWithCubeTexture.vertexData;
+        indexData=cuboidWithCubeTexture.indexData;
+        numElements=indexData.length;
         this.cubeTexture=texture;
+        this.shader=shader;
 
     }
 
 
-    @Override
+
     public void bind() {
-        super.bind();
-        cubeTexture.reload();
+
+        bufferIds=shader.vertices.create(vertexData,indexData);
     }
 
-    @Override
+
     public void unBind() {
-        super.unBind();
-        cubeTexture.dispose();
+        shader.vertices.dispose(bufferIds);
+
+    }
+
+
+    public void draw( int shadowTextureId,float[] cameraViewProj) {
+        shader.draw(bufferIds,numElements,cubeTexture, shadowTextureId,  cameraViewProj);
     }
 
 
-    public void draw( ) {
-        super.draw(cubeTexture);
-    }
 
-    @Override
-    public void update(float deltaTime) {
-
-    }
 }

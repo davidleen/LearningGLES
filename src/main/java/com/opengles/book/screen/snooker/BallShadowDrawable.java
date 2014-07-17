@@ -23,7 +23,7 @@ public class BallShadowDrawable {
 
     float[] vertexData;
     short[] indexData;
-
+   int[] bufferIds;
     private BallShadowShader shader;
 
 
@@ -51,7 +51,7 @@ public class BallShadowDrawable {
 
 
     public void draw( ) {
-       shader.draw( );
+       shader.draw(bufferIds,indexData.length );
 
 
     }
@@ -61,12 +61,12 @@ public class BallShadowDrawable {
 
     public void bind() {
 
-        shader.vertices.create(vertexData,indexData);
+     bufferIds=   shader.vertices.create(vertexData,indexData);
 
     }
 
     public void unBind() {
-        shader.vertices.dispose();
+        shader.vertices.dispose(bufferIds);
     }
 
 

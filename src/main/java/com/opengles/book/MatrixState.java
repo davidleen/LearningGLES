@@ -223,12 +223,12 @@ public class MatrixState
     /**
      * 获取摄像机投影组合矩阵。
      */
-    public static float[] getViewProjMatrix()
+    public static void
+    getViewProjMatrix(float[] newViewProj )
     {
-        float[] newViewProj=getNewMatrix();
 
         Matrix.multiplyMM(newViewProj, 0, mProjMatrix, 0, mVMatrix, 0);
-        return newViewProj;
+
     }
 
     /**

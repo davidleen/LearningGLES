@@ -49,9 +49,9 @@ public class ShadowFrameBuffer {
 
     }
 
-    public int getBufferId()
+    public int getTextureBufferId()
     {
-        return bufferId[frameIdIndex];
+        return bufferId[textureIdIndex];
     }
 
     public void create()

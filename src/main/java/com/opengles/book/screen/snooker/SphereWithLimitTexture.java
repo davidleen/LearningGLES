@@ -3,7 +3,7 @@ package com.opengles.book.screen.snooker;
 import com.opengles.book.framework.gl.TextureRegion;
 
 /**
- * Created by Administrator on 2014/7/13.
+ * 球体  顶点 构造类。
  */
 public class SphereWithLimitTexture {
 
