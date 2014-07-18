@@ -21,17 +21,25 @@ public class CuboidDrawable   {
     int numElements;
     int[] bufferIds;
 
-    public CuboidDrawable(  float xLength, float yLength, float zLength,CubeTexture texture, CubeBallShader shader
+//    public CuboidDrawable(  float xLength, float yLength, float zLength,CubeTexture texture, CubeBallShader shader
+//    ) {
+//        CuboidWithCubeTexture   cuboidWithCubeTexture=new CuboidWithCubeTexture(xLength,yLength,zLength);
+//        vertexData=cuboidWithCubeTexture.vertexData;
+//        indexData=cuboidWithCubeTexture.indexData;
+//        numElements=indexData.length;
+//        this.cubeTexture=texture;
+//        this.shader=shader;
+//
+//    }
+    public CuboidDrawable(  float[] vertexData, short[] indexData, CubeTexture texture, CubeBallShader shader
     ) {
-        CuboidWithCubeTexture   cuboidWithCubeTexture=new CuboidWithCubeTexture(xLength,yLength,zLength);
-        vertexData=cuboidWithCubeTexture.vertexData;
-        indexData=cuboidWithCubeTexture.indexData;
+      this.vertexData=vertexData;
+        this.indexData=indexData;
         numElements=indexData.length;
         this.cubeTexture=texture;
         this.shader=shader;
 
     }
-
 
 
     public void bind() {

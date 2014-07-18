@@ -120,7 +120,8 @@ public class SnookerScreen  extends GLScreen{
 
     //球体绘制类。
     private BallDrawable[] ballDrawables;
-    private BallShadowDrawable[] ballShadowDrawables;
+    private ShadowDrawable[] ballShadowDrawables;
+    private ShadowDrawable tablePlanShadowDrawable;
 
     private Texture  ballTexture ;
 
@@ -166,7 +167,7 @@ public class SnookerScreen  extends GLScreen{
 
 
 
-        ballShadowDrawables=new BallShadowDrawable[16];
+        ballShadowDrawables=new ShadowDrawable[16];
         //桌球绘制对象。
         ballDrawables=new BallDrawable[16];
 
@@ -180,10 +181,14 @@ public class SnookerScreen  extends GLScreen{
             int y=i/4*(ballTexture.height/4);
 
             TextureRegion region=new TextureRegion(ballTexture,x,y,ballTexture.width/4,ballTexture.height/4);
-
-            ballShadowDrawables[i]=new BallShadowDrawable(BALL_RADIUS,region,ballShadowShader);
+            SphereWithLimitTexture sphere = new SphereWithLimitTexture(BALL_RADIUS,  region);
+            ballShadowDrawables[i]=new ShadowDrawable(sphere.attributes,sphere.indics,ballShadowShader);
             ballDrawables[i]=new BallDrawable( BALL_RADIUS,region,ballShader);
         }
+        BallShadowShader cubeShadowShader=new BallShadowShader(game.getContext(),SphereWithLimitTexture.VERTEX_POS_SIZE+SphereWithLimitTexture.VERTEX_NORMAL_SIZE);
+        //桌面对象3D纹理
+        CuboidWithCubeTexture      data=new CuboidWithCubeTexture(TABLE_SIZE.x,TABLE_SIZE.y,TABLE_SIZE.z);
+        tablePlanShadowDrawable=new ShadowDrawable(data.vertexData,data.indexData,cubeShadowShader);
 
 
         buffer=new ShadowFrameBuffer(viewPort);
@@ -199,15 +204,19 @@ public class SnookerScreen  extends GLScreen{
         barCuboidTexture=new CubeTexture(game.getContext().getResources(),"crystalball/water.png");
         planeCuboidTexture=new CubeTexture(game.getContext().getResources(),"teapot.png");
         CubeBallShader shader=new CubeBallShader(game.getContext());
+
+
+        tablePlanDrawable=new CuboidDrawable(data.vertexData,data.indexData ,planeCuboidTexture,shader);
         //桌腿绘制对象
-        legDrawer =new CuboidDrawable( tableLegSize.x,tableLegSize.y,tableLegSize.z,legCuboidTexture,shader);
-        //桌面对象3D纹理
-        tablePlanDrawable=new CuboidDrawable( TABLE_SIZE.x,TABLE_SIZE.y,TABLE_SIZE.z,planeCuboidTexture,shader);
+            data=new CuboidWithCubeTexture(tableLegSize.x,tableLegSize.y,tableLegSize.z);
+        legDrawer =new CuboidDrawable( data.vertexData,data.indexData,legCuboidTexture,shader);
 
-        tableLongBarDrawable=new CuboidDrawable( LONG_BAR_SIZE.x,LONG_BAR_SIZE.y,LONG_BAR_SIZE.z,barCuboidTexture,shader);
-        tableShortBarDrawable=new CuboidDrawable( SHORT_BAR_SIZE.x,SHORT_BAR_SIZE.y,SHORT_BAR_SIZE.z,barCuboidTexture,shader);
-
-        ballStickDrawable=new CuboidDrawable( BALL_STICK_SIZE.x,BALL_STICK_SIZE.y,BALL_STICK_SIZE.z,legCuboidTexture,shader);
+        data=new CuboidWithCubeTexture(LONG_BAR_SIZE.x,LONG_BAR_SIZE.y,LONG_BAR_SIZE.z);
+        tableLongBarDrawable=new CuboidDrawable(data.vertexData,data.indexData  ,barCuboidTexture,shader);
+        data=new CuboidWithCubeTexture(SHORT_BAR_SIZE.x,SHORT_BAR_SIZE.y,SHORT_BAR_SIZE.z);
+        tableShortBarDrawable=new CuboidDrawable(data.vertexData,data.indexData ,barCuboidTexture,shader);
+        data=new CuboidWithCubeTexture(BALL_STICK_SIZE.x,BALL_STICK_SIZE.y,BALL_STICK_SIZE.z);
+        ballStickDrawable=new CuboidDrawable(data.vertexData,data.indexData ,legCuboidTexture,shader);
 //
 
 
@@ -330,8 +339,10 @@ public class SnookerScreen  extends GLScreen{
         tableShortBarDrawable.unBind();
         for(BallDrawable ballDrawable:ballDrawables)
          ballDrawable.unBind();
-        for(BallShadowDrawable ballDrawable:ballShadowDrawables)
+        for(ShadowDrawable ballDrawable:ballShadowDrawables)
             ballDrawable.unBind();
+
+        tablePlanShadowDrawable.unBind();
         ballStickDrawable.unBind();
 
         legCuboidTexture.dispose();
@@ -353,11 +364,11 @@ public class SnookerScreen  extends GLScreen{
 
 
         //设置光源位置。
-        LightSources.setSunLightPosition(10, 20, 0);
+        LightSources.setSunLightPosition(30, 20, 0);
         // 设置 三种光线
-        LightSources.setAmbient(0.15f, 0.15f, 0.15f, 1f);
-        LightSources.setDiffuse(0.25f, 0.22f, 0.25f, 1f);
-        LightSources.setSpecLight(0.6f, 0.6f, 0.6f, 1f);
+        LightSources.setAmbient(0.6f, 0.6f, 0.6f, 1f);
+        LightSources.setDiffuse(0.5f, 0.5f, 0.5f, 1f);
+        LightSources.setSpecLight(0.3f, 0.3f, 0.3f, 1f);
 
         viewPort.apply();
         projectInfo.setFrustum();
@@ -376,8 +387,9 @@ public class SnookerScreen  extends GLScreen{
         ballStickDrawable.bind();
         for(BallDrawable ballDrawable:ballDrawables)
         ballDrawable.bind();
-        for(BallShadowDrawable ballDrawable:ballShadowDrawables)
+        for(ShadowDrawable ballDrawable:ballShadowDrawables)
             ballDrawable.bind();
+        tablePlanShadowDrawable.bind();
 
         tableLongBarDrawable.bind();
         tableShortBarDrawable.bind();
@@ -406,37 +418,42 @@ public class SnookerScreen  extends GLScreen{
         //调用此方法计算产生透视投影矩阵
         projectInfo.setFrustum();
         //绘制阴影。
-
+       // GLES20.glDisable(GLES20.GL_BLEND);
         //绑定绘制阴影映射的fbo
        buffer.bind();
 
         MatrixState.setCamera(LightSources.lightPositionSun[0],LightSources.lightPositionSun[1],LightSources.lightPositionSun[2],camera.targetX,camera.targetY,camera.targetZ,0,1,0);
 
-
+        GLES20.glClearColor(1.0f,0.3f,0.3f,1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         //将摄像机移动到光源位置。
        //绘制各物体阴影深度绘制。
 
 
-        for(int i=0;i<16;i++) {
+//        for(int i=0;i<16;i++) {
+//
+//             SnookerDraw.draw(ballShadowDrawables[i], balls[i] );
+//        }
 
-             SnookerDraw.draw(ballShadowDrawables[i], balls[i] );
-        }
-
+        //绘制桌面
+        SnookerDraw.draw(tablePlanShadowDrawable, tablePlane );
+        buffer.unBind();
        int  shadowBufferId=buffer.getTextureBufferId();
         //获取以光线为摄像点的 虚拟矩阵。
         //申请矩阵数据
         float[]cameraViewProj=MatrixState.getNewMatrix();
         MatrixState.getViewProjMatrix(cameraViewProj);
-       buffer.unBind();
 
 
-        if(frameBuffer!=null) {
 
-            frameBuffer.bind();
+         if(frameBuffer!=null) {
+
+             frameBuffer.bind();
 
             camera.setCamera();
 
+
+             GLES20.glClearColor(0f,00f,00f,0f);
             //清除颜色缓存于深度缓存
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
@@ -466,11 +483,11 @@ public class SnookerScreen  extends GLScreen{
 
                 SnookerDraw.draw(ballDrawables[i], balls[i], ballTexture.textureId, shadowBufferId, cameraViewProj);
             }
-            //绘制白色球
-            frameBuffer.show();
+
+             frameBuffer.show();
 
 
-        }
+       }
         //释放矩阵数据；
         MatrixState.freeMatrix(cameraViewProj);
     }

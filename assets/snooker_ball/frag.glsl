@@ -8,7 +8,7 @@ varying vec4 ambient;
 varying vec4 diffuse;
 varying vec4 specular;
 varying vec2 vTextureCoord;
-varying vec4 vPosition;
+varying  vec4 vPosition;
 
 void main()                         
 {
@@ -21,26 +21,36 @@ void main()
 //将坐标转换为纹理坐标
      float s=(positionOnLightCamera.s+1.0)/2.0;
      float t=(positionOnLightCamera.t+1.0)/2.0;
+     vec4 finalColor=texture2D(sTexture, vTextureCoord);
+     if( s>=0.0 && s<=1.0 && t>=0.0 && t<=1.0)
+     {
 
     vec4 depth4=texture2D(shadowTexture,vec2(s,t));
     float minDis=depth4.r*256.0*256.0+depth4.g*256.0+depth4.b+depth4.a/32.0;
     float dis=distance(vPosition.xyz,uLightLocation);
     //将计算出的颜色给此片元
-   vec4 finalColor=texture2D(sTexture, vTextureCoord);
+
     //若实际距离大于最小距离， 则在阴影中。  为修正值  根据具体情况调整， 否则会出现严重自身阴影问题。
-   bool isInshow=   s>=0.0 && s<=1.0 && t>=0.0 && t<=1.0 && minDis>5.0  &&     minDis <= dis-2.5;
+   bool isInshow=        minDis <= dis-0.25 ;
 
     if( isInshow)
     {
          //阴影中 仅适用环境光计算
-          finalColor = finalColor*ambient*1.2;
+        //      finalColor = finalColor*ambient*1.2;
+           finalColor=vec4(0.0,0.0,0.0,0.0);
         // gl_FragColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
       }else
       {
    //给此片元颜色值
-        finalColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
+       finalColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
       }
+      }
+    else
+    {
 
+
+     finalColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
+    }
     gl_FragColor =finalColor  ;
   //gl_FragColor=finalColor*ambient+finalColor*specular+finalColor*diffuse;
 

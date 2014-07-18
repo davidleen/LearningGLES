@@ -22,15 +22,25 @@ public class BallShadowShader {
 
     public BallShadowShader(Context context) {
 //初始化shader
-        initShader(context);
 
-        vertices = new Vertices(new String[]{"aPosition" }, new int[]{SphereWithLimitTexture.VERTEX_POS_SIZE},SphereWithLimitTexture.VERTEX_SIZE, mProgram);
+
+
+
+
+        this(context,SphereWithLimitTexture.VERTEX_SIZE);
+
+    }
+
+
+
+    public BallShadowShader(Context context,int vertexSize) {
+        initShader(context);
+        vertices = new Vertices(new String[]{"aPosition" }, new int[]{SphereWithLimitTexture.VERTEX_POS_SIZE},vertexSize, mProgram);
 
 
 
 
     }
-
 
 
 

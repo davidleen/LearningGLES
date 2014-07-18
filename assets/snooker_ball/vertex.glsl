@@ -14,7 +14,7 @@ varying vec4 ambient;
 varying vec4 diffuse;
 varying vec4 specular;
 varying vec2 vTextureCoord;
-varying vec4 vPosition;
+varying  vec4 vPosition;
 //定位光光照计算的方法
 void pointLight(					//定位光光照计算的方法
   in vec3 normal,				//法向量

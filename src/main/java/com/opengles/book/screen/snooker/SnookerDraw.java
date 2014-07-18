@@ -3,7 +3,6 @@ package com.opengles.book.screen.snooker;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.Transform;
 import com.opengles.book.MatrixState;
-import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.math.MathUtils;
 
 import javax.vecmath.Quat4f;
@@ -63,7 +62,7 @@ public class SnookerDraw {
      * 通过矩阵转移
      * 绘制物体。
      */
-    public static void draw(BallShadowDrawable drawable,
+    public static void draw(ShadowDrawable drawable,
                             RigidBody body//物理世界模型
 
     )

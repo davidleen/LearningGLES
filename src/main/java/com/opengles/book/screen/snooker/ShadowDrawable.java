@@ -18,7 +18,7 @@ import java.nio.FloatBuffer;
  *
  * @author davidleen29
  */
-public class BallShadowDrawable {
+public class ShadowDrawable {
 
 
     float[] vertexData;
@@ -28,24 +28,17 @@ public class BallShadowDrawable {
 
 
 
-    public BallShadowDrawable( float radius, TextureRegion region,BallShadowShader shader) {
-
-        initData(radius, region);
-        this.shader=shader;
 
 
 
-
+    public ShadowDrawable(float[] vertexData,short[] indexData,BallShadowShader shader)
+    {
+        this.vertexData=vertexData;
+        this.indexData=indexData;
+        this.shader=shader                ;
     }
 
 
-    private void initData(float radius, TextureRegion region) {
-
-        SphereWithLimitTexture sphere = new SphereWithLimitTexture(radius,  region);
-        vertexData = sphere.attributes;
-        indexData = sphere.indics;
-
-    }
 
 
 

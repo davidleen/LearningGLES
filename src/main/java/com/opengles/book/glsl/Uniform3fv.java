@@ -22,7 +22,10 @@ public   class Uniform3fv extends FloatBufferUniform {
     @Override
     protected void doBind(int uniformHandler, UniformBinder<FloatBuffer> binder) {
 
+
+
          GLES20.glUniform3fv(uniformHandler, 1, binder.getBindValue());
+
 
     }
 }

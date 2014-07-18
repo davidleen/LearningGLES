@@ -1,6 +1,6 @@
 precision mediump float;
 uniform  highp mat4 uLightMVPMatrix; //总变换矩阵(对于光源位置的矩阵。)
-uniform samplerCube sTexture;//纹理内容数据
+ uniform samplerCube sTexture;//纹理内容数据
 uniform sampler2D shadowTexture;//阴影纹理映射贴图。
 //接收从顶点着色器过来的参数
 uniform highp vec3 uLightLocation;	//光源位置
@@ -21,23 +21,24 @@ void main()
 //将坐标转换为纹理坐标
      float s=(positionOnLightCamera.s+1.0)/2.0;
      float t=(positionOnLightCamera.t+1.0)/2.0;
-     vec4 finalColor=textureCube(sTexture, vPosition.xyz);
+    vec4 finalColor=textureCube(sTexture, vPosition.xyz);
+  //    vec4 finalColor=vec4(0.95,0.95,0.95,1.0);
    if(   s>=0.0 && s<=1.0 && t>=0.0 && t<=1.0)
    {
 
         vec4 depth4=texture2D(shadowTexture,vec2(s,t));
-        float minDis=depth4.r*256.0*256.0+depth4.g*256.0+depth4.b+depth4.a/32.0;
+        float minDis= depth4.r*256.0*256.0+depth4.g*256.0+depth4.b+depth4.a/32.0;
         float dis=distance(vPosition.xyz,uLightLocation);
         //将计算出的颜色给此片元
 
-       bool bigger=minDis>0.5 &&  minDis <= dis-0.5  ;
+       bool isInShadow=minDis<dis-3.0 ;
      //    &&
-      if( bigger) //若实际距离大于最小距离， 则在阴影中。 3.0为修正值  根据具体情况调整， 否则会出现严重自身阴影问题。
+      if( isInShadow) //若实际距离大于最小距离， 则在阴影中。 3.0为修正值  根据具体情况调整， 否则会出现严重自身阴影问题。
       {
        //阴影中 仅适用环境光计算
-        finalColor = finalColor*ambient*1.2;
+         //   finalColor = finalColor*ambient*1.2;
 
-      //      finalColor=vec4(0.0,0.0,0.0,0.0);
+        finalColor=vec4(0.0,0.0,0.0,1.0);
           //   gl_FragColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
         }else
         {
@@ -46,7 +47,7 @@ void main()
         }
      }else
      {
-        //     finalColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
+         finalColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
 
      }
 

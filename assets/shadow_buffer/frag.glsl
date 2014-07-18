@@ -1,18 +1,28 @@
 precision mediump float;
-uniform  highp  vec3 uLightLocation;//光源位置。
+uniform    vec3 uLightLocation;//光源位置。
 //接收从顶点着色器过来的参数
-varying vec4 vPosition;
+varying  vec4 vPosition;
 
 void main()                         
 {    
 
 
    float dis=distance(vPosition.xyz,uLightLocation);
+
+
+    if(uLightLocation.y>19.1)
+    {
+    gl_FragColor = vec4(1.0,0.1,0.0,0.0);
+    }else
+    {
+
    //将距离转换成颜色值  转成纹理图
    //整数部分
     float integerPart=floor(dis);
     //小数部分
     float fragPart=fract(dis);
+
+
 
 
     float r=floor(integerPart/256.0);
@@ -33,5 +43,7 @@ void main()
 
    // 片元颜色值
    gl_FragColor = vec4(r,g,b,a);
-//gl_FragColor = vec4(1.0,1.0,1.0,1.0);
+ // gl_FragColor = vec4(1.0,0.1,0.0,0.0);
+
+}
 }   

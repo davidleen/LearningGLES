@@ -84,7 +84,7 @@ public class ShaderUtil {
 		if (program != 0) {
 			// 向程序中加入顶点着色器
 			GLES20.glAttachShader(program, vertexShader);
-            getLinkLogInfo(vertexShader,pixelShader);
+           // getLinkLogInfo(vertexShader,pixelShader);
 
 			// 向程序中加入片元着色器
 			GLES20.glAttachShader(program, pixelShader);
