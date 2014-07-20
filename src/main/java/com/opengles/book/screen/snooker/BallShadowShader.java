@@ -6,10 +6,7 @@ import com.opengles.book.LightSources;
 import com.opengles.book.MatrixState;
 import com.opengles.book.ShaderUtil;
 
-import com.opengles.book.glsl.Uniform;
-import com.opengles.book.glsl.Uniform3fv;
-import com.opengles.book.glsl.Uniform4fv;
-import com.opengles.book.glsl.UniformMatrix4F;
+import com.opengles.book.glsl.*;
 
 import java.nio.FloatBuffer;
 
@@ -54,7 +51,7 @@ public class BallShadowShader {
     private UniformMatrix4F finalMatrix;
     private UniformMatrix4F uMMatrix;
 
-    private Uniform3fv uLightLocationUniform;
+    private Uniform3fv_Float uLightLocationUniform;
 
 
 
@@ -105,12 +102,6 @@ public class BallShadowShader {
             }
         });
 
-        uLightLocationUniform = new Uniform3fv(mProgram, " uLightLocation", new Uniform.UniformBinder<FloatBuffer>() {
-            @Override
-            public FloatBuffer getBindValue() {
-                return LightSources.lightPositionFBSun;
-            }
-        });
 
 
         uMMatrix = new UniformMatrix4F(mProgram, "uMMatrix", new Uniform.UniformBinder<float[]>() {
@@ -122,6 +113,15 @@ public class BallShadowShader {
             }
         });
 
+
+
+
+        uLightLocationUniform = new Uniform3fv_Float(mProgram, "uLightLocation", new Uniform.UniformBinder<float[]>() {
+            @Override
+            public float[] getBindValue() {
+                return LightSources.lightPositionSun;
+            }
+        });
 
 
     }

@@ -17,6 +17,8 @@ public  abstract class Uniform<T> {
     public Uniform(int mProgram, String uniformName,UniformBinder<T> binder)
     {
         uniformHandler= GLES20.glGetUniformLocation(mProgram,uniformName);
+        if(uniformHandler==-1)
+            throw new RuntimeException("can not find uniform :"+ uniformName+" in programe :"+mProgram);
         this.binder=binder;
         notifyChanged();
     }

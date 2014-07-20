@@ -172,8 +172,9 @@ public class SnookerScreen  extends GLScreen{
         ballDrawables=new BallDrawable[16];
 
 
-        BallShadowShader ballShadowShader=new BallShadowShader(game.getContext());
+        CubeBallShader shader=new CubeBallShader(game.getContext());
         BallShader ballShader=new BallShader(game.getContext());
+        BallShadowShader ballShadowShader=new BallShadowShader(game.getContext());
         for(int i=0;i<16;i++)
         {
 
@@ -203,7 +204,7 @@ public class SnookerScreen  extends GLScreen{
         legCuboidTexture=new CubeTexture(game.getContext().getResources(),"crystalball/blue.png");
         barCuboidTexture=new CubeTexture(game.getContext().getResources(),"crystalball/water.png");
         planeCuboidTexture=new CubeTexture(game.getContext().getResources(),"teapot.png");
-        CubeBallShader shader=new CubeBallShader(game.getContext());
+
 
 
         tablePlanDrawable=new CuboidDrawable(data.vertexData,data.indexData ,planeCuboidTexture,shader);
@@ -366,9 +367,9 @@ public class SnookerScreen  extends GLScreen{
         //设置光源位置。
         LightSources.setSunLightPosition(30, 20, 0);
         // 设置 三种光线
-        LightSources.setAmbient(0.6f, 0.6f, 0.6f, 1f);
-        LightSources.setDiffuse(0.5f, 0.5f, 0.5f, 1f);
-        LightSources.setSpecLight(0.3f, 0.3f, 0.3f, 1f);
+        LightSources.setAmbient(0.1f, 0.1f, 0.1f, 1f);
+        LightSources.setDiffuse(0.3f, 0.3f, 0.3f, 1f);
+        LightSources.setSpecLight(0.6f, 0.6f, 0.6f, 1f);
 
         viewPort.apply();
         projectInfo.setFrustum();

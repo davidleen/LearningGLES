@@ -126,7 +126,7 @@ public class ObjObject implements ObjectDrawable {
                 return MatrixState.getMMatrix();
             }
         });
-        cameraUniform=new Uniform3fv(mProgram,"cameraPosition",new Uniform.UniformBinder<FloatBuffer>() {
+        cameraUniform=new Uniform3fv(mProgram,"uCamera",new Uniform.UniformBinder<FloatBuffer>() {
             @Override
             public FloatBuffer getBindValue() {
                 return MatrixState.cameraFB;
