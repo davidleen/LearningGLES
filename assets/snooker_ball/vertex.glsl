@@ -36,7 +36,7 @@ void pointLight(					//定位光光照计算的方法
   vec3 vp= normalize(lightLocation-(uMMatrix*vec4(aPosition,1)).xyz);  
   vp=normalize(vp);//格式化vp
   vec3 halfVector=normalize(vp+eye);	//求视线与光线的半向量    
-  float shininess=1.0;				//粗糙度，越小越光滑
+  float shininess=5.0;				//粗糙度，越小越光滑
   float nDotViewPosition=max(0.0,dot(newNormal,vp)); 	//求法向量与vp的点积与0的最大值
   diffuse=lightDiffuse*nDotViewPosition;				//计算散射光的最终强度
   float nDotViewHalfVector=dot(newNormal,halfVector);	//法线与半向量的点积 

@@ -31,14 +31,14 @@ void main()
     //将计算出的颜色给此片元
 
     //若实际距离大于最小距离， 则在阴影中。  为修正值  根据具体情况调整， 否则会出现严重自身阴影问题。
-   bool isInshow=        minDis <= dis-1.0 ;
+   bool isInshow= minDis>1.0 &&    minDis <= dis-0.5;
 
     if( isInshow)
     {
          //阴影中 仅适用环境光计算
-              finalColor = finalColor*ambient*1.2;
-      //     finalColor=vec4(0.0,0.0,0.0,0.0);
-        // gl_FragColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
+          //   finalColor = finalColor*ambient*1.2;
+   finalColor =vec4(1.0,0.0,0.0,1.0);
+
       }else
       {
    //给此片元颜色值
@@ -52,6 +52,6 @@ void main()
      finalColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
     }
     gl_FragColor =finalColor  ;
-  //gl_FragColor=finalColor*ambient+finalColor*specular+finalColor*diffuse;
+
 
 }

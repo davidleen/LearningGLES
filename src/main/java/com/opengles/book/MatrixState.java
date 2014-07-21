@@ -24,7 +24,6 @@ public class MatrixState
 
 	public static final int MATRIX_SIZE = 16;
 	static PoolObjectFactory<float[]> factory = new PoolObjectFactory<float[]>() {
-
 		@Override
 		public float[] createObject() {
 

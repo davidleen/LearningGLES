@@ -68,7 +68,9 @@ public class SnookerScreen  extends GLScreen{
     Vector3 BALL_STICK_SIZE=Vector3.create(6,0.1f,0.1f);
 
     private ProjectInfo projectInfo;
+    private ProjectInfo shadowProject;
     private Camera3D camera;
+    private Camera3D shadowCamera;
     private ViewPort viewPort;
     //地板类绘制。
     private FloorDrawable floorDrawable;
@@ -147,6 +149,7 @@ public class SnookerScreen  extends GLScreen{
         //计算透视投影的比例
         float  ratio = (float) width / height;
         projectInfo=new ProjectInfo(-ratio, ratio, -1, 1, NEAR, FAR);
+
         camera=new Camera3D( EYE_X,   //人眼位置的X
                 EYE_Y, 	//人眼位置的Y
                 EYE_Z,   //人眼位置的Z
@@ -156,6 +159,9 @@ public class SnookerScreen  extends GLScreen{
                 0,
                 20,
                 0);
+
+
+
         cameraHelper=new CameraHelper(camera,new AABB3(Vector3.create(-TABLE_SIZE.x/2-2, tableLegSize.y*1.5f,-TABLE_SIZE.z/2-2),Vector3.create(TABLE_SIZE.x/2+2,tableLegSize.y*2,TABLE_SIZE.z/2+2)));
         dynamicsWorld= generateDynamicsWorld();
 
@@ -364,12 +370,32 @@ public class SnookerScreen  extends GLScreen{
         GLES20.glClearColor(0,0,0,0.0f);
 
 
+
+        float lightX=camera.eyeX;float lightY=camera.eyeY;float lightZ=camera.eyeZ;
         //设置光源位置。
-        LightSources.setSunLightPosition(30, 20, 0);
+        LightSources.setSunLightPosition(lightX, lightY, lightZ);
         // 设置 三种光线
-        LightSources.setAmbient(0.1f, 0.1f, 0.1f, 1f);
+        LightSources.setAmbient(0.3f, 0.3f, 0.3f, 1f);
         LightSources.setDiffuse(0.3f, 0.3f, 0.3f, 1f);
         LightSources.setSpecLight(0.6f, 0.6f, 0.6f, 1f);
+
+
+
+        //投影映射的视图。
+        shadowProject=new ProjectInfo(projectInfo.left, projectInfo.right, projectInfo.bottom, projectInfo.top, projectInfo.near,  projectInfo.far);
+        //映射的camera
+        shadowCamera=new Camera3D( lightX,   //人眼位置的X
+                lightY, 	//人眼位置的Y
+                lightZ,   //人眼位置的Z
+                TARGET_X, 	//人眼球看的点X
+                TARGET_Y,   //人眼球看的点Y
+                TARGET_Z,   //人眼球看的点Z
+                0,
+                100,
+                0);
+
+
+
 
         viewPort.apply();
         projectInfo.setFrustum();
@@ -416,45 +442,49 @@ public class SnookerScreen  extends GLScreen{
 
        // viewPort.apply();
 
-        //调用此方法计算产生透视投影矩阵
-        projectInfo.setFrustum();
+
+
         //绘制阴影。
        // GLES20.glDisable(GLES20.GL_BLEND);
         //绑定绘制阴影映射的fbo
        buffer.bind();
+        //调用此方法计算产生透视投影矩阵
+        shadowProject.setFrustum();
+        shadowCamera.setCamera();
+      //  MatrixState.setCamera(LightSources.lightPositionSun[0],LightSources.lightPositionSun[1],LightSources.lightPositionSun[2],camera.targetX,camera.targetY,camera.targetZ,0,100,0);
 
-        MatrixState.setCamera(LightSources.lightPositionSun[0],LightSources.lightPositionSun[1],LightSources.lightPositionSun[2],camera.targetX,camera.targetY,camera.targetZ,0,1,0);
 
-        GLES20.glClearColor(1.0f,0.3f,0.3f,1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         //将摄像机移动到光源位置。
        //绘制各物体阴影深度绘制。
 
 
-//        for(int i=0;i<16;i++) {
-//
-//             SnookerDraw.draw(ballShadowDrawables[i], balls[i] );
-//        }
+        for(int i=0;i<16;i++) {
 
-        //绘制桌面
-        SnookerDraw.draw(tablePlanShadowDrawable, tablePlane );
-        buffer.unBind();
+          //   SnookerDraw.draw(ballShadowDrawables[i], balls[i] );
+        }
+
+//        //绘制桌面
+         SnookerDraw.draw(tablePlanShadowDrawable, tablePlane );
+
        int  shadowBufferId=buffer.getTextureBufferId();
         //获取以光线为摄像点的 虚拟矩阵。
         //申请矩阵数据
         float[]cameraViewProj=MatrixState.getNewMatrix();
         MatrixState.getViewProjMatrix(cameraViewProj);
 
+        buffer.unBind();
+
 
 
          if(frameBuffer!=null) {
 
              frameBuffer.bind();
-
             camera.setCamera();
+             //调用此方法计算产生透视投影矩阵
+             projectInfo.setFrustum();
 
 
-             GLES20.glClearColor(0f,00f,00f,0f);
             //清除颜色缓存于深度缓存
             GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
@@ -533,10 +563,6 @@ public class SnookerScreen  extends GLScreen{
      */
     public DynamicsWorld generateDynamicsWorld()
     {
-
-
-
-
         //检测配置信息对象
         CollisionConfiguration collisionConfiguration = new DefaultCollisionConfiguration();
         //算法分配对象
