@@ -109,7 +109,7 @@ public class SnookerScreen  extends GLScreen{
 
 
     //桌面类绘制。
-    private CuboidDrawable tablePlanDrawable;
+    private SnookerObjObject tablePlanDrawable;
 
     //桌面长边栏绘制
     private CuboidDrawable tableLongBarDrawable;
@@ -213,7 +213,7 @@ public class SnookerScreen  extends GLScreen{
 
 
 
-        tablePlanDrawable=new CuboidDrawable(data.vertexData,data.indexData ,planeCuboidTexture,shader);
+        tablePlanDrawable=new SnookerObjObject( game.getContext());
         //桌腿绘制对象
             data=new CuboidWithCubeTexture(tableLegSize.x,tableLegSize.y,tableLegSize.z);
         legDrawer =new CuboidDrawable( data.vertexData,data.indexData,legCuboidTexture,shader);
@@ -371,7 +371,7 @@ public class SnookerScreen  extends GLScreen{
 
 
 
-        float lightX=camera.eyeX;float lightY=camera.eyeY;float lightZ=camera.eyeZ;
+        float lightX=5;float lightY=10;float lightZ=0;
         //设置光源位置。
         LightSources.setSunLightPosition(lightX, lightY, lightZ);
         // 设置 三种光线
@@ -461,7 +461,7 @@ public class SnookerScreen  extends GLScreen{
 
         for(int i=0;i<16;i++) {
 
-             SnookerDraw.draw(ballShadowDrawables[i], balls[i] );
+        //     SnookerDraw.draw(ballShadowDrawables[i], balls[i] );
         }
 
 //        //绘制桌面

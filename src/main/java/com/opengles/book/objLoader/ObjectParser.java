@@ -220,6 +220,7 @@ public class ObjectParser {
 
 
         } catch (IOException e) {
+            e.printStackTrace();
            throw new RuntimeException("analysis error on .obj" +  path + fileName+
                    " file");
         }

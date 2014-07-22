@@ -26,7 +26,7 @@ void main()
      {
 
     vec4 depth4=texture2D(shadowTexture,vec2(s,t));
-    float minDis=depth4.r*256.0*256.0+depth4.g*256.0+depth4.b+depth4.a/32.0;
+    float minDis= depth4.r*256.0*256.0+depth4.g*256.0+depth4.b+depth4.a/32.0;
     float dis=distance(vPosition.xyz,uLightLocation);
     //将计算出的颜色给此片元
 
@@ -36,7 +36,7 @@ void main()
     if( isInshow)
     {
          //阴影中 仅适用环境光计算
-           finalColor = finalColor*ambient*1.2;
+           finalColor = finalColor*ambient;
    //  finalColor =vec4(1.0,0.0,0.0,1.0);
 
       }else

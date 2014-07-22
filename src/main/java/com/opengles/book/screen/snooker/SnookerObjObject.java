@@ -50,6 +50,9 @@ public class SnookerObjObject implements ObjectDrawable {
     //物体变换矩阵属性
     private UniformMatrix4F objectMatrix;
 
+    //摄像机虚拟mvp矩阵。
+    private UniformMatrix4F cameraMVPUniform;
+
     //相机位置属性
     private Uniform3fv cameraUniform;
     //太阳光位置属性  //光源位置。
@@ -63,6 +66,9 @@ public class SnookerObjObject implements ObjectDrawable {
 
 	Map<String, Integer> textureMap = new HashMap<String, Integer>();
 
+    float[] cameraMVP=MatrixState.getNewMatrix();
+
+    //
     private int shadowTextureId;
     private int shadowTextureHandler;
     private int objTextureHandler;
@@ -74,7 +80,7 @@ public class SnookerObjObject implements ObjectDrawable {
 
 	public SnookerObjObject(Context context)
 	{
-		this(context,"snooker_ball", "desk.obj");
+		this(context,"snooker_ball/", "desk.obj");
 	}
 
 
@@ -154,8 +160,12 @@ public class SnookerObjObject implements ObjectDrawable {
             }
         });
 
-
-
+        cameraMVPUniform =new UniformMatrix4F(mProgram,"uLightMVPMatrix",new Uniform.UniformBinder<float[]>() {
+            @Override
+            public float[] getBindValue() {
+                return cameraMVP;
+            }
+        });
         attributeWrap=new Vertices(new String[]{"aPosition","aNormal","aTexCoor"},new int[]{VERTEX_POS_SIZE,VERTEX_NORMAL_SIZE,VERTEX_TEXTURE_CORD_SIZE},mProgram);
 
 
@@ -224,7 +234,7 @@ public class SnookerObjObject implements ObjectDrawable {
         sunLocationUniform.bind();
 
 
-
+       cameraMVPUniform.bind();
 
 
 
@@ -264,6 +274,19 @@ public class SnookerObjObject implements ObjectDrawable {
 
 
 	}
+
+
+    /**
+     * \绘制方法
+     * @param shadowTextureId
+     * @param cameraMVP
+     */
+    public void draw(int shadowTextureId,float[] cameraMVP)
+    {
+        this.shadowTextureId=shadowTextureId;
+        MatrixState.copyMatrix(cameraMVP,this.cameraMVP);
+        draw();
+    }
 
 	/**
 	 * 加载纹理
@@ -354,11 +377,6 @@ public class SnookerObjObject implements ObjectDrawable {
 
 
 
-    public void draw(int shadowTextureId,float[] cameraMVP)
-    {
-
-    }
-	 
 	
 	/**
 	 * @return
