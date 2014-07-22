@@ -461,7 +461,7 @@ public class SnookerScreen  extends GLScreen{
 
         for(int i=0;i<16;i++) {
 
-          //   SnookerDraw.draw(ballShadowDrawables[i], balls[i] );
+             SnookerDraw.draw(ballShadowDrawables[i], balls[i] );
         }
 
 //        //绘制桌面
@@ -497,6 +497,8 @@ public class SnookerScreen  extends GLScreen{
 
             //绘制桌面
             SnookerDraw.draw(tablePlanDrawable, tablePlane,shadowBufferId, cameraViewProj);
+
+
 
             //绘制球棍
             SnookerDraw.draw(ballStickDrawable, ballStick,shadowBufferId, cameraViewProj);

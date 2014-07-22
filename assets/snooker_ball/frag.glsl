@@ -36,8 +36,8 @@ void main()
     if( isInshow)
     {
          //阴影中 仅适用环境光计算
-          //   finalColor = finalColor*ambient*1.2;
-   finalColor =vec4(1.0,0.0,0.0,1.0);
+           finalColor = finalColor*ambient*1.2;
+   //  finalColor =vec4(1.0,0.0,0.0,1.0);
 
       }else
       {

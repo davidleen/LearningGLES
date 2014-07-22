@@ -3,6 +3,7 @@ package com.opengles.book.screen.snooker;
 import android.opengl.GLES20;
 import com.opengles.book.FloatUtils;
 import com.opengles.book.ShaderUtil;
+import com.opengles.book.framework.exceptions.AttributeLocationNoFoundException;
 
 /**
  * a class for binding  drawing attribute in a program;
@@ -62,6 +63,10 @@ public class Vertices {
         for (int i = 0; i < attributeCount; i++) {
             attributeHandlers[i] = GLES20.glGetAttribLocation(mProgram,
                     attributeNames[i]);
+            if( attributeHandlers[i] <0)
+            {
+                throw new AttributeLocationNoFoundException(String.valueOf(mProgram),attributeNames[i]);
+            }
         }
 
 

@@ -1,26 +1,22 @@
-package com.opengles.book.objects;
+package com.opengles.book.screen.snooker;
 
 import android.content.Context;
 import android.opengl.GLES20;
-import android.util.Log;
-import com.opengles.book.*;
-import com.opengles.book.framework.gl.CubeTexture;
+import com.opengles.book.LightSources;
+import com.opengles.book.MatrixState;
+import com.opengles.book.ShaderUtil;
+import com.opengles.book.Vertices;
 import com.opengles.book.framework.gl.Texture;
 import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.glsl.Uniform;
 import com.opengles.book.glsl.Uniform3fv;
 import com.opengles.book.glsl.Uniform4fv;
 import com.opengles.book.glsl.UniformMatrix4F;
-import com.opengles.book.math.Vector3;
 import com.opengles.book.objLoader.*;
 
 import java.io.IOException;
 import java.nio.FloatBuffer;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 
@@ -28,7 +24,7 @@ import java.util.Map;
  * @create : 2014-1-7 下午9:22:33
  *         .obj 文件对象 绘制
  */
-public class ObjObject implements ObjectDrawable {
+public class SnookerObjObject implements ObjectDrawable {
 
 
 
@@ -36,11 +32,8 @@ public class ObjObject implements ObjectDrawable {
 	protected static final int VERTEX_NORMAL_SIZE = 3;// xyz
 	protected static final int VERTEX_TEXTURE_CORD_SIZE = 2;// s t
 
-//	protected static final int VERTEX_STRIP_SIZE_OF_BUFFER = (VERTEX_POS_SIZE
-//			+ VERTEX_NORMAL_SIZE
-//			+ VERTEX_TEXTURE_CORD_SIZE)
-//			* FloatUtils.RATIO_FLOATTOBYTE;
-	String TAG = ObjObject.this.getClass().getName();
+
+	String TAG = SnookerObjObject.this.getClass().getName();
 
 	int mProgram;// 着色器id
 	//int muMVPMatrixHandle;//总变换矩阵handler
@@ -70,28 +63,28 @@ public class ObjObject implements ObjectDrawable {
 
 	Map<String, Integer> textureMap = new HashMap<String, Integer>();
 
-
+    private int shadowTextureId;
+    private int shadowTextureHandler;
+    private int objTextureHandler;
 
     //顶点绘制类
     private Vertices attributeWrap;
 
     public Texture texture;
 
-	public ObjObject(Context context)
+	public SnookerObjObject(Context context)
 	{
-		this(context, "tz/", "tz.obj");
+		this(context,"snooker_ball", "desk.obj");
 	}
 
 
 
-    public ObjObject(Context context, String path, String fileName){
-
-
+    public SnookerObjObject(Context context, String path, String fileName){
 
         this( context, ObjectParser.parse(context, path, fileName));
     }
 
-    public ObjObject(Context context,ObjModel objModel )
+    public SnookerObjObject(Context context, ObjModel objModel)
 
 	{
 
@@ -162,7 +155,7 @@ public class ObjObject implements ObjectDrawable {
         });
 
 
-        
+
         attributeWrap=new Vertices(new String[]{"aPosition","aNormal","aTexCoor"},new int[]{VERTEX_POS_SIZE,VERTEX_NORMAL_SIZE,VERTEX_TEXTURE_CORD_SIZE},mProgram);
 
 
@@ -174,12 +167,12 @@ public class ObjObject implements ObjectDrawable {
 
 
 
-		
-		
+
+
 		onCreate(mProgram);
 	}
 
-	
+
 
 	@Override
 	public void bind() {
@@ -187,7 +180,7 @@ public class ObjObject implements ObjectDrawable {
 		try {
 			createTexture(context, model);
 		} catch (IOException e) {
-			 
+
 			e.printStackTrace();
 		}
 
@@ -200,8 +193,8 @@ public class ObjObject implements ObjectDrawable {
 		// 绑定固定值， 会变换的数值 在draw中绑定。
         onBind(mProgram);
 		GLES20.glUseProgram(0);
-		
-		
+
+
 
 
 	}
@@ -233,9 +226,11 @@ public class ObjObject implements ObjectDrawable {
 
 
 
-		
-		
+
+
 		onDraw(mProgram);
+
+
 
 		List<ObjModelPart> partList = model.parts;
 
@@ -250,6 +245,7 @@ public class ObjObject implements ObjectDrawable {
             //specify texture as color attachment
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getTextureId(model.path,material.textureFile));
+            GLES20.glUniform1i(objTextureHandler, 0);
 
 
 
@@ -271,11 +267,11 @@ public class ObjObject implements ObjectDrawable {
 
 	/**
 	 * 加载纹理
-	 * 
+	 *
 	 *
 	 * @param context
 	 * @param model
-	 * @throws IOException
+	 * @throws java.io.IOException
 	 */
 	public void createTexture(Context context, ObjModel model)
 			throws IOException
@@ -330,6 +326,9 @@ public class ObjObject implements ObjectDrawable {
 	protected void onBind(int mProgram)
 	{
 		//let sub class do any more  for bind;
+
+        shadowTextureHandler=GLES20.glGetUniformLocation(mProgram,"shadowTexture");
+        objTextureHandler=GLES20.glGetUniformLocation(mProgram,"sTexture");
 	}
 	
 	protected void onUnBind(int mProgram)
@@ -342,28 +341,37 @@ public class ObjObject implements ObjectDrawable {
 	
 	protected void onDraw(int mProgram)
 	{
-		//let sub class do any more  for bind to the value;
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE1);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, shadowTextureId);
+        GLES20.glUniform1i(shadowTextureHandler, 1);
 	}
 	
 	protected void onCreate(int mProgram)
 	{
 		//let sub class do any more  for get handler ;
 	}
-	
+
+
+
+
+    public void draw(int shadowTextureId,float[] cameraMVP)
+    {
+
+    }
 	 
 	
 	/**
 	 * @return
 	 */
 	protected String getFragmentFileName() {
-		return "objObject/frag.glsl";
+		return "snooker_ball/frag.glsl";
 	}
 
 	/**
 	 * @return
 	 */
 	protected String getVertexFileName() {
-		return "objObject/vertex.glsl";
+		return "snooker_ball/vertex.glsl";
 	}
 
 
@@ -375,4 +383,10 @@ public class ObjObject implements ObjectDrawable {
     public AABB getBoundary() {
         return model.boundary;
     }
+
+    public void setShadowTextureId(int textureId)
+    {
+        this.shadowTextureId =textureId;
+    }
+
 }

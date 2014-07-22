@@ -1,6 +1,7 @@
 package com.opengles.book.glsl;
 
 import android.opengl.GLES20;
+import com.opengles.book.framework.exceptions.UniformLocationNoFoundException;
 
 /**
  *
@@ -18,7 +19,7 @@ public  abstract class Uniform<T> {
     {
         uniformHandler= GLES20.glGetUniformLocation(mProgram,uniformName);
         if(uniformHandler==-1)
-            throw new RuntimeException("can not find uniform :"+ uniformName+" in programe :"+mProgram);
+            throw new UniformLocationNoFoundException( String.valueOf(mProgram), uniformName  );
         this.binder=binder;
         notifyChanged();
     }
