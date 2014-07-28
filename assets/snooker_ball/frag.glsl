@@ -31,19 +31,19 @@ void main()
     //将计算出的颜色给此片元
 
     //若实际距离大于最小距离， 则在阴影中。  为修正值  根据具体情况调整， 否则会出现严重自身阴影问题。
-   bool isInshow= minDis>1.0 &&    minDis <= dis-0.5;
+    bool isInshow= minDis>1.0 &&    minDis <= dis-0.5;
 
-    if( isInshow)
-    {
-         //阴影中 仅适用环境光计算
-           finalColor = finalColor*ambient;
-   //  finalColor =vec4(1.0,0.0,0.0,1.0);
+            if( isInshow)
+            {
+                 //阴影中 仅适用环境光计算
+                  finalColor = finalColor*ambient;
 
-      }else
-      {
-   //给此片元颜色值
-       finalColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
-      }
+
+              }else
+              {
+           //给此片元颜色值
+               finalColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
+              }
       }
     else
     {

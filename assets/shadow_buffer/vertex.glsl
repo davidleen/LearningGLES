@@ -1,7 +1,6 @@
 uniform mat4 uMVPMatrix; //总变换矩阵
 uniform mat4 uMMatrix; //变换矩阵
-
-uniform  highp vec3 uLightLocation;	//光源位置
+uniform  highp  vec3 uLightLocation;	//光源位置
 attribute vec3 aPosition;  //顶点位置
 
 //用于传递给片元着色器的变量
