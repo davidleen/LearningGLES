@@ -215,7 +215,7 @@ public class SnookerScreen  extends GLScreen{
 
         tablePlanDrawable=new SnookerObjObject( game.getContext());
         //桌腿绘制对象
-            data=new CuboidWithCubeTexture(tableLegSize.x,tableLegSize.y,tableLegSize.z);
+        data=new CuboidWithCubeTexture(tableLegSize.x,tableLegSize.y,tableLegSize.z);
         legDrawer =new CuboidDrawable( data.vertexData,data.indexData,legCuboidTexture,shader);
 
         data=new CuboidWithCubeTexture(LONG_BAR_SIZE.x,LONG_BAR_SIZE.y,LONG_BAR_SIZE.z);
@@ -224,9 +224,6 @@ public class SnookerScreen  extends GLScreen{
         tableShortBarDrawable=new CuboidDrawable(data.vertexData,data.indexData ,barCuboidTexture,shader);
         data=new CuboidWithCubeTexture(BALL_STICK_SIZE.x,BALL_STICK_SIZE.y,BALL_STICK_SIZE.z);
         ballStickDrawable=new CuboidDrawable(data.vertexData,data.indexData ,legCuboidTexture,shader);
-//
-
-
 
 
         floor=generateFloor(dynamicsWorld);
@@ -236,7 +233,6 @@ public class SnookerScreen  extends GLScreen{
         longBars=generateTableLongBar(dynamicsWorld);
         shortBars=generateTableShortBar(dynamicsWorld);
         ballStick=generateBallStick(dynamicsWorld);
-
         balls=generateSnookerBalls(dynamicsWorld);
 
         //初始化屏幕点击事件
@@ -367,7 +363,7 @@ public class SnookerScreen  extends GLScreen{
     public void resume() {
         super.resume();
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-        GLES20.glClearColor(0,0,0,0.0f);
+        GLES20.glClearColor(1,1,1,1f);
 
 
 

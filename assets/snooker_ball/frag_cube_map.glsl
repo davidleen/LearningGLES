@@ -31,7 +31,7 @@ void main()
         float dis=distance(vPosition.xyz,uLightLocation);
         //将计算出的颜色给此片元
 
-       bool isInShadow=true;// = minDis>1.0 && minDis<dis-2.0;
+       bool isInShadow=  minDis<dis-2.0;
      //    &&
       if( isInShadow) //若实际距离大于最小距离， 则在阴影中。 3.0为修正值  根据具体情况调整， 否则会出现严重自身阴影问题。
       {
