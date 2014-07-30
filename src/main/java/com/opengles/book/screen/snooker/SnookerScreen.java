@@ -382,7 +382,8 @@ public class SnookerScreen  extends GLScreen{
 
 
         //投影映射的视图。
-        shadowProject=new ProjectInfo(projectInfo.left, projectInfo.right, projectInfo.bottom, projectInfo.top, projectInfo.near,  projectInfo.far);
+      //  shadowProject=new ProjectInfo(projectInfo.left, projectInfo.right, projectInfo.bottom, projectInfo.top, projectInfo.near,  projectInfo.far);
+        shadowProject=new ProjectInfo(-2, 2, -2, 2, projectInfo.near,  projectInfo.far);
         //映射的camera
         shadowCamera=new Camera3D( lightX,   //人眼位置的X
                 lightY, 	//人眼位置的Y
@@ -449,7 +450,7 @@ public class SnookerScreen  extends GLScreen{
         //绑定绘制阴影映射的fbo
        buffer.bind();
         //调用此方法计算产生透视投影矩阵
-        shadowProject.setFrustum();
+        shadowProject.setOrtho();
         shadowCamera.setCamera();
       //  MatrixState.setCamera(LightSources.lightPositionSun[0],LightSources.lightPositionSun[1],LightSources.lightPositionSun[2],camera.targetX,camera.targetY,camera.targetZ,0,100,0);
 
@@ -461,7 +462,7 @@ public class SnookerScreen  extends GLScreen{
 
         for(int i=0;i<16;i++) {
 
-        //     SnookerDraw.draw(ballShadowDrawables[i], balls[i] );
+          SnookerDraw.draw(ballShadowDrawables[i], balls[i] );
         }
 
 //        //绘制桌面
