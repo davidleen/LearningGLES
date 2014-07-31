@@ -17,7 +17,7 @@ bool getShadowFactor(vec4 lightZ)
     vec4 packedZValue = texture2D(shadowTexture, lightZ.st);
    // float bias = 0.005*tan(acos(cosTheta)); // cosTheta is dot( n,l ), clamped between 0 and 1
    // bias = clamp(bias, 0,0.01);
-    return packedZValue.x<lightZ.z-0.02;
+    return packedZValue.x<lightZ.z-0.025;
 
  // unpack the value stored to get the depth.
     const vec4 bitShifts = vec4(1.0 / (256.0 * 256.0 * 256.0),

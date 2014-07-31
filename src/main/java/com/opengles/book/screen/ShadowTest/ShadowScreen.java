@@ -154,8 +154,11 @@ public class ShadowScreen extends GLScreen{
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         //绘制阴影物体。
 
+        MatrixState.pushMatrix();
+        MatrixState.scaleM(5,1,5);
+        teapotShadow.draw();
+        MatrixState.popMatrix();
 
-             teapotShadow.draw();
 
 
 
@@ -173,7 +176,7 @@ public class ShadowScreen extends GLScreen{
 
         MatrixState.pushMatrix();
         MatrixState.translate(0,3,0);
-            teapotShadow.draw();
+          teapotShadow.draw();
         MatrixState.popMatrix();
 
 
@@ -213,8 +216,11 @@ public class ShadowScreen extends GLScreen{
                 GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
 
+            MatrixState.pushMatrix();
+            MatrixState.scaleM(5,1,5);
+            teapotObj.draw(shadowTextureId,cameraViewProj);
+            MatrixState.popMatrix();
 
-                teapotObj.draw(shadowTextureId,cameraViewProj);
 
          MatrixState.pushMatrix();
         MatrixState.translate(0,4,2);
