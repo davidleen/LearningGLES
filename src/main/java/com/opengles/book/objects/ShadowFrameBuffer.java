@@ -54,6 +54,15 @@ public class ShadowFrameBuffer {
         return bufferId[textureIdIndex];
     }
 
+
+    /**
+     *
+     * @return
+     */
+    public int getDepthBufferId(){
+        return bufferId[renderIdIndex];
+    }
+
     public void create()
     {
 

@@ -24,9 +24,9 @@ public class SphereWithLimitTexture {
 
         public float[] attributes;
         public short[] indics;
-        protected static final int VERTEX_POS_SIZE = 3;// xyz
-        protected static final int VERTEX_NORMAL_SIZE = 3;// xyz
-        protected static final int VERTEX_TEXTURE_SIZE = 2;// s t
+        public static final int VERTEX_POS_SIZE = 3;// xyz
+        public static final int VERTEX_NORMAL_SIZE = 3;// xyz
+        public static final int VERTEX_TEXTURE_SIZE = 2;// s t
 
        public static final int VERTEX_SIZE=VERTEX_POS_SIZE+VERTEX_NORMAL_SIZE+VERTEX_TEXTURE_SIZE;
 

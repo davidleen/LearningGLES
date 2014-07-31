@@ -149,7 +149,6 @@ public class SnookerScreen  extends GLScreen{
         //计算透视投影的比例
         float  ratio = (float) width / height;
         projectInfo=new ProjectInfo(-ratio, ratio, -1, 1, NEAR, FAR);
-
         camera=new Camera3D( EYE_X,   //人眼位置的X
                 EYE_Y, 	//人眼位置的Y
                 EYE_Z,   //人眼位置的Z
@@ -163,6 +162,24 @@ public class SnookerScreen  extends GLScreen{
 
 
         cameraHelper=new CameraHelper(camera,new AABB3(Vector3.create(-TABLE_SIZE.x/2-2, tableLegSize.y*1.5f,-TABLE_SIZE.z/2-2),Vector3.create(TABLE_SIZE.x/2+2,tableLegSize.y*2,TABLE_SIZE.z/2+2)));
+
+
+        //投影映射的视图。
+        //   shadowProject=new ProjectInfo(projectInfo.left, projectInfo.right, projectInfo.bottom, projectInfo.top, projectInfo.near,  projectInfo.far);
+        shadowProject=new ProjectInfo(-5*ratio, 5*ratio, -5, 5, projectInfo.near,  projectInfo.far);
+        //映射的camera
+        shadowCamera=new Camera3D( 5,   //人眼位置的X
+                10, 	//人眼位置的Y
+                0,   //人眼位置的Z
+                TARGET_X, 	//人眼球看的点X
+                TARGET_Y,   //人眼球看的点Y
+                TARGET_Z,   //人眼球看的点Z
+                0,
+                100,
+                0);
+
+
+
         dynamicsWorld= generateDynamicsWorld();
 
 
@@ -381,19 +398,6 @@ public class SnookerScreen  extends GLScreen{
 
 
 
-        //投影映射的视图。
-      //  shadowProject=new ProjectInfo(projectInfo.left, projectInfo.right, projectInfo.bottom, projectInfo.top, projectInfo.near,  projectInfo.far);
-        shadowProject=new ProjectInfo(-2, 2, -2, 2, projectInfo.near,  projectInfo.far);
-        //映射的camera
-        shadowCamera=new Camera3D( lightX,   //人眼位置的X
-                lightY, 	//人眼位置的Y
-                lightZ,   //人眼位置的Z
-                TARGET_X, 	//人眼球看的点X
-                TARGET_Y,   //人眼球看的点Y
-                TARGET_Z,   //人眼球看的点Z
-                0,
-                100,
-                0);
 
 
 
@@ -440,6 +444,8 @@ public class SnookerScreen  extends GLScreen{
     public void present(float deltaData) {
 
 
+       // GLES20.glEnable(GLES20.GL_CULL_FACE);
+
 
        // viewPort.apply();
 
@@ -452,8 +458,6 @@ public class SnookerScreen  extends GLScreen{
         //调用此方法计算产生透视投影矩阵
         shadowProject.setOrtho();
         shadowCamera.setCamera();
-      //  MatrixState.setCamera(LightSources.lightPositionSun[0],LightSources.lightPositionSun[1],LightSources.lightPositionSun[2],camera.targetX,camera.targetY,camera.targetZ,0,100,0);
-
 
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         //将摄像机移动到光源位置。

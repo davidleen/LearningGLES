@@ -123,6 +123,12 @@ public class MatrixState
 		Matrix.rotateM(currMatrix, 0, angle, x, y, z);
 	}
 
+
+    public static void scaleM(  float x, float y, float z )
+    {
+        Matrix.scaleM(currMatrix, 0,  x, y, z);
+    }
+
 	// 设置摄像机
 
 	public static float[] cameraLocation = new float[3];// 摄像机位置
@@ -200,6 +206,17 @@ public class MatrixState
 		Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mMVPMatrix, 0);
 		return mMVPMatrix;
 	}
+
+
+    //获取具体物体的总变换矩阵   投影矩阵 X 摄像机矩阵 X 物体变换矩阵
+    public static void getFinalMatrix(float[] matrix)
+    {
+
+        float[]  mvp=getFinalMatrix();
+        copyMatrix(mvp,matrix);
+
+
+    }
 
 	   //获取具体物体的变换矩阵
 	public static float[] getMMatrix()

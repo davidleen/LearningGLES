@@ -14,6 +14,7 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import com.opengles.book.screen.ShadowTest.ShadowScreen;
 import com.opengles.book.screen.cubeCollisionDemo.CubeCollisionDemoScreen;
 import com.opengles.book.screen.dollDemo.DollDemoScreen;
 import com.opengles.book.screen.snooker.SnookerScreen;
@@ -90,6 +91,12 @@ public class MainActivity extends ListActivity {
 
 
         info = new MenuInfo("桌球游戏", SnookerScreen.class.getName());
+
+        datas.add(info);
+
+
+
+        info = new MenuInfo("阴影映射测试", ShadowScreen.class.getName());
 
         datas.add(info);
 
