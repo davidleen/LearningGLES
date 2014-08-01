@@ -1,7 +1,7 @@
 precision mediump float;
 uniform sampler2D sTexture;//纹理内容数据
-uniform sampler2D shadowTexture;//阴影纹理映射贴图。
-
+//uniform sampler2D shadowTexture;//阴影纹理映射贴图。
+uniform sampler2DShadow shadowTexture;//阴影纹理映射贴图。
 
 varying vec4 ambient;
 varying vec4 diffuse;
