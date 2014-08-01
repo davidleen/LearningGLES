@@ -171,7 +171,12 @@ public class ShadowScreen extends GLScreen{
          sphereShadow.draw();
          MatrixState.popMatrix();
 
-
+        MatrixState.pushMatrix();
+        MatrixState.translate(3,5,3);
+        MatrixState.scaleM(0.1f,0.1f,0.1f);
+        MatrixState.translate(0,-15,0);
+        sphereShadow.draw();
+        MatrixState.popMatrix();
 
 
         MatrixState.pushMatrix();
@@ -224,6 +229,14 @@ public class ShadowScreen extends GLScreen{
 
          MatrixState.pushMatrix();
         MatrixState.translate(0,4,2);
+        MatrixState.scaleM(0.1f,0.1f,0.1f);
+        MatrixState.translate(0,-15,0);
+        sphereObj.draw(shadowTextureId,cameraViewProj);
+        MatrixState.popMatrix();
+
+
+        MatrixState.pushMatrix();
+        MatrixState.translate(3,5,3);
         MatrixState.scaleM(0.1f,0.1f,0.1f);
         MatrixState.translate(0,-15,0);
         sphereObj.draw(shadowTextureId,cameraViewProj);
