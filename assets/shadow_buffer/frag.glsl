@@ -10,7 +10,7 @@ void main()
 
    float dis=distance(vPosition.xyz,uLightLocation);
 
-
+     //   dis=10.0;
 
 
 

@@ -26,14 +26,16 @@ void main()
      {
 
     vec4 depth4=texture2D(shadowTexture,vec2(s,t));
-    float minDis= depth4.r*256.0*256.0+depth4.g*256.0+depth4.b+depth4.a/32.0;
+    float minDis= floor( depth4.r*256.0*256.0)+floor(depth4.g*256.0)+depth4.b+depth4.a/32.0;
     float dis=distance(vPosition.xyz,uLightLocation);
 
-    float bias=0.5;
+    float bias=1.5;
     //将计算出的颜色给此片元
 
     //若实际距离大于最小距离， 则在阴影中。  为修正值  根据具体情况调整， 否则会出现严重自身阴影问题。
     bool isInshow=     minDis <= dis-bias;
+
+    //isInShow=minDis>1.0;
 
             if( isInshow)
             {

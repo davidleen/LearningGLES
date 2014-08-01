@@ -35,6 +35,10 @@ import java.util.Random;
  * Created by davidleen29 on 2014/7/8.
  */
 public class SnookerScreen  extends GLScreen{
+
+
+
+    private Vector3 lightPosition=Vector3.create(10,100,10);
     private static final float MAX_AABB_LENGTH = 100;
     final static float EYE_X=0;//观察者的位置x
     final static float EYE_Y=  10 ;//观察者的位置y
@@ -166,16 +170,17 @@ public class SnookerScreen  extends GLScreen{
 
         //投影映射的视图。
         //   shadowProject=new ProjectInfo(projectInfo.left, projectInfo.right, projectInfo.bottom, projectInfo.top, projectInfo.near,  projectInfo.far);
-        shadowProject=new ProjectInfo(-5*ratio, 5*ratio, -5, 5, projectInfo.near,  projectInfo.far);
+        int baseHeight=10;
+        shadowProject=new ProjectInfo(-baseHeight*ratio, baseHeight*ratio, -baseHeight, baseHeight, 1,  200);
         //映射的camera
-        shadowCamera=new Camera3D( 5,   //人眼位置的X
-                10, 	//人眼位置的Y
-                0,   //人眼位置的Z
+        shadowCamera=new Camera3D( lightPosition.x,   //人眼位置的X
+                lightPosition.y, 	//人眼位置的Y
+                lightPosition.z,   //人眼位置的Z
                 TARGET_X, 	//人眼球看的点X
                 TARGET_Y,   //人眼球看的点Y
                 TARGET_Z,   //人眼球看的点Z
                 0,
-                100,
+                1,
                 0);
 
 
@@ -384,13 +389,13 @@ public class SnookerScreen  extends GLScreen{
     public void resume() {
         super.resume();
         GLES20.glEnable(GLES20.GL_DEPTH_TEST);
-        GLES20.glClearColor(0,0,0,0.0f);
+        GLES20.glClearColor(1,1,1,1.0f);
 
 
 
-        float lightX=5;float lightY=10;float lightZ=0;
+
         //设置光源位置。
-        LightSources.setSunLightPosition(lightX, lightY, lightZ);
+        LightSources.setSunLightPosition(lightPosition.x,lightPosition.y,lightPosition.z);
         // 设置 三种光线
         LightSources.setAmbient(0.3f, 0.3f, 0.3f, 1f);
         LightSources.setDiffuse(0.3f, 0.3f, 0.3f, 1f);
@@ -470,8 +475,10 @@ public class SnookerScreen  extends GLScreen{
         }
 
 //        //绘制桌面
+        MatrixState.pushMatrix();
+        MatrixState.translate(0,0.25f,0);
          SnookerDraw.draw(tablePlanShadowDrawable, tablePlane );
-
+        MatrixState.popMatrix();
        int  shadowBufferId=buffer.getTextureBufferId();
         //获取以光线为摄像点的 虚拟矩阵。
         //申请矩阵数据
@@ -501,7 +508,11 @@ public class SnookerScreen  extends GLScreen{
                     SnookerDraw.draw(legDrawer, leg,shadowBufferId, cameraViewProj);
 
             //绘制桌面
-            SnookerDraw.draw(tablePlanDrawable, tablePlane,shadowBufferId, cameraViewProj);
+             MatrixState.pushMatrix();
+             MatrixState.translate(0,0.25f,0);
+             SnookerDraw.draw(tablePlanDrawable, tablePlane,shadowBufferId, cameraViewProj);
+             MatrixState.popMatrix();
+
 
 
 
