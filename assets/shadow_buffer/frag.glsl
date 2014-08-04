@@ -7,12 +7,9 @@ varying  vec4 vPosition;
 void main()
 {
 
-
    float dis=distance(vPosition.xyz,uLightLocation);
 
-     //   dis=10.0;
-
-
+     //  dis=10.0;
 
 
    //将距离转换成颜色值  转成纹理图
@@ -33,16 +30,11 @@ void main()
     float a=mod(fragPart,32.0);
 
     //压缩至0-1 间值
-    r=r/256.0;
-    g=g/256.0;
-    b=b/32.0;
+      r=r/256.0;
+      g=g/256.0;
+      b=b/32.0;
       a=a/32.0;
 
-
-
-
-
-                gl_FragColor = vec4(r,g,b,a);
-
+      gl_FragColor = vec4(r,g,b,a);
 
   }
