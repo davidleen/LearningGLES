@@ -21,8 +21,8 @@ public  abstract class Uniform<T> {
         uniformHandler= GLES20.glGetUniformLocation(mProgram,uniformName);
         if(uniformHandler==-1)
         {
-            Log.d(TAG, "program: "+ mProgram +" does not have  uniform :"+ uniformName );
-       //     throw new UniformLocationNoFoundException( String.valueOf(mProgram), uniformName  );
+              Log.e(TAG, "program: "+ mProgram +" does not have  uniform :"+ uniformName );
+            //   throw new UniformLocationNoFoundException( String.valueOf(mProgram), uniformName  );
         }
 
         this.binder=binder;

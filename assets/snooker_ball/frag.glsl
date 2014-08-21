@@ -13,10 +13,10 @@ varying  vec4 vPosition;
 void main()                         
 {
 
-        vec4 finalColor=texture2D(sTexture, vTextureCoord);
+                    vec4 finalColor=texture2D(sTexture, vTextureCoord);
 
 
-            vec4 lightZ = vPosition / vPosition.w;
+                    vec4 lightZ = vPosition / vPosition.w;
                     lightZ = (lightZ + 1.0) / 2.0;
                       vec4 packedZValue = texture2D(shadowTexture, lightZ.st);
                          float bias =0.005 ;
@@ -31,7 +31,7 @@ void main()
 
                       }else
                       {
-                   //给此片元颜色值
+                     //给此片元颜色值
                        finalColor = finalColor*ambient+finalColor*specular+finalColor*diffuse;
                       }
 
