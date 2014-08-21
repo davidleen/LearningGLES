@@ -1,6 +1,6 @@
 uniform mat4 uMVPMatrix; //总变换矩阵
 uniform mat4 uMMatrix; //变换矩阵
-uniform   mat4 uLightMVPMatrix; //总变换矩阵(对于光源位置的矩阵。)
+uniform   mat4 uLightVPMatrix; //总变换矩阵(对于光源位置的矩阵。)
 uniform vec4 abientLight;	//环境光强度
 uniform vec4 lightDiffuse;	//散射光强度
 uniform vec4 lightSpecular;	//镜面光强度
@@ -56,5 +56,5 @@ void main()
    diffuse=diffuseTemp;
    specular=specularTemp;
    vTextureCoord = aTexCoor;//将接收的纹理坐标传递给片元着色器
-   vPosition=uMMatrix*vec4(aPosition,1);
+  vPosition=uLightVPMatrix*(uMMatrix*vec4(aPosition,1));
 }                      

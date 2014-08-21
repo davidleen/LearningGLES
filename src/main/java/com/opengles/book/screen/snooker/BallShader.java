@@ -196,7 +196,7 @@ public class BallShader {
             }
         });
 
-        mLightViewProj=new UniformMatrix4F(mProgram,"uLightMVPMatrix",new Uniform.UniformBinder<float[]>() {
+        mLightViewProj=new UniformMatrix4F(mProgram,"uLightVPMatrix",new Uniform.UniformBinder<float[]>() {
             @Override
             public float[] getBindValue() {
                 return lightCameraViewProj;

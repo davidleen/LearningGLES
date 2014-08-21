@@ -49,9 +49,6 @@ public class BallShadowShader {
 
     // 总变换矩阵属性
     private UniformMatrix4F finalMatrix;
-    private UniformMatrix4F uMMatrix;
-
-    private Uniform3fv_Float uLightLocationUniform;
 
 
 
@@ -69,8 +66,7 @@ public class BallShadowShader {
 
         //将最终变换矩阵传入shader程序
         finalMatrix.bind();
-        uLightLocationUniform.bind();
-        uMMatrix.bind();
+
 
 
 
@@ -104,24 +100,8 @@ public class BallShadowShader {
 
 
 
-        uMMatrix = new UniformMatrix4F(mProgram, "uMMatrix", new Uniform.UniformBinder<float[]>() {
-            @Override
-            public float[] getBindValue() {
 
 
-                return MatrixState.getMMatrix();
-            }
-        });
-
-
-
-
-        uLightLocationUniform = new Uniform3fv_Float(mProgram, "uLightLocation", new Uniform.UniformBinder<float[]>() {
-            @Override
-            public float[] getBindValue() {
-                return LightSources.lightPositionSun;
-            }
-        });
 
 
     }

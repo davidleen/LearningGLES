@@ -38,7 +38,7 @@ public class SnookerScreen  extends GLScreen{
 
 
 
-    private Vector3 lightPosition=Vector3.create(10,100,10);
+    private Vector3 lightPosition=Vector3.create(0,100,-100);
     private static final float MAX_AABB_LENGTH = 100;
     final static float EYE_X=0;//观察者的位置x
     final static float EYE_Y=  10 ;//观察者的位置y

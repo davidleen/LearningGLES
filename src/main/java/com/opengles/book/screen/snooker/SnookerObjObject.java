@@ -160,7 +160,7 @@ public class SnookerObjObject implements ObjectDrawable {
             }
         });
 
-        cameraMVPUniform =new UniformMatrix4F(mProgram,"uLightMVPMatrix",new Uniform.UniformBinder<float[]>() {
+        cameraMVPUniform =new UniformMatrix4F(mProgram,"uLightVPMatrix",new Uniform.UniformBinder<float[]>() {
             @Override
             public float[] getBindValue() {
                 return cameraMVP;
