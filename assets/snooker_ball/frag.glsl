@@ -19,7 +19,7 @@ void main()
                     vec4 lightZ = vPosition / vPosition.w;
                     lightZ = (lightZ + 1.0) / 2.0;
                       vec4 packedZValue = texture2D(shadowTexture, lightZ.st);
-                         float bias =0.005 ;
+                         float bias =0.02;
                     bool isInShadow=   packedZValue.x<lightZ.z-bias;
 
 

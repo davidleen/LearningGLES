@@ -38,7 +38,7 @@ public class SnookerScreen  extends GLScreen{
 
 
 
-    private Vector3 lightPosition=Vector3.create(0,100,-100);
+    private Vector3 lightPosition=Vector3.create(0,20, 0);
     private static final float MAX_AABB_LENGTH = 100;
     final static float EYE_X=0;//观察者的位置x
     final static float EYE_Y=  10 ;//观察者的位置y
@@ -128,11 +128,12 @@ public class SnookerScreen  extends GLScreen{
     private BallDrawable[] ballDrawables;
     private ShadowDrawable[] ballShadowDrawables;
     private ShadowDrawable tablePlanShadowDrawable;
+    private ShadowDrawable ballStickShadowDrawable;
 
     private Texture  ballTexture ;
 
 
-    private ScreenClickHandler handler;
+    private BallStick handler;
 
 
     //阴影缓冲区控制对象。
@@ -170,8 +171,8 @@ public class SnookerScreen  extends GLScreen{
 
         //投影映射的视图。
         //   shadowProject=new ProjectInfo(projectInfo.left, projectInfo.right, projectInfo.bottom, projectInfo.top, projectInfo.near,  projectInfo.far);
-        int baseHeight=10;
-        shadowProject=new ProjectInfo(-baseHeight*ratio, baseHeight*ratio, -baseHeight, baseHeight, 1,  200);
+        int baseHeight=3;
+        shadowProject=new ProjectInfo(-baseHeight*ratio, baseHeight*ratio, -baseHeight, baseHeight, 1,  40);
         //映射的camera
         shadowCamera=new Camera3D( lightPosition.x,   //人眼位置的X
                 lightPosition.y, 	//人眼位置的Y
@@ -182,6 +183,7 @@ public class SnookerScreen  extends GLScreen{
                 0,
                 1,
                 0);
+
 
 
 
@@ -246,6 +248,7 @@ public class SnookerScreen  extends GLScreen{
         tableShortBarDrawable=new CuboidDrawable(data.vertexData,data.indexData ,barCuboidTexture,shader);
         data=new CuboidWithCubeTexture(BALL_STICK_SIZE.x,BALL_STICK_SIZE.y,BALL_STICK_SIZE.z);
         ballStickDrawable=new CuboidDrawable(data.vertexData,data.indexData ,legCuboidTexture,shader);
+        ballStickShadowDrawable=new ShadowDrawable(data.vertexData,data.indexData,cubeShadowShader);
 //
 
 
@@ -262,9 +265,9 @@ public class SnookerScreen  extends GLScreen{
         balls=generateSnookerBalls(dynamicsWorld);
 
         //初始化屏幕点击事件
-        handler=new ScreenClickHandler( new ScreenClickHandler.OnClickListener() {
+        handler=new BallStick( new BallStick.OnStickListener() {
             @Override
-            public void onClick(Input.TouchEvent event) {
+            public void onStick(Input.TouchEvent event) {
                     //执行代码
                 //推动白球
 
@@ -331,7 +334,8 @@ public class SnookerScreen  extends GLScreen{
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-
+        List<Input.TouchEvent> touchEvents =
+                glGame.getInput().getTouchEvents();
 
 
         timeCollapsed += deltaTime;
@@ -341,17 +345,16 @@ public class SnookerScreen  extends GLScreen{
             timeCollapsed -= TIME_STEP;
         }
 
-         List<Input.TouchEvent> touchEvents =
-                glGame.getInput().getTouchEvents();
+
         for (Input.TouchEvent event:touchEvents) {
 
             cameraHelper.onEvent(event);
-
+            handler.onTouchEvent(event);
 
         }
 
 
-        handler.handleTouchEvents(touchEvents);
+
 
 
         dynamicsWorld.stepSimulation(deltaTime, MAX_SUB_STEPS);
@@ -372,6 +375,7 @@ public class SnookerScreen  extends GLScreen{
             ballDrawable.unBind();
 
         tablePlanShadowDrawable.unBind();
+        ballStickShadowDrawable.unBind();
         ballStickDrawable.unBind();
 
         legCuboidTexture.dispose();
@@ -397,7 +401,7 @@ public class SnookerScreen  extends GLScreen{
         //设置光源位置。
         LightSources.setSunLightPosition(lightPosition.x,lightPosition.y,lightPosition.z);
         // 设置 三种光线
-        LightSources.setAmbient(0.3f, 0.3f, 0.3f, 1f);
+        LightSources.setAmbient(0.1f, 0.1f, 0.1f, 1f);
         LightSources.setDiffuse(0.3f, 0.3f, 0.3f, 1f);
         LightSources.setSpecLight(0.6f, 0.6f, 0.6f, 1f);
 
@@ -427,6 +431,7 @@ public class SnookerScreen  extends GLScreen{
         for(ShadowDrawable ballDrawable:ballShadowDrawables)
             ballDrawable.bind();
         tablePlanShadowDrawable.bind();
+        ballStickShadowDrawable.bind();
 
         tableLongBarDrawable.bind();
         tableShortBarDrawable.bind();
@@ -479,6 +484,7 @@ public class SnookerScreen  extends GLScreen{
         MatrixState.translate(0,0.25f,0);
          SnookerDraw.draw(tablePlanShadowDrawable, tablePlane );
         MatrixState.popMatrix();
+        SnookerDraw.draw(ballStickShadowDrawable, ballStick );
        int  shadowBufferId=buffer.getTextureBufferId();
         //获取以光线为摄像点的 虚拟矩阵。
         //申请矩阵数据
@@ -489,9 +495,9 @@ public class SnookerScreen  extends GLScreen{
 
 
 
-         if(frameBuffer!=null) {
-
-             frameBuffer.bind();
+//         if(frameBuffer!=null) {
+//
+//             frameBuffer.bind();
             camera.setCamera();
              //调用此方法计算产生透视投影矩阵
              projectInfo.setFrustum();
@@ -533,10 +539,10 @@ public class SnookerScreen  extends GLScreen{
                 SnookerDraw.draw(ballDrawables[i], balls[i], ballTexture.textureId, shadowBufferId, cameraViewProj);
             }
 
-             frameBuffer.show();
+           //  frameBuffer.show();
 
 
-       }
+//       }
         //释放矩阵数据；
         MatrixState.freeMatrix(cameraViewProj);
     }
