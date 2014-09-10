@@ -4,6 +4,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import com.opengles.book.framework.Input;
 import com.opengles.book.framework.impl.GLGame;
+import com.opengles.book.math.Vector3;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -13,12 +14,26 @@ import java.util.ListIterator;
  * Created by davidleen29   qq:67320337
  * on 2014-7-14.
  */
-public class BallStick {
+public class BallStick implements  Workable
+ {
+
+
+     //木棍绘制类
+     private CuboidDrawable ballStickDrawable ;
+     Vector3 BALL_STICK_SIZE=Vector3.create(6,0.1f,0.1f);
+
 
     /**
      * 桌球棍挥击事件
      */
      OnStickListener listener;
+
+
+     public BallStick()
+     {
+//         data=new CuboidWithCubeTexture(BALL_STICK_SIZE.x,BALL_STICK_SIZE.y,BALL_STICK_SIZE.z);
+//         ballStickDrawable=new CuboidDrawable(data.vertexData,data.indexData ,legCuboidTexture,shader);
+     }
 
 
     State state;
@@ -88,7 +103,12 @@ public class BallStick {
 
     }
 
-    /**
+     @Override
+     public void resume() {
+
+     }
+
+     /**
      * 状态更新
      */
     public   void update(float deltaTime)
@@ -112,8 +132,28 @@ public class BallStick {
 
     }
 
+     @Override
+     public void onTouch(List<Input.TouchEvent> events) {
 
-    /**
+     }
+
+     @Override
+     public void add(Workable workable) {
+
+     }
+
+     @Override
+     public void remove(Workable workable) {
+
+     }
+
+     @Override
+     public boolean hasChild() {
+         return false;
+     }
+
+
+     /**
      * 球滚完成挥击监听接口
      */
     public interface  OnStickListener

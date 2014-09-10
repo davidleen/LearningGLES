@@ -6,7 +6,7 @@ import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.objects.CubeDrawer;
 
 /**
- * 长方体对象绘制类。
+ * 长方体对象绘制类。  使用环境纹理
  * Created by davidleen29   qq:67320337
  * on 2014-7-9.
  */

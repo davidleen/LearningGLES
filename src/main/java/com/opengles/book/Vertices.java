@@ -96,6 +96,8 @@ public class Vertices {
         int attributeOffset = 0;
         for (int i = 0; i < attributeCount; i++) {
             GLES20.glEnableVertexAttribArray(attributeHandlers[i]);
+
+
             GLES20.glVertexAttribPointer(attributeHandlers[i], attributeSizes[i], GLES20.GL_FLOAT,
                     false,
                     stride, attributeOffset);
