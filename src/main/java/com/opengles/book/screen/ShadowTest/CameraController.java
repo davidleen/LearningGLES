@@ -40,7 +40,6 @@ private float  mPreviousX  ;
                 {
                     Vector3 vector3=Vector3.create(camera3D.eyeX,camera3D.eyeY,camera3D.eyeZ);
                     vector3.y+=deltaY/10.0;
-//                  vector3.rotate(deltaY,1,0,0);
                     vector3.rotate(-deltaX,0,1,0);
                     camera3D.eyeX=vector3.x;
                     camera3D.eyeY=Math.max(Math.min(vector3.y,6),1);

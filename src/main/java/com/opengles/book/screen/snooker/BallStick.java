@@ -1,9 +1,12 @@
 package com.opengles.book.screen.snooker;
 
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import com.opengles.book.framework.Input;
 import com.opengles.book.framework.impl.GLGame;
 
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * 桌球棍类。
@@ -15,11 +18,15 @@ public class BallStick {
     /**
      * 桌球棍挥击事件
      */
-    OnStickListener listener;
-    //桌球棍状态  0 不存在， 1 蓄力  2 发射
-    private int state=0;
-    private static final int STATE_UN_WORK=0;
-    private static final int STATE_HOLD=1;
+     OnStickListener listener;
+
+
+    State state;
+
+    public enum State
+    {   //桌球棍状态  0 不存在， 1 蓄力  2 发射
+        STATE_UN_WORK,STATE_HOLD,STATE_WIELDING;
+    }
     //球棍力度
     private  int power;
 
@@ -52,14 +59,14 @@ public class BallStick {
             if(event.type== Input.TouchEvent.TOUCH_DOWN)
             {
 
-                state=STATE_HOLD;
+                state=State.STATE_HOLD;
                 holdAccumulate=0;
                 x=event.x;
                 y=event.y;
 
             }
 
-            if(state==STATE_HOLD&&event.type== Input.TouchEvent.TOUCH_UP)
+            if(state==State.STATE_HOLD&&event.type== Input.TouchEvent.TOUCH_UP)
             {
                  if(   Math.abs(event.x-x)<APPROXIMATE_VALUE&&Math.abs(event.y-y)<APPROXIMATE_VALUE)
                  {
@@ -68,9 +75,11 @@ public class BallStick {
                      listener.onStick(event);
 
                  }
-                state=STATE_UN_WORK;
+                state=State.STATE_UN_WORK;
 
             }
+
+
 
 
 
@@ -86,7 +95,7 @@ public class BallStick {
     {
 
         //已经点击
-        if(  state==STATE_HOLD)
+        if(  state==State.STATE_HOLD)
         {
             holdAccumulate+=deltaTime;
         }
@@ -112,4 +121,7 @@ public class BallStick {
 
         public void onStick(Input.TouchEvent event);
     }
+
+
+
 }

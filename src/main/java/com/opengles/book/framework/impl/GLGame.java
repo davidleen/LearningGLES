@@ -23,6 +23,8 @@ import android.os.PowerManager.WakeLock;
 import android.view.Window;
 import android.view.WindowManager;
 
+import java.util.ArrayList;
+
 public abstract class GLGame extends Activity implements Game, Renderer {
 	enum GLGameState {
 		Initialized,
@@ -64,6 +66,8 @@ public abstract class GLGame extends Activity implements Game, Renderer {
 		 getSystemService(Context.POWER_SERVICE);
 		 wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK,
 		 "GLGame");
+
+
 	}
 
 	public void onResume() {

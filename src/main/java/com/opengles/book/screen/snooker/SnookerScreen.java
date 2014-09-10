@@ -1,5 +1,6 @@
 package com.opengles.book.screen.snooker;
 
+import android.graphics.Canvas;
 import android.opengl.GLES20;
 import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.dispatch.*;
@@ -27,6 +28,7 @@ import com.opengles.book.screen.cubeCollisionDemo.ConcreateObject;
 import com.opengles.book.screen.dollDemo.FloorDrawable;
 
 import javax.vecmath.Vector3f;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
