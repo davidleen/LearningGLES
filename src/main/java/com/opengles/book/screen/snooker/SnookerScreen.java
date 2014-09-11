@@ -59,7 +59,7 @@ public class SnookerScreen  extends GLScreen{
     final static float ROOM_LONG=30;
     final static float ROOM_HEIGHT=20;
 
-
+    BallStick ballStick ;
 
 
     //桌腿尺寸大小设置。
@@ -94,7 +94,7 @@ public class SnookerScreen  extends GLScreen{
     //球体模型
     RigidBody[] balls;
 
-    RigidBody ballStick;
+
 
     //物理世界模型
     private DynamicsWorld dynamicsWorld;
@@ -122,15 +122,13 @@ public class SnookerScreen  extends GLScreen{
     //桌面短边栏绘制
     private CuboidDrawable tableShortBarDrawable;
 
-    //木棍绘制类
-    private CuboidDrawable ballStickDrawable ;
 
 
     //球体绘制类。
     private BallDrawable[] ballDrawables;
     private ShadowDrawable[] ballShadowDrawables;
     private ShadowDrawable tablePlanShadowDrawable;
-    private ShadowDrawable ballStickShadowDrawable;
+    //private ShadowDrawable ballStickShadowDrawable;
 
     private Texture  ballTexture ;
 
@@ -249,9 +247,7 @@ public class SnookerScreen  extends GLScreen{
         data=new CuboidWithCubeTexture(SHORT_BAR_SIZE.x,SHORT_BAR_SIZE.y,SHORT_BAR_SIZE.z);
         tableShortBarDrawable=new CuboidDrawable(data.vertexData,data.indexData ,barCuboidTexture,shader);
         data=new CuboidWithCubeTexture(BALL_STICK_SIZE.x,BALL_STICK_SIZE.y,BALL_STICK_SIZE.z);
-        ballStickDrawable=new CuboidDrawable(data.vertexData,data.indexData ,legCuboidTexture,shader);
-        ballStickShadowDrawable=new ShadowDrawable(data.vertexData,data.indexData,cubeShadowShader);
-//
+
 
 
 
@@ -262,7 +258,7 @@ public class SnookerScreen  extends GLScreen{
                 (dynamicsWorld);
         longBars=generateTableLongBar(dynamicsWorld);
         shortBars=generateTableShortBar(dynamicsWorld);
-        ballStick=generateBallStick(dynamicsWorld);
+        ballStick=new BallStick(game.getContext());
 
         balls=generateSnookerBalls(dynamicsWorld);
 
@@ -377,8 +373,7 @@ public class SnookerScreen  extends GLScreen{
             ballDrawable.unBind();
 
         tablePlanShadowDrawable.unBind();
-        ballStickShadowDrawable.unBind();
-        ballStickDrawable.unBind();
+      ballStick.pause();
 
         legCuboidTexture.dispose();
         planeCuboidTexture.dispose();
@@ -427,13 +422,13 @@ public class SnookerScreen  extends GLScreen{
         floorDrawable.bind();
         legDrawer.bind();
         tablePlanDrawable.bind();
-        ballStickDrawable.bind();
+
         for(BallDrawable ballDrawable:ballDrawables)
         ballDrawable.bind();
         for(ShadowDrawable ballDrawable:ballShadowDrawables)
             ballDrawable.bind();
         tablePlanShadowDrawable.bind();
-        ballStickShadowDrawable.bind();
+        ballStick.resume();
 
         tableLongBarDrawable.bind();
         tableShortBarDrawable.bind();
@@ -448,6 +443,7 @@ public class SnookerScreen  extends GLScreen{
     @Override
     public void dispose() {
         super.dispose();
+
     }
 
 
@@ -486,7 +482,7 @@ public class SnookerScreen  extends GLScreen{
         MatrixState.translate(0,0.25f,0);
          SnookerDraw.draw(tablePlanShadowDrawable, tablePlane );
         MatrixState.popMatrix();
-        SnookerDraw.draw(ballStickShadowDrawable, ballStick );
+
        int  shadowBufferId=buffer.getTextureBufferId();
         //获取以光线为摄像点的 虚拟矩阵。
         //申请矩阵数据
@@ -497,9 +493,11 @@ public class SnookerScreen  extends GLScreen{
 
 
 
-//         if(frameBuffer!=null) {
+         if(frameBuffer!=null) {
 //
-//             frameBuffer.bind();
+             frameBuffer.bind();
+
+
             camera.setCamera();
              //调用此方法计算产生透视投影矩阵
              projectInfo.setFrustum();
@@ -524,8 +522,7 @@ public class SnookerScreen  extends GLScreen{
 
 
 
-            //绘制球棍
-            SnookerDraw.draw(ballStickDrawable, ballStick,shadowBufferId, cameraViewProj);
+
             for (RigidBody bar : longBars)
                 SnookerDraw.draw(tableLongBarDrawable, bar,shadowBufferId, cameraViewProj);
 
@@ -541,10 +538,13 @@ public class SnookerScreen  extends GLScreen{
                 SnookerDraw.draw(ballDrawables[i], balls[i], ballTexture.textureId, shadowBufferId, cameraViewProj);
             }
 
-           //  frameBuffer.show();
+        //绘制球棍
+        ballStick.present(deltaData);
 
 
-//       }
+
+             frameBuffer.show();
+      }
         //释放矩阵数据；
         MatrixState.freeMatrix(cameraViewProj);
     }

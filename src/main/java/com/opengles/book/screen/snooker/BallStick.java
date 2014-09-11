@@ -1,10 +1,16 @@
 package com.opengles.book.screen.snooker;
 
+import android.content.Context;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import com.opengles.book.MatrixState;
 import com.opengles.book.framework.Input;
+import com.opengles.book.framework.gl.Texture;
 import com.opengles.book.framework.impl.GLGame;
 import com.opengles.book.math.Vector3;
+import com.opengles.book.objLoader.ObjModel;
+import com.opengles.book.objLoader.ObjectParser;
+import com.opengles.book.objects.ObjObject;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -18,9 +24,16 @@ public class BallStick implements  Workable
  {
 
 
+
      //木棍绘制类
-     private CuboidDrawable ballStickDrawable ;
-     Vector3 BALL_STICK_SIZE=Vector3.create(6,0.1f,0.1f);
+
+     Vector3 originPosition=Vector3.create(0,8,0);
+
+
+
+
+     ObjObject ballStick;
+
 
 
     /**
@@ -29,10 +42,10 @@ public class BallStick implements  Workable
      OnStickListener listener;
 
 
-     public BallStick()
+     public BallStick(Context context)
      {
-//         data=new CuboidWithCubeTexture(BALL_STICK_SIZE.x,BALL_STICK_SIZE.y,BALL_STICK_SIZE.z);
-//         ballStickDrawable=new CuboidDrawable(data.vertexData,data.indexData ,legCuboidTexture,shader);
+
+         ballStick=new ObjObject(context,"ballstick/","ballstick.obj");
      }
 
 
@@ -106,7 +119,15 @@ public class BallStick implements  Workable
      @Override
      public void resume() {
 
+        ballStick.bind();
      }
+
+     @Override
+     public void pause() {
+
+         ballStick.unBind();
+     }
+
 
      /**
      * 状态更新
@@ -130,6 +151,10 @@ public class BallStick implements  Workable
     public void present(float deltaTime)
     {
 
+        MatrixState.pushMatrix();
+        MatrixState.translate(originPosition.x,originPosition.y,originPosition.z);
+        ballStick.draw();
+        MatrixState.popMatrix();
     }
 
      @Override

@@ -16,6 +16,11 @@ public class BaseObject implements  Workable {
     }
 
     @Override
+    public void pause() {
+
+    }
+
+    @Override
     public void update(float deltaTime) {
 
     }

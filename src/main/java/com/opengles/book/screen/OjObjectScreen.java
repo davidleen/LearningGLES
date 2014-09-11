@@ -15,6 +15,7 @@ import com.opengles.book.math.Vector3;
 import com.opengles.book.objLoader.AABB;
 import com.opengles.book.objects.ObjObject;
 import com.opengles.book.objects.TwistCuboid;
+import com.opengles.book.screen.snooker.BallStick;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,6 +43,8 @@ public   class OjObjectScreen extends GLScreen {
 
 
     private List<ObjObject> objects;
+
+
 
 	public OjObjectScreen(Game game) {
 		super(game);
