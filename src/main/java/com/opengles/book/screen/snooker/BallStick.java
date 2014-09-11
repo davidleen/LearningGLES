@@ -36,6 +36,8 @@ public class BallStick implements  Workable
 
 
 
+
+     private float WIELD_TIME=1;
     /**
      * 桌球棍挥击事件
      */
@@ -63,7 +65,7 @@ public class BallStick implements  Workable
     public float APPROXIMATE_VALUE=5f;
 
 
-    private float holdAccumulate;
+    private float wieldAccumulate;
 
     /**
      * 构造函数
@@ -88,7 +90,7 @@ public class BallStick implements  Workable
             {
 
                 state=State.STATE_HOLD;
-                holdAccumulate=0;
+
                 x=event.x;
                 y=event.y;
 
@@ -100,9 +102,10 @@ public class BallStick implements  Workable
                  {
 
                      //按下抬起的 在指定范围内表示点击。
-                     listener.onStick(event);
-
-                 }
+                     //进入球棍动画阶段。
+                     wieldAccumulate=0;
+                     state=State.STATE_WIELDING;
+                 }else
                 state=State.STATE_UN_WORK;
 
             }
@@ -138,7 +141,7 @@ public class BallStick implements  Workable
         //已经点击
         if(  state==State.STATE_HOLD)
         {
-            holdAccumulate+=deltaTime;
+           // holdAccumulate+=deltaTime;
         }
 
 
@@ -148,19 +151,25 @@ public class BallStick implements  Workable
     /**
      * 状态展示。
      */
-    public void present(float deltaTime)
-    {
+    public void present(float deltaTime) {
+        if (state == State.STATE_UN_WORK) return;
+
+
+        float step = 0;
+        if (state == State.STATE_WIELDING)
+        {
+            wieldAccumulate+=deltaTime;
+            step= wieldAccumulate/WIELD_TIME*3;
+        }
+
 
         MatrixState.pushMatrix();
-        MatrixState.translate(originPosition.x,originPosition.y,originPosition.z);
+        MatrixState.translate(originPosition.x,originPosition.y,originPosition.z-step);
         ballStick.draw();
         MatrixState.popMatrix();
     }
 
-     @Override
-     public void onTouch(List<Input.TouchEvent> events) {
 
-     }
 
      @Override
      public void add(Workable workable) {

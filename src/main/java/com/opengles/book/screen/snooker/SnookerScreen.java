@@ -336,6 +336,13 @@ public class SnookerScreen  extends GLScreen{
                 glGame.getInput().getTouchEvents();
 
 
+        for(Input.TouchEvent event:touchEvents)
+        {ballStick.onTouchEvent(event);}
+
+        ballStick.update(deltaTime);
+
+
+
         timeCollapsed += deltaTime;
         if (timeCollapsed > TIME_STEP) {
 
@@ -356,6 +363,8 @@ public class SnookerScreen  extends GLScreen{
 
 
         dynamicsWorld.stepSimulation(deltaTime, MAX_SUB_STEPS);
+
+
     }
 
     @Override

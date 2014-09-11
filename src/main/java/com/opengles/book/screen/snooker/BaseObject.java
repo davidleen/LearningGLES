@@ -31,9 +31,10 @@ public class BaseObject implements  Workable {
     }
 
     @Override
-    public void onTouch(List<Input.TouchEvent> events) {
-
+    public boolean onTouchEvent(Input.TouchEvent event) {
+        return false;
     }
+
 
     @Override
     public void add(Workable workable) {
