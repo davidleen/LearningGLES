@@ -133,7 +133,6 @@ public class SnookerScreen  extends GLScreen{
     private Texture  ballTexture ;
 
 
-    private BallStick handler;
 
 
     //阴影缓冲区控制对象。
@@ -258,14 +257,14 @@ public class SnookerScreen  extends GLScreen{
                 (dynamicsWorld);
         longBars=generateTableLongBar(dynamicsWorld);
         shortBars=generateTableShortBar(dynamicsWorld);
-        ballStick=new BallStick(game.getContext());
+
 
         balls=generateSnookerBalls(dynamicsWorld);
 
         //初始化屏幕点击事件
-        handler=new BallStick( new BallStick.OnStickListener() {
+        ballStick=new BallStick(game.getContext(), new BallStick.OnStickListener() {
             @Override
-            public void onStick(Input.TouchEvent event) {
+            public void onStick( float power) {
                     //执行代码
                 //推动白球
 
@@ -310,7 +309,7 @@ public class SnookerScreen  extends GLScreen{
 //
              Vector3f  newValue=   balls[15].getLinearVelocity(new Vector3f( ));
                 //计算球速度
-              direction.scale(random.nextInt(10)+10);
+              direction.scale(power);
              newValue.add(direction);
               balls[15].setLinearVelocity( newValue);
                 if(!balls[15].isActive())
@@ -354,7 +353,7 @@ public class SnookerScreen  extends GLScreen{
         for (Input.TouchEvent event:touchEvents) {
 
             cameraHelper.onEvent(event);
-            handler.onTouchEvent(event);
+
 
         }
 
@@ -847,21 +846,6 @@ public class SnookerScreen  extends GLScreen{
     }
 
 
-    /**
-     * 生成桌球棍。
-     */
-    public RigidBody generateBallStick(DynamicsWorld dynamicsWorld )
-    {
-
-        //创建box形状。
-        CollisionShape stickShape = new CapsuleShape(0.1f,4);
-        RigidBody body=  BodyCreator.create(stickShape, 1, new Vector3f(0,10,0), 0.2f, 0.5f);
-        dynamicsWorld.addRigidBody(body);
-        body.forceActivationState(CollisionObject.WANTS_DEACTIVATION);
-        return body;
-
-
-    }
 
 
     /**

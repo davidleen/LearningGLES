@@ -66,4 +66,21 @@ public class TextureDomain {
         this.context=context;
     }
 
+
+    /**
+     * 纹理信息存放位置
+     */
+    class TextureInfo
+    {
+
+        //纹理文件名称
+        public String fileName;
+
+        //引用计数
+        public int count;
+
+        //纹理在图元中的位置。
+        int textureId;
+    }
+
 }

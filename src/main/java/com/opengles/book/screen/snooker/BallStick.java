@@ -29,15 +29,9 @@ public class BallStick implements  Workable
 
      Vector3 originPosition=Vector3.create(0,8,0);
 
-
-
-
      ObjObject ballStick;
-
-
-
-
-     private float WIELD_TIME=1;
+     private float WIELD_TIME=0.5f;
+     private float WIELD_LENGTH=3;
     /**
      * 桌球棍挥击事件
      */
@@ -47,11 +41,11 @@ public class BallStick implements  Workable
      public BallStick(Context context)
      {
 
-         ballStick=new ObjObject(context,"ballstick/","ballstick.obj");
+       this(context,null);
      }
 
 
-    State state;
+    State state=State.STATE_UN_WORK;
 
     public enum State
     {   //桌球棍状态  0 不存在， 1 蓄力  2 发射
@@ -59,21 +53,28 @@ public class BallStick implements  Workable
     }
     //球棍力度
     private  int power;
+     private static float MaxPower=100;
+     private static float MaxPowerHoldTime=6;
 
     float x; float y;
 
     public float APPROXIMATE_VALUE=5f;
 
 
+     //球杆挥动累计耗时
     private float wieldAccumulate;
+     //球杆按住 累计耗时
+     private float holdAccumulate;
+
 
     /**
      * 构造函数
      * @param listener
      */
-    public BallStick(OnStickListener listener)
+    public BallStick(Context context,OnStickListener listener)
     {
         this.listener=listener;
+        ballStick=new ObjObject(context,"ballstick/","ballstick.obj");
     }
 
 
@@ -86,10 +87,11 @@ public class BallStick implements  Workable
 
 
 
-            if(event.type== Input.TouchEvent.TOUCH_DOWN)
+            if(event.type== Input.TouchEvent.TOUCH_DOWN&&state!=State.STATE_HOLD)
             {
 
                 state=State.STATE_HOLD;
+                holdAccumulate=0;
 
                 x=event.x;
                 y=event.y;
@@ -141,7 +143,24 @@ public class BallStick implements  Workable
         //已经点击
         if(  state==State.STATE_HOLD)
         {
-           // holdAccumulate+=deltaTime;
+            holdAccumulate+=deltaTime;
+            power=(int)(holdAccumulate%MaxPowerHoldTime*MaxPower/MaxPowerHoldTime);
+        }
+
+        if(state==State.STATE_WIELDING)
+        {
+
+            wieldAccumulate+=deltaTime;
+            if(wieldAccumulate>WIELD_TIME)
+            {
+                 state=State.STATE_UN_WORK;
+                if(listener!=null)
+                {
+                    listener.onStick(power );
+                }
+            }
+
+
         }
 
 
@@ -158,8 +177,7 @@ public class BallStick implements  Workable
         float step = 0;
         if (state == State.STATE_WIELDING)
         {
-            wieldAccumulate+=deltaTime;
-            step= wieldAccumulate/WIELD_TIME*3;
+            step= wieldAccumulate/WIELD_TIME*WIELD_LENGTH;
         }
 
 
@@ -193,7 +211,7 @@ public class BallStick implements  Workable
     public interface  OnStickListener
     {
 
-        public void onStick(Input.TouchEvent event);
+        public void onStick( float power);
     }
 
 
