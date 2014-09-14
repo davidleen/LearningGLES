@@ -262,7 +262,7 @@ public class SnookerScreen  extends GLScreen{
         balls=generateSnookerBalls(dynamicsWorld);
 
         //初始化屏幕点击事件
-        ballStick=new BallStick(game.getContext(), new BallStick.OnStickListener() {
+        ballStick=new BallStick(game.getContext(),camera, new BallStick.OnStickListener() {
             @Override
             public void onStick( float power) {
                     //执行代码
@@ -270,10 +270,6 @@ public class SnookerScreen  extends GLScreen{
 
                 if(balls[15].isActive())
                 { return;}
-
-
-
-
 
 
                 //获取当前白球位置

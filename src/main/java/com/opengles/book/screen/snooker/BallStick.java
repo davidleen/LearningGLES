@@ -5,6 +5,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import com.opengles.book.MatrixState;
 import com.opengles.book.framework.Input;
+import com.opengles.book.framework.gl.Camera3D;
 import com.opengles.book.framework.gl.Texture;
 import com.opengles.book.framework.impl.GLGame;
 import com.opengles.book.math.Vector3;
@@ -28,6 +29,7 @@ public class BallStick implements  Workable
      //木棍绘制类
 
      Vector3 originPosition=Vector3.create(0,8,0);
+     Camera3D camera;
 
      ObjObject ballStick;
      private float WIELD_TIME=0.5f;
@@ -38,10 +40,10 @@ public class BallStick implements  Workable
      OnStickListener listener;
 
 
-     public BallStick(Context context)
+     public BallStick(Context context,Camera3D camera)
      {
 
-       this(context,null);
+       this(context,camera,null);
      }
 
 
@@ -71,15 +73,16 @@ public class BallStick implements  Workable
      * 构造函数
      * @param listener
      */
-    public BallStick(Context context,OnStickListener listener)
+    public BallStick(Context context,Camera3D camera,OnStickListener listener)
     {
         this.listener=listener;
+        this.camera=camera;
         ballStick=new ObjObject(context,"ballstick/","ballstick.obj");
     }
 
 
     /**
-     * 接受点击事件
+     * 接受点击事件2
      * @param event
      */
     public boolean onTouchEvent( Input.TouchEvent event )
