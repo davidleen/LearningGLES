@@ -1,7 +1,7 @@
 bin/
 gen/
-.idea/
 target/
 app/build/
 .gradle/
+build/
 
