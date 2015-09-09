@@ -1,4 +1,4 @@
-package com.giants3.android.openglesframework.framework.math;
+package com.opengles.book;
 
 
 import javax.vecmath.Quat4f;

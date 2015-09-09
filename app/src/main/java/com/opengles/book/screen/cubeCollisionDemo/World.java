@@ -21,7 +21,7 @@ import com.giants3.android.openglesframework.framework.MatrixState;
 import com.opengles.book.ShaderUtil;
 
 import com.giants3.android.openglesframework.framework.math.AABB3;
-import com.giants3.android.openglesframework.framework.math.MathUtils;
+import com.opengles.book.MathUtils;
 import com.giants3.android.openglesframework.framework.math.Vector3;
 import com.opengles.book.objects.CubeDrawer;
 import com.opengles.book.objects.RectangleViewObject;

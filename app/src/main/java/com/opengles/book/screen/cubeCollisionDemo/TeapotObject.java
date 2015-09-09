@@ -10,7 +10,7 @@ import com.bulletphysics.extras.gimpact.GImpactMeshShape;
 import com.bulletphysics.linearmath.Transform;
 import com.giants3.android.openglesframework.framework.utils.FloatUtils;
 import com.giants3.android.openglesframework.framework.MatrixState;
-import com.giants3.android.openglesframework.framework.math.MathUtils;
+import com.opengles.book.MathUtils;
 import com.opengles.book.objLoader.ObjModel;
 import com.opengles.book.objLoader.ObjectParser;
 import com.opengles.book.objects.ObjObject;

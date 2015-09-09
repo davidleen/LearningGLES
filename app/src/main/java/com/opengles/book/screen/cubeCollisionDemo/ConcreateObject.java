@@ -4,7 +4,7 @@ import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.Transform;
 import com.giants3.android.openglesframework.framework.MatrixState;
 import com.opengles.book.galaxy.ObjectDrawable;
-import com.giants3.android.openglesframework.framework.math.MathUtils;
+import com.opengles.book.MathUtils;
 
 import javax.vecmath.Quat4f;
 

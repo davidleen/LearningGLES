@@ -21,6 +21,6 @@ android {
 
 }
 dependencies {
-
+    compile 'cz.advel.jbullet:jbullet:20101010-1'
     compile project(':openglesframework')
 }

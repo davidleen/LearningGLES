@@ -8,7 +8,7 @@
 //import com.bulletphysics.linearmath.DefaultMotionState;
 //import com.bulletphysics.linearmath.Transform;
 //import com.giants3.android.openglesframework.framework.MatrixState;
-//import com.giants3.android.openglesframework.framework.math.MathUtils;
+//import com.opengles.book.MathUtils;
 //import com.opengles.book.objects.CubeDrawer;
 //
 //import javax.vecmath.Quat4f;
