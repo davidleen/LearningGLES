@@ -1,16 +1,7 @@
 package com.opengles.book.screen.snooker;
 
 
-import android.opengl.GLES20;
-import com.opengles.book.*;
-
-import android.content.Context;
-
-import com.opengles.book.framework.gl.TextureRegion;
-import com.opengles.book.glsl.*;
-
-import java.nio.FloatBuffer;
-
+import com.giants3.android.openglesframework.framework.gl.TextureRegion;
 
 /**
  * 球体通用对象通用对象

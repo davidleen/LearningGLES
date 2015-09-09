@@ -1,12 +1,7 @@
 package com.opengles.book.screen.dollDemo;
 
 import android.content.Context;
-import android.hardware.Camera;
 import android.opengl.GLES20;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.dispatch.CollisionConfiguration;
@@ -22,14 +17,14 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
-import com.opengles.book.MatrixState;
-import com.opengles.book.framework.Game;
-import com.opengles.book.framework.Input;
-import com.opengles.book.framework.gl.Camera3D;
-import com.opengles.book.framework.gl.ProjectInfo;
-import com.opengles.book.galaxy.CameraController;
-import com.opengles.book.math.AABB3;
-import com.opengles.book.math.Vector3;
+import com.giants3.android.openglesframework.framework.Game;
+import com.giants3.android.openglesframework.framework.Input;
+import com.giants3.android.openglesframework.framework.MatrixState;
+
+import com.giants3.android.openglesframework.framework.gl.Camera3D;
+import com.giants3.android.openglesframework.framework.gl.ProjectInfo;
+import com.giants3.android.openglesframework.framework.math.AABB3;
+import com.giants3.android.openglesframework.framework.math.Vector3;
 import com.opengles.book.objLoader.ObjModel;
 import com.opengles.book.objLoader.ObjectParser;
 import com.opengles.book.objects.ObjObject;

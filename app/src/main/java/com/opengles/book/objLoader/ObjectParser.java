@@ -1,9 +1,8 @@
 package com.opengles.book.objLoader;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.opengles.book.utils.Vector3D;
+import com.giants3.android.openglesframework.framework.utils.Vector3D;
 import junit.framework.Assert;
 
 import java.io.BufferedReader;

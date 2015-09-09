@@ -1,11 +1,10 @@
 package com.opengles.book.objects;
 
 import com.opengles.book.ShaderUtil;
-import com.opengles.book.utils.FontUtil;
+import com.giants3.android.openglesframework.framework.utils.FontUtil;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;

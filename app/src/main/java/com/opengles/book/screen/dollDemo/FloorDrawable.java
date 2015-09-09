@@ -1,15 +1,11 @@
 package com.opengles.book.screen.dollDemo;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.widget.ImageView;
-import com.opengles.book.MatrixState;
+
+import com.giants3.android.openglesframework.framework.MatrixState;
 import com.opengles.book.ShaderUtil;
 import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.objects.RectangleViewObject;
-
-import java.lang.ref.SoftReference;
-import java.util.HashMap;
 
 /**
  *地板绘制类。

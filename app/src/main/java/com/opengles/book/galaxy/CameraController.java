@@ -1,11 +1,10 @@
 package com.opengles.book.galaxy;
 
-import android.graphics.Camera;
-import com.opengles.book.framework.Input;
-import com.opengles.book.framework.gl.Camera3D;
-import com.opengles.book.framework.gl.LookAtCamera;
-import com.opengles.book.framework.impl.GLGraphics;
-import com.opengles.book.math.Rectangle;
+
+import com.giants3.android.openglesframework.framework.Input;
+import com.giants3.android.openglesframework.framework.gl.LookAtCamera;
+import com.giants3.android.openglesframework.framework.impl.GLGraphics;
+import com.giants3.android.openglesframework.framework.math.Rectangle;
 
 import java.util.List;
 

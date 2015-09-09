@@ -21,6 +21,8 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
 
+import com.giants3.android.openglesframework.framework.utils.FloatUtils;
+
 /**
  * 加载顶点Shader与片元Shader的工具类
  * 

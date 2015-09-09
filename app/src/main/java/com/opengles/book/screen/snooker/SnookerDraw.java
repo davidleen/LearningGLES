@@ -2,8 +2,8 @@ package com.opengles.book.screen.snooker;
 
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.Transform;
-import com.opengles.book.MatrixState;
-import com.opengles.book.math.MathUtils;
+import com.giants3.android.openglesframework.framework.MatrixState;
+import com.giants3.android.openglesframework.framework.math.MathUtils;
 
 import javax.vecmath.Quat4f;
 

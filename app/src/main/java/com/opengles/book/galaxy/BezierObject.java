@@ -1,6 +1,5 @@
 package com.opengles.book.galaxy;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -8,9 +7,9 @@ import android.opengl.GLES20;
 import android.util.Log;
 
 import com.opengles.book.BuildConfig;
-import com.opengles.book.FloatUtils;
+import com.giants3.android.openglesframework.framework.utils.FloatUtils;
 import com.opengles.book.LightSources;
-import com.opengles.book.MatrixState;
+import com.giants3.android.openglesframework.framework.MatrixState;
 import com.opengles.book.R;
 import com.opengles.book.ShaderUtil;
 import com.opengles.book.bn.BNPosition;

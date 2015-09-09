@@ -2,25 +2,22 @@ package com.opengles.book.objects;
 
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.util.Log;
-import android.util.SparseArray;
+
+import com.giants3.android.openglesframework.framework.MatrixState;
+import com.giants3.android.openglesframework.framework.gl.CubeTexture;
+import com.giants3.android.openglesframework.framework.utils.FloatUtils;
 import com.opengles.book.*;
-import com.opengles.book.framework.gl.CubeTexture;
-import com.opengles.book.framework.gl.Texture;
+
 import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.objLoader.Material;
 import com.opengles.book.objLoader.ObjModel;
 import com.opengles.book.objLoader.ObjModelPart;
 import com.opengles.book.objLoader.ObjectParser;
-import com.opengles.book.utils.TextureMap;
+import com.giants3.android.openglesframework.framework.utils.TextureMap;
 
-import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 

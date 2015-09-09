@@ -1,13 +1,8 @@
 package com.opengles.book.objects;
 
 import android.content.Context;
-import android.opengl.GLES20;
 
-import com.opengles.book.FloatUtils;
-import com.opengles.book.MatrixState;
-import com.opengles.book.ShaderUtil;
-import com.opengles.book.framework.gl.CubeTexture;
-import com.opengles.book.galaxy.ObjectDrawable;
+
 
 /**
  * 立方体构造  使用立体纹理

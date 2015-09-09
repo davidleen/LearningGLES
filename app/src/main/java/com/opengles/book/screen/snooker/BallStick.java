@@ -1,20 +1,13 @@
 package com.opengles.book.screen.snooker;
 
 import android.content.Context;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
-import com.opengles.book.MatrixState;
-import com.opengles.book.framework.Input;
-import com.opengles.book.framework.gl.Camera3D;
-import com.opengles.book.framework.gl.Texture;
-import com.opengles.book.framework.impl.GLGame;
-import com.opengles.book.math.Vector3;
-import com.opengles.book.objLoader.ObjModel;
-import com.opengles.book.objLoader.ObjectParser;
-import com.opengles.book.objects.ObjObject;
 
-import java.util.List;
-import java.util.ListIterator;
+import com.giants3.android.openglesframework.framework.Input;
+import com.giants3.android.openglesframework.framework.MatrixState;
+
+import com.giants3.android.openglesframework.framework.gl.Camera3D;
+import com.giants3.android.openglesframework.framework.math.Vector3;
+import com.opengles.book.objects.ObjObject;
 
 /**
  * 桌球棍类。

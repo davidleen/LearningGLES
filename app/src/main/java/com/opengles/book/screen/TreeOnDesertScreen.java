@@ -5,11 +5,12 @@ import java.util.List;
 
 import android.opengl.GLES20;
 
-import com.opengles.book.MatrixState;
-import com.opengles.book.framework.Game;
-import com.opengles.book.framework.Input.TouchEvent;
-import com.opengles.book.framework.gl.LookAtCamera;
-import com.opengles.book.framework.impl.GLScreen;
+import com.giants3.android.openglesframework.framework.Game;
+import com.giants3.android.openglesframework.framework.Input;
+import com.giants3.android.openglesframework.framework.MatrixState;
+
+import com.giants3.android.openglesframework.framework.gl.LookAtCamera;
+import com.giants3.android.openglesframework.framework.impl.GLScreen;
 import com.opengles.book.galaxy.CameraController;
 import com.opengles.book.galaxy.ObjectDrawable;
 
@@ -24,7 +25,7 @@ import com.opengles.book.screen.treeOnDesert.TreeGroup;
  * 		2d图片 永远对准camera
  * }
  */
-public class TreeOnDesertScreen extends GLScreen{
+public class TreeOnDesertScreen extends GLScreen {
 	
 	public static final int UNIT_SIZE=1;
 	
@@ -51,7 +52,7 @@ public class TreeOnDesertScreen extends GLScreen{
 
 	@Override
 	public void update(float deltaTime) {
-		List<TouchEvent> touchEvents = glGame.getInput().getTouchEvents();
+		List<Input.TouchEvent> touchEvents = glGame.getInput().getTouchEvents();
 		 
 
         cameraController.onTouchEvent(touchEvents);

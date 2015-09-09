@@ -3,10 +3,11 @@ package com.opengles.book.glsl;
 import android.content.Context;
 import android.graphics.*;
 import android.opengl.GLES20;
-import com.opengles.book.MatrixState;
+import com.giants3.android.openglesframework.framework.MatrixState;
+import com.giants3.android.openglesframework.framework.gl.FPSCounter;
 import com.opengles.book.ShaderUtil;
-import com.opengles.book.framework.gl.FPSCounter;
-import com.opengles.book.math.Vector2;
+
+import com.giants3.android.openglesframework.framework.math.Vector2;
 import com.opengles.book.objects.RectangleViewObject;
 
 /**

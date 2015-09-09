@@ -2,11 +2,9 @@ package com.opengles.book.screen.cubeCollisionDemo;
 
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.linearmath.Transform;
-import com.opengles.book.MatrixState;
+import com.giants3.android.openglesframework.framework.MatrixState;
 import com.opengles.book.galaxy.ObjectDrawable;
-import com.opengles.book.math.MathUtils;
-import com.opengles.book.objects.NewAbstractSimpleObject;
-import com.opengles.book.screen.snooker.BallDrawable;
+import com.giants3.android.openglesframework.framework.math.MathUtils;
 
 import javax.vecmath.Quat4f;
 

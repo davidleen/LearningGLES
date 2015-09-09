@@ -1,6 +1,7 @@
 package com.opengles.book;
 
-import com.opengles.book.R;
+import com.giants3.android.openglesframework.framework.utils.FloatUtils;
+
 import java.nio.FloatBuffer;
  
 

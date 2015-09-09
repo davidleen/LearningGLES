@@ -5,7 +5,8 @@ import java.nio.ShortBuffer;
 import java.util.Random;
 
 import android.util.Log;
-import com.opengles.book.R;
+
+import com.giants3.android.openglesframework.framework.utils.FloatUtils;
 
 /**
  * 球体

@@ -6,18 +6,15 @@ import java.util.List;
 import android.opengl.GLES20;
 import android.util.Log;
 
-import android.view.View;
-import com.opengles.book.MatrixState;
-import com.opengles.book.framework.Game;
-import com.opengles.book.framework.Input.TouchEvent;
-import com.opengles.book.framework.impl.GLScreen;
-import com.opengles.book.galaxy.ObjectDrawable;
-import com.opengles.book.math.Vector2;
+import com.giants3.android.openglesframework.framework.Game;
+import com.giants3.android.openglesframework.framework.Input;
+import com.giants3.android.openglesframework.framework.MatrixState;
+
+import com.giants3.android.openglesframework.framework.impl.GLScreen;
 import com.opengles.book.objects.MenuObject;
 import com.opengles.book.objects.MenuObject.MenuClickListner;
-import com.opengles.book.objects.RectangleObject;
 
-public class MainScreen extends GLScreen{
+public class MainScreen extends GLScreen {
 	
 	private List<MenuObject> menus;
 	 int width;
@@ -98,15 +95,15 @@ menu.setListener(new MenuClickListner() {
 	@Override
 	public void update(float deltaTime) {
         super.update(deltaTime);
-		List<TouchEvent> touchs = glGame.getInput().getTouchEvents();
+		List<Input.TouchEvent> touchs = glGame.getInput().getTouchEvents();
 		
-		for (TouchEvent touch : touchs)
+		for (Input.TouchEvent touch : touchs)
 		{
 			
 			//Log.d("TEST", "click "+touch);
 			switch(touch.type)
 			{
-			case TouchEvent.TOUCH_DOWN: 
+			case Input.TouchEvent.TOUCH_DOWN:
 				 
 				for(int i=0;i<menus.size();i++)
 				{

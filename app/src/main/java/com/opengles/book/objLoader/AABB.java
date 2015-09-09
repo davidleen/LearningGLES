@@ -1,6 +1,6 @@
 package com.opengles.book.objLoader;
 
-import com.opengles.book.math.Vector3;
+import com.giants3.android.openglesframework.framework.math.Vector3;
 
 /**
  * 标准立方体 维度

@@ -5,10 +5,8 @@ import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
-import com.opengles.book.math.Vector3;
-import com.opengles.book.objects.Sphere;
+import com.giants3.android.openglesframework.framework.math.Vector3;
 
-import javax.vecmath.Tuple3f;
 import javax.vecmath.Vector3f;
 
 /**

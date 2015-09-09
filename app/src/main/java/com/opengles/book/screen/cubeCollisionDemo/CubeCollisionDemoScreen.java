@@ -1,21 +1,14 @@
 package com.opengles.book.screen.cubeCollisionDemo;
 
 import android.opengl.GLES20;
-import com.bulletphysics.collision.shapes.TriangleIndexVertexArray;
-import com.opengles.book.MatrixState;
-import com.opengles.book.framework.Game;
-import com.opengles.book.framework.Input;
-import com.opengles.book.framework.gl.Camera3D;
-import com.opengles.book.framework.gl.ProjectInfo;
-import com.opengles.book.framework.impl.GLGame;
-import com.opengles.book.framework.impl.GLScreen;
-import com.opengles.book.math.Vector3;
 
+
+import com.giants3.android.openglesframework.framework.Game;
+import com.giants3.android.openglesframework.framework.Input;
+import com.giants3.android.openglesframework.framework.gl.Camera3D;
+import com.giants3.android.openglesframework.framework.gl.ProjectInfo;
 import com.opengles.book.screen.FrameBufferScreen;
 
-import javax.microedition.khronos.opengles.GL10;
-import javax.microedition.khronos.opengles.GL10Ext;
-import javax.vecmath.Tuple3f;
 import javax.vecmath.Vector3f;
 import java.util.List;
 import java.util.Random;

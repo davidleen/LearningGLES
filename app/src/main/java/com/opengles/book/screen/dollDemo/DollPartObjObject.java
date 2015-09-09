@@ -1,7 +1,7 @@
 package com.opengles.book.screen.dollDemo;
 
 import android.content.Context;
-import com.opengles.book.FloatUtils;
+import com.giants3.android.openglesframework.framework.utils.FloatUtils;
 import com.opengles.book.glsl.Uniform;
 import com.opengles.book.glsl.Uniform4fv;
 import com.opengles.book.objLoader.ObjModel;

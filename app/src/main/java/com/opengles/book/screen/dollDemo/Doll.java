@@ -13,10 +13,9 @@ import com.bulletphysics.dynamics.constraintsolver.Generic6DofConstraint;
 import com.bulletphysics.dynamics.constraintsolver.Point2PointConstraint;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
-import com.opengles.book.MatrixState;
-import com.opengles.book.math.AABB3;
-import com.opengles.book.math.Vector3;
-import com.opengles.book.objects.ObjObject;
+import com.giants3.android.openglesframework.framework.MatrixState;
+import com.giants3.android.openglesframework.framework.math.AABB3;
+import com.giants3.android.openglesframework.framework.math.Vector3;
 import com.opengles.book.screen.cubeCollisionDemo.ConcreateObject;
 
 import javax.vecmath.Vector3f;

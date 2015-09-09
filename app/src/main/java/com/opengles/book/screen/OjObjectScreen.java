@@ -1,21 +1,21 @@
 package com.opengles.book.screen;
 
-import android.graphics.Camera;
 import android.opengl.GLES20;
 import android.util.Log;
+
+import com.giants3.android.openglesframework.framework.Game;
+import com.giants3.android.openglesframework.framework.Input;
+import com.giants3.android.openglesframework.framework.gl.FPSCounter;
+import com.giants3.android.openglesframework.framework.gl.LookAtCamera;
+import com.giants3.android.openglesframework.framework.impl.GLScreen;
 import com.opengles.book.LightSources;
-import com.opengles.book.MatrixState;
-import com.opengles.book.framework.Game;
-import com.opengles.book.framework.Input.TouchEvent;
-import com.opengles.book.framework.gl.FPSCounter;
-import com.opengles.book.framework.gl.LookAtCamera;
-import com.opengles.book.framework.impl.GLScreen;
+import com.giants3.android.openglesframework.framework.MatrixState;
+
 import com.opengles.book.galaxy.CameraController;
-import com.opengles.book.math.Vector3;
+import com.giants3.android.openglesframework.framework.math.Vector3;
 import com.opengles.book.objLoader.AABB;
 import com.opengles.book.objects.ObjObject;
 import com.opengles.book.objects.TwistCuboid;
-import com.opengles.book.screen.snooker.BallStick;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public   class OjObjectScreen extends GLScreen {
 
 
     private CameraController cameraController;
-    LookAtCamera  camera;
+    LookAtCamera camera;
 
 
 
@@ -73,7 +73,7 @@ public   class OjObjectScreen extends GLScreen {
 	public void update(float deltaTime) {
 
         objects.get(currentObjectIndex).update(deltaTime);
-		List<TouchEvent> touchEvents = glGame.getInput().getTouchEvents();
+		List<Input.TouchEvent> touchEvents = glGame.getInput().getTouchEvents();
         cameraController.onTouchEvent(touchEvents);
         timeCollapsedForSun += deltaTime;
         if (timeCollapsedForSun >= 0.1f)

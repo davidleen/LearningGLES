@@ -2,20 +2,16 @@ package com.opengles.book.screen.ShadowTest;
 
 import android.content.Context;
 import android.opengl.GLES20;
-import com.opengles.book.LightSources;
-import com.opengles.book.MatrixState;
+
+import com.giants3.android.openglesframework.framework.MatrixState;
 import com.opengles.book.ShaderUtil;
 import com.opengles.book.Vertices;
-import com.opengles.book.framework.gl.Texture;
+
 import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.glsl.Uniform;
-import com.opengles.book.glsl.Uniform3fv;
-import com.opengles.book.glsl.Uniform4fv;
 import com.opengles.book.glsl.UniformMatrix4F;
 import com.opengles.book.objLoader.*;
 
-import java.io.IOException;
-import java.nio.FloatBuffer;
 import java.util.*;
 
 /**

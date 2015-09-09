@@ -3,21 +3,20 @@ package com.opengles.book.screen;
 import java.util.List;
 
 import android.opengl.GLES20;
-import android.util.Log;
 
-import com.opengles.book.MatrixState;
-import com.opengles.book.framework.Game;
-import com.opengles.book.framework.Input.TouchEvent;
-import com.opengles.book.framework.gl.FPSCounter;
-import com.opengles.book.framework.gl.LookAtCamera;
-import com.opengles.book.framework.impl.GLScreen;
+import com.giants3.android.openglesframework.framework.Game;
+import com.giants3.android.openglesframework.framework.Input;
+import com.giants3.android.openglesframework.framework.MatrixState;
+
+import com.giants3.android.openglesframework.framework.gl.FPSCounter;
+import com.giants3.android.openglesframework.framework.gl.LookAtCamera;
+import com.giants3.android.openglesframework.framework.impl.GLScreen;
 import com.opengles.book.galaxy.CameraController;
 import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.objects.FlutterFlag;
 import com.opengles.book.objects.PoetPanel;
 import com.opengles.book.objects.RectangleObject;
 import com.opengles.book.objects.SphereObject;
-import com.opengles.book.utils.FontUtil;
 
 public   class Reflect_BasketBall_Screen extends GLScreen {
 
@@ -61,14 +60,14 @@ public   class Reflect_BasketBall_Screen extends GLScreen {
 	@Override
 	public void update(float deltaTime) {
 
-		List<TouchEvent> events=  glGame.getInput().getTouchEvents();
+		List<Input.TouchEvent> events=  glGame.getInput().getTouchEvents();
 		  
 		cameraController.onTouchEvent(events);
-		for (TouchEvent touch : events)
+		for (Input.TouchEvent touch : events)
 		{
 			switch(touch.type)
 			{
-			case TouchEvent.TOUCH_DOWN: 
+			case Input.TouchEvent.TOUCH_DOWN:
 				controller.addVy(1);
 				break;
 			 

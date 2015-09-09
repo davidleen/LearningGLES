@@ -1,11 +1,9 @@
 package com.opengles.book.screen.snooker;
 
-import android.provider.ContactsContract;
-import com.opengles.book.framework.Input;
-import com.opengles.book.framework.MVP;
-import com.opengles.book.framework.gl.Camera3D;
-import com.opengles.book.math.AABB3;
-import com.opengles.book.math.Vector3;
+import com.giants3.android.openglesframework.framework.Input;
+import com.giants3.android.openglesframework.framework.gl.Camera3D;
+import com.giants3.android.openglesframework.framework.math.AABB3;
+import com.giants3.android.openglesframework.framework.math.Vector3;
 
 /**
  * 视角辅助类。

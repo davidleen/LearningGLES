@@ -1,8 +1,8 @@
 package com.opengles.book.objects;
  
 
-	import com.opengles.book.FloatUtils;
-import com.opengles.book.MatrixState;
+	import com.giants3.android.openglesframework.framework.utils.FloatUtils;
+import com.giants3.android.openglesframework.framework.MatrixState;
  
 import com.opengles.book.ShaderUtil;
 import com.opengles.book.galaxy.ObjectDrawable;

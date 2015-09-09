@@ -5,7 +5,8 @@ import static com.opengles.book.screen.TreeOnDesertScreen.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.opengles.book.framework.gl.LookAtCamera;
+
+import com.giants3.android.openglesframework.framework.gl.LookAtCamera;
 import com.opengles.book.galaxy.ObjectDrawable;
 
 import android.content.Context;

@@ -6,17 +6,16 @@ import java.util.Random;
 import android.content.Context;
 import android.opengl.GLES20;
 
-import com.opengles.book.FloatUtils;
+import com.giants3.android.openglesframework.framework.gl.Texture;
+import com.giants3.android.openglesframework.framework.utils.FloatUtils;
 import com.opengles.book.ShaderUtil;
 import com.opengles.book.Vertices;
-import com.opengles.book.framework.gl.Texture;
+
 import com.opengles.book.galaxy.ObjectDrawable;
-import com.opengles.book.glsl.Uniform;
 import com.opengles.book.glsl.Uniform.UniformBinder;
 import com.opengles.book.glsl.Uniform1fv;
 import com.opengles.book.glsl.Uniform3fv;
 import com.opengles.book.glsl.Uniform4fv;
-import com.opengles.book.utils.TextureMap;
 
 /**
  * 粒子系统生成对象

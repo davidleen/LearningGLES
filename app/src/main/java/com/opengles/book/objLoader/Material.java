@@ -2,11 +2,8 @@ package com.opengles.book.objLoader;
 
 import android.util.Log;
 
-import com.opengles.book.FloatUtils;
-import com.opengles.book.LightSources;
 import junit.framework.Assert;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
 /**

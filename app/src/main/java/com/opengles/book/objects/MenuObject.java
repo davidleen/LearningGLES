@@ -1,23 +1,15 @@
 package com.opengles.book.objects;
 
-import java.io.IOException;
-import java.util.Vector;
-
 import com.opengles.book.ShaderUtil;
-import com.opengles.book.math.Rectangle;
-import com.opengles.book.math.Vector2;
-import com.opengles.book.utils.BitmapUtils;
+import com.giants3.android.openglesframework.framework.math.Rectangle;
+import com.giants3.android.openglesframework.framework.math.Vector2;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff.Mode;
-import android.view.View.MeasureSpec;
-import android.widget.Button;
 
 public class MenuObject extends RectangleObject{
 

@@ -1,9 +1,7 @@
 package com.opengles.book.screen.snooker;
 
-import android.content.Context;
-import com.opengles.book.framework.gl.CubeTexture;
-import com.opengles.book.galaxy.ObjectDrawable;
-import com.opengles.book.objects.CubeDrawer;
+
+import com.giants3.android.openglesframework.framework.gl.CubeTexture;
 
 /**
  * 长方体对象绘制类。  使用环境纹理

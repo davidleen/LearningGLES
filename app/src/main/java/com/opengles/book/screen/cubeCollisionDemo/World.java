@@ -14,21 +14,22 @@ import com.bulletphysics.extras.gimpact.GImpactMeshShape;
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.Transform;
 
-import com.opengles.book.FloatUtils;
-import com.opengles.book.MatrixState;
+import com.giants3.android.openglesframework.framework.Pool;
+import com.giants3.android.openglesframework.framework.gl.CubeTexture;
+import com.giants3.android.openglesframework.framework.utils.FloatUtils;
+import com.giants3.android.openglesframework.framework.MatrixState;
 import com.opengles.book.ShaderUtil;
-import com.opengles.book.framework.Pool;
-import com.opengles.book.framework.gl.CubeTexture;
-import com.opengles.book.math.AABB3;
-import com.opengles.book.math.MathUtils;
-import com.opengles.book.math.Vector3;
+
+import com.giants3.android.openglesframework.framework.math.AABB3;
+import com.giants3.android.openglesframework.framework.math.MathUtils;
+import com.giants3.android.openglesframework.framework.math.Vector3;
 import com.opengles.book.objects.CubeDrawer;
 import com.opengles.book.objects.RectangleViewObject;
 import com.opengles.book.objects.SphereObject;
 
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
-import java.nio.Buffer;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;

@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.opengl.GLES20;
-import com.opengles.book.FloatUtils;
+import com.giants3.android.openglesframework.framework.utils.FloatUtils;
 
 import java.io.IOException;
 

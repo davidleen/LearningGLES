@@ -1,6 +1,5 @@
 package com.opengles.book.screen.snooker;
 
-import android.graphics.Canvas;
 import android.opengl.GLES20;
 import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.dispatch.*;
@@ -13,22 +12,28 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
+import com.giants3.android.openglesframework.framework.Game;
+import com.giants3.android.openglesframework.framework.Input;
+import com.giants3.android.openglesframework.framework.gl.Camera3D;
+import com.giants3.android.openglesframework.framework.gl.CubeTexture;
+import com.giants3.android.openglesframework.framework.gl.ProjectInfo;
+import com.giants3.android.openglesframework.framework.gl.Texture;
+import com.giants3.android.openglesframework.framework.gl.TextureRegion;
+import com.giants3.android.openglesframework.framework.gl.ViewPort;
+import com.giants3.android.openglesframework.framework.impl.GLScreen;
 import com.opengles.book.LightSources;
-import com.opengles.book.MatrixState;
-import com.opengles.book.framework.Game;
-import com.opengles.book.framework.Input;
-import com.opengles.book.framework.gl.*;
-import com.opengles.book.framework.impl.GLScreen;
+import com.giants3.android.openglesframework.framework.MatrixState;
+
 import com.opengles.book.glsl.FrameBufferManager;
-import com.opengles.book.math.AABB3;
-import com.opengles.book.math.Vector3;
+import com.giants3.android.openglesframework.framework.math.AABB3;
+import com.giants3.android.openglesframework.framework.math.Vector3;
 import com.opengles.book.objects.ShadowFrameBuffer;
 import com.opengles.book.screen.cubeCollisionDemo.BodyCreator;
 import com.opengles.book.screen.cubeCollisionDemo.ConcreateObject;
 import com.opengles.book.screen.dollDemo.FloorDrawable;
 
 import javax.vecmath.Vector3f;
-import java.util.Iterator;
+
 import java.util.List;
 import java.util.Random;
 
@@ -36,7 +41,7 @@ import java.util.Random;
  * 桌球游戏界面
  * Created by davidleen29 on 2014/7/8.
  */
-public class SnookerScreen  extends GLScreen{
+public class SnookerScreen  extends GLScreen {
 
 
 
@@ -130,7 +135,7 @@ public class SnookerScreen  extends GLScreen{
     private ShadowDrawable tablePlanShadowDrawable;
     //private ShadowDrawable ballStickShadowDrawable;
 
-    private Texture  ballTexture ;
+    private Texture ballTexture ;
 
 
 

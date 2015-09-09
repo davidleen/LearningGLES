@@ -3,16 +3,16 @@ package com.opengles.book.screen;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.opengl.GLES20;
 
+import com.giants3.android.openglesframework.framework.Game;
+import com.giants3.android.openglesframework.framework.Input;
+import com.giants3.android.openglesframework.framework.gl.FPSCounter;
+import com.giants3.android.openglesframework.framework.gl.LookAtCamera;
+import com.giants3.android.openglesframework.framework.impl.GLScreen;
 import com.opengles.book.LightSources;
-import com.opengles.book.MatrixState;
-import com.opengles.book.framework.Game;
-import com.opengles.book.framework.Input.TouchEvent;
-import com.opengles.book.framework.gl.FPSCounter;
-import com.opengles.book.framework.gl.LookAtCamera;
-import com.opengles.book.framework.impl.GLScreen;
+import com.giants3.android.openglesframework.framework.MatrixState;
+
 import com.opengles.book.galaxy.CameraController;
 import com.opengles.book.galaxy.Celestial;
 import com.opengles.book.galaxy.CloudWithVbo;
@@ -57,7 +57,7 @@ public   class GalaxyScreen extends GLScreen {
 	@Override
 	public void update(float deltaTime) {
 
-		List<TouchEvent> touchs = glGame.getInput().getTouchEvents();
+		List<Input.TouchEvent> touchs = glGame.getInput().getTouchEvents();
 
 			cameraController.onTouchEvent(touchs);
 

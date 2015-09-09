@@ -1,22 +1,22 @@
 package com.opengles.book.screen.cubeCollisionDemo;
 
 import android.content.Context;
-import com.bulletphysics.collision.shapes.BvhTriangleMeshShape;
+
 import com.bulletphysics.collision.shapes.IndexedMesh;
 import com.bulletphysics.collision.shapes.ScalarType;
 import com.bulletphysics.collision.shapes.TriangleIndexVertexArray;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.extras.gimpact.GImpactMeshShape;
 import com.bulletphysics.linearmath.Transform;
-import com.opengles.book.FloatUtils;
-import com.opengles.book.MatrixState;
-import com.opengles.book.math.MathUtils;
+import com.giants3.android.openglesframework.framework.utils.FloatUtils;
+import com.giants3.android.openglesframework.framework.MatrixState;
+import com.giants3.android.openglesframework.framework.math.MathUtils;
 import com.opengles.book.objLoader.ObjModel;
 import com.opengles.book.objLoader.ObjectParser;
 import com.opengles.book.objects.ObjObject;
 
 import javax.vecmath.Quat4f;
-import javax.vecmath.Vector3f;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 

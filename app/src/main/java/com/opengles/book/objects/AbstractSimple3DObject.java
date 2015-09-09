@@ -3,14 +3,14 @@ package com.opengles.book.objects;
 
 import android.content.Context;
 import android.opengl.GLES20;
-import com.opengles.book.FloatUtils;
-import com.opengles.book.MatrixState;
+
+import com.giants3.android.openglesframework.framework.gl.CubeTexture;
+import com.giants3.android.openglesframework.framework.utils.FloatUtils;
+import com.giants3.android.openglesframework.framework.MatrixState;
 import com.opengles.book.ShaderUtil;
 import com.opengles.book.Vertices;
-import com.opengles.book.framework.gl.CubeTexture;
-import com.opengles.book.galaxy.ObjectDrawable;
+
 import com.opengles.book.glsl.Uniform;
-import com.opengles.book.glsl.Uniform1fv;
 import com.opengles.book.glsl.UniformMatrix4F;
 
 /**

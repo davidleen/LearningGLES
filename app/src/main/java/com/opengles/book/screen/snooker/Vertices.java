@@ -1,9 +1,11 @@
 package com.opengles.book.screen.snooker;
 
 import android.opengl.GLES20;
-import com.opengles.book.FloatUtils;
+
+import com.giants3.android.openglesframework.framework.exceptions.AttributeLocationNoFoundException;
+import com.giants3.android.openglesframework.framework.utils.FloatUtils;
 import com.opengles.book.ShaderUtil;
-import com.opengles.book.framework.exceptions.AttributeLocationNoFoundException;
+
 
 /**
  * a class for binding  drawing attribute in a program;

@@ -3,9 +3,10 @@ import java.lang.reflect.InvocationTargetException;
 
 import android.content.Context;
 
-import com.opengles.book.framework.Game;
-import com.opengles.book.framework.Screen;
-import com.opengles.book.framework.impl.GLGame;
+
+import com.giants3.android.openglesframework.framework.Game;
+import com.giants3.android.openglesframework.framework.Screen;
+import com.giants3.android.openglesframework.framework.impl.GLGame;
 import com.opengles.book.screen.MainScreen;
 
 public class GalaxyGame extends GLGame {

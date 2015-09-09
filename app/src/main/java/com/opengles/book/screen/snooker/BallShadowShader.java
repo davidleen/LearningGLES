@@ -2,13 +2,11 @@ package com.opengles.book.screen.snooker;
 
 import android.content.Context;
 import android.opengl.GLES20;
-import com.opengles.book.LightSources;
-import com.opengles.book.MatrixState;
+
+import com.giants3.android.openglesframework.framework.MatrixState;
 import com.opengles.book.ShaderUtil;
 
 import com.opengles.book.glsl.*;
-
-import java.nio.FloatBuffer;
 
 /**
  * {简单描述用途}

@@ -1,8 +1,7 @@
 package com.opengles.book.screen.snooker;
 
-import com.opengles.book.framework.Input;
 
-import java.util.List;
+import com.giants3.android.openglesframework.framework.Input;
 
 /**
  * {简单描述用途}

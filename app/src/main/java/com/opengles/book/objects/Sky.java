@@ -1,13 +1,8 @@
 package com.opengles.book.objects;
 
-import java.util.Random;
-
-import com.opengles.book.BuildConfig;
-import com.opengles.book.FloatUtils;
 import com.opengles.book.ShaderUtil;
 
 import android.content.Context;
-import android.util.Log;
 
 /**
  * 天空穹

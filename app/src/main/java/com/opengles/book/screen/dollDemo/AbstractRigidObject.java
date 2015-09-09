@@ -5,9 +5,9 @@ import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
-import com.opengles.book.MatrixState;
+import com.giants3.android.openglesframework.framework.MatrixState;
 import com.opengles.book.galaxy.ObjectDrawable;
-import com.opengles.book.math.MathUtils;
+import com.giants3.android.openglesframework.framework.math.MathUtils;
 
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;

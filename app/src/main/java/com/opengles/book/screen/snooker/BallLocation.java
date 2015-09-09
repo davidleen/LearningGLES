@@ -1,9 +1,7 @@
 package com.opengles.book.screen.snooker;
 
-import com.opengles.book.math.Vector3;
+import com.giants3.android.openglesframework.framework.math.Vector3;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 

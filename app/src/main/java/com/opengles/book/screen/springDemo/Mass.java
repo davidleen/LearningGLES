@@ -1,8 +1,8 @@
 package com.opengles.book.screen.springDemo;
 
 
-import com.opengles.book.math.Vector2;
-import com.opengles.book.math.Vector3;
+import com.giants3.android.openglesframework.framework.math.Vector2;
+import com.giants3.android.openglesframework.framework.math.Vector3;
 
 /*
  * 质点类

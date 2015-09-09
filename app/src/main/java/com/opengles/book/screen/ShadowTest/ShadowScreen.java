@@ -2,18 +2,18 @@ package com.opengles.book.screen.ShadowTest;
 
 
 import android.opengl.GLES20;
+
+import com.giants3.android.openglesframework.framework.Game;
+import com.giants3.android.openglesframework.framework.Input;
+import com.giants3.android.openglesframework.framework.gl.Camera3D;
+import com.giants3.android.openglesframework.framework.gl.ProjectInfo;
+import com.giants3.android.openglesframework.framework.gl.ViewPort;
+import com.giants3.android.openglesframework.framework.impl.GLScreen;
 import com.opengles.book.LightSources;
-import com.opengles.book.MatrixState;
-import com.opengles.book.framework.Game;
+import com.giants3.android.openglesframework.framework.MatrixState;
 
-import com.opengles.book.framework.Input;
-import com.opengles.book.framework.gl.Camera3D;
-import com.opengles.book.framework.gl.ProjectInfo;
-import com.opengles.book.framework.gl.ViewPort;
-import com.opengles.book.framework.impl.GLScreen;
 
-import com.opengles.book.math.AABB3;
-import com.opengles.book.math.Vector3;
+import com.giants3.android.openglesframework.framework.math.Vector3;
 import com.opengles.book.objLoader.ObjModel;
 import com.opengles.book.objLoader.ObjectParser;
 import com.opengles.book.objects.ObjObject;
@@ -27,7 +27,7 @@ import java.util.List;
  * Created by davidleen29   qq:67320337
  * on 2014-7-30.
  */
-public class ShadowScreen extends GLScreen{
+public class ShadowScreen extends GLScreen {
 
 
      Vector3 lightPosition=Vector3.create(0,20,3);

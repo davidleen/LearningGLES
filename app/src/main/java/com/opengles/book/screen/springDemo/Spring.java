@@ -1,6 +1,6 @@
 package com.opengles.book.screen.springDemo;
 
-import com.opengles.book.math.Vector3;
+import com.giants3.android.openglesframework.framework.math.Vector3;
 
 /*
  * 弹簧类

@@ -1,10 +1,8 @@
 package com.opengles.book.screen.treeOnDesert;
 
-import com.opengles.book.MatrixState;
-import com.opengles.book.framework.gl.LookAtCamera;
-import com.opengles.book.galaxy.ObjectDrawable;
+import com.giants3.android.openglesframework.framework.MatrixState;
+import com.giants3.android.openglesframework.framework.gl.LookAtCamera;
 
- 
 
 //单个的树类
 public class SingleTree implements Comparable<SingleTree> 

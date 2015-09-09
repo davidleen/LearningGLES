@@ -3,8 +3,6 @@ package com.opengles.book;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +11,7 @@ import java.util.Map;
 import android.content.res.Resources;
 import android.util.Log;
 
-import com.opengles.book.utils.Vector3D;
+import com.giants3.android.openglesframework.framework.utils.Vector3D;
 
 /**
  * 

@@ -1,9 +1,9 @@
 package com.opengles.book.screen.ShadowTest;
 
-import com.opengles.book.framework.Input;
-import com.opengles.book.framework.MVP;
-import com.opengles.book.framework.gl.Camera3D;
-import com.opengles.book.math.Vector3;
+
+import com.giants3.android.openglesframework.framework.Input;
+import com.giants3.android.openglesframework.framework.gl.Camera3D;
+import com.giants3.android.openglesframework.framework.math.Vector3;
 
 /**
  *    简单摄像机控制类。

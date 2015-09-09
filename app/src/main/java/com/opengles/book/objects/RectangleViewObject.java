@@ -1,10 +1,9 @@
 package com.opengles.book.objects;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import com.opengles.book.ShaderUtil;
-import com.opengles.book.math.Vector2;
-import com.opengles.book.math.Vector3;
+
+import com.giants3.android.openglesframework.framework.math.Vector2;
+import com.giants3.android.openglesframework.framework.math.Vector3;
 
 /**
  * 平面的通用对象

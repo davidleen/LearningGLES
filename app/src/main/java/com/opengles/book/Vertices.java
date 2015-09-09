@@ -2,6 +2,8 @@ package com.opengles.book;
 
 import android.opengl.GLES20;
 
+import com.giants3.android.openglesframework.framework.utils.FloatUtils;
+
 /**
  * a class for binding  drawing attribute in a program;
  *

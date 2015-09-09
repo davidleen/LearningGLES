@@ -1,14 +1,6 @@
 package com.opengles.book.objects;
 
-import java.nio.FloatBuffer;
-import java.nio.ShortBuffer;
-import java.util.Random;
-
 import android.util.Log;
-
-import com.opengles.book.BuildConfig;
-import com.opengles.book.FloatUtils;
-import com.opengles.book.R;
 
 /**
  * 球体构造

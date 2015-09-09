@@ -2,16 +2,15 @@ package com.opengles.book.screen;
 
 import android.graphics.Bitmap;
 import android.opengl.GLES20;
+
+import com.giants3.android.openglesframework.framework.Game;
+import com.giants3.android.openglesframework.framework.Input;
+import com.giants3.android.openglesframework.framework.gl.LookAtCamera;
+import com.giants3.android.openglesframework.framework.objects.LightTracing;
 import com.opengles.book.LightSources;
-import com.opengles.book.MatrixState;
+import com.giants3.android.openglesframework.framework.MatrixState;
 import com.opengles.book.ShaderUtil;
-import com.opengles.book.framework.Game;
-import com.opengles.book.framework.Input.TouchEvent;
-import com.opengles.book.framework.gl.LookAtCamera;
-import com.opengles.book.framework.impl.GLScreen;
-import com.opengles.book.framework.objects.LightTracing;
-import com.opengles.book.galaxy.CameraController;
-import com.opengles.book.glsl.FrameBufferManager;
+
 import com.opengles.book.objects.RectangleViewObject;
 
 import java.util.List;
@@ -53,7 +52,7 @@ public   class LightTracingScreen extends FrameBufferScreen {
 	public void update(float deltaTime) {
         super.update(  deltaTime);
 
-		List<TouchEvent> touchEvents = glGame.getInput().getTouchEvents();
+		List<Input.TouchEvent> touchEvents = glGame.getInput().getTouchEvents();
     //    cameraController.onTouchEvent(touchEvents);
 
 

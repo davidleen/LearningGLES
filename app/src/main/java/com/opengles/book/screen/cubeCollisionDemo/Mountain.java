@@ -2,14 +2,14 @@ package com.opengles.book.screen.cubeCollisionDemo;
 
 import android.content.Context;
 import android.opengl.GLES20;
+
+import com.giants3.android.openglesframework.framework.MatrixState;
 import com.opengles.book.*;
 import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.glsl.Uniform;
-import com.opengles.book.glsl.Uniform4fv;
 import com.opengles.book.glsl.UniformMatrix4F;
 
 import java.io.IOException;
-import java.nio.FloatBuffer;
 
 /**
  * 山脉纹理绘制

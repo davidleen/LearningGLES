@@ -1,8 +1,9 @@
 package com.opengles.book.objects;
 
 import android.opengl.GLES20;
-import com.opengles.book.framework.MVP;
-import com.opengles.book.framework.gl.ViewPort;
+
+import com.giants3.android.openglesframework.framework.gl.ViewPort;
+
 
 /**
  * 阴影映射  距离检测 缓冲帮组类。

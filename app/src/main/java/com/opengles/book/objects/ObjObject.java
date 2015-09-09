@@ -2,16 +2,16 @@ package com.opengles.book.objects;
 
 import android.content.Context;
 import android.opengl.GLES20;
-import android.util.Log;
+
+import com.giants3.android.openglesframework.framework.MatrixState;
+import com.giants3.android.openglesframework.framework.gl.Texture;
 import com.opengles.book.*;
-import com.opengles.book.framework.gl.CubeTexture;
-import com.opengles.book.framework.gl.Texture;
+
 import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.glsl.Uniform;
 import com.opengles.book.glsl.Uniform3fv;
 import com.opengles.book.glsl.Uniform4fv;
 import com.opengles.book.glsl.UniformMatrix4F;
-import com.opengles.book.math.Vector3;
 import com.opengles.book.objLoader.*;
 
 import java.io.IOException;

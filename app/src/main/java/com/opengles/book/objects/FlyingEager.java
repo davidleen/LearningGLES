@@ -2,8 +2,12 @@ package com.opengles.book.objects;
 
 import android.content.Context;
 import android.opengl.GLES20;
+
+import com.giants3.android.openglesframework.framework.MatrixState;
+import com.giants3.android.openglesframework.framework.gl.Texture;
+import com.giants3.android.openglesframework.framework.utils.FloatUtils;
 import com.opengles.book.*;
-import com.opengles.book.framework.gl.Texture;
+
 import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.glsl.*;
 import com.opengles.book.objLoader.*;

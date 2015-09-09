@@ -4,7 +4,7 @@ import java.nio.FloatBuffer;
 
 import android.opengl.GLES20;
 
-import com.opengles.book.FloatUtils;
+import com.giants3.android.openglesframework.framework.utils.FloatUtils;
 
 public class NewFloatUniform {
 	

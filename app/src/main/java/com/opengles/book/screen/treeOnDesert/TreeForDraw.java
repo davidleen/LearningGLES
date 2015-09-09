@@ -2,19 +2,12 @@ package com.opengles.book.screen.treeOnDesert;
 
  
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
-import com.opengles.book.MatrixState;
 import com.opengles.book.ShaderUtil;
-import com.opengles.book.galaxy.ObjectDrawable;
 import com.opengles.book.objects.AbstractSimpleObject;
  
 
 import android.content.Context;
-import android.opengl.GLES20;
+
 import static com.opengles.book.screen.TreeOnDesertScreen.*;
 
 public class TreeForDraw extends AbstractSimpleObject

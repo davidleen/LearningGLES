@@ -3,8 +3,8 @@ package com.opengles.book.galaxy;
 import java.nio.FloatBuffer;
 import java.util.Random;
 
-import com.opengles.book.FloatUtils;
-import com.opengles.book.MatrixState;
+import com.giants3.android.openglesframework.framework.utils.FloatUtils;
+import com.giants3.android.openglesframework.framework.MatrixState;
 import com.opengles.book.ShaderUtil;
 
 import android.content.Context;

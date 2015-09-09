@@ -2,15 +2,15 @@ package com.opengles.book.screen;
 
 import android.opengl.GLES20;
 import android.util.DisplayMetrics;
-import com.opengles.book.LightSources;
-import com.opengles.book.MatrixState;
 
-import com.opengles.book.ShaderUtil;
-import com.opengles.book.framework.Game;
-import com.opengles.book.framework.Input;
-import com.opengles.book.framework.gl.CubeTexture;
-import com.opengles.book.framework.gl.LookAtCamera;
-import com.opengles.book.framework.impl.GLScreen;
+import com.giants3.android.openglesframework.framework.Game;
+import com.giants3.android.openglesframework.framework.Input;
+import com.giants3.android.openglesframework.framework.gl.CubeTexture;
+import com.giants3.android.openglesframework.framework.gl.LookAtCamera;
+import com.giants3.android.openglesframework.framework.impl.GLScreen;
+import com.opengles.book.LightSources;
+
+
 import com.opengles.book.galaxy.CameraController;
 import com.opengles.book.glsl.FrameBufferManager;
 import com.opengles.book.objects.*;
@@ -33,7 +33,7 @@ public class FrameBufferDemoScreen extends GLScreen {
 
 
     CubeDrawer obj;
-    CubeTexture   cubeTexture ;
+    CubeTexture cubeTexture ;
     private LookAtCamera camera;
     CameraController cameraController;
 

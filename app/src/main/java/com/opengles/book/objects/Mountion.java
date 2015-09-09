@@ -2,23 +2,15 @@ package com.opengles.book.objects;
 
 import java.io.IOException;
 
-import com.opengles.book.FloatUtils;
-import com.opengles.book.MatrixState;
-import com.opengles.book.R;
+import com.giants3.android.openglesframework.framework.utils.FloatUtils;
+import com.giants3.android.openglesframework.framework.MatrixState;
 import com.opengles.book.ShaderUtil;
 import com.opengles.book.galaxy.ObjectDrawable;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.opengl.GLES20;
 import android.util.Log;
 import com.opengles.book.screen.cubeCollisionDemo.GrayMap;
-
-
-import static com.opengles.book.screen.GrayMapScreen.UNIT_SIZE;
 
 /**
  * 山脉地形类
