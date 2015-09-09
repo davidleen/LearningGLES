@@ -7,7 +7,7 @@ apply plugin: 'com.jfrog.bintray'
 // 根节点添加
 group = "com.giants3.android"
 // 根节点添加
-version = "1.0"
+version = "1.0.1"
 
 android {
     compileSdkVersion 22
@@ -119,11 +119,10 @@ artifacts {
 
 
 
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
     configurations = ['archives']
     pkg {
         repo = "maven"
