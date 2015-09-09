@@ -33,8 +33,8 @@ dependencies {
 }
 
 // 根节点添加
-def siteUrl = 'https://github.com/davidleen/AnnotationAdapter'    // project homepage
-def gitUrl = 'https://github.com/davidleen/AnnotationAdapter.git' // project git
+def siteUrl = 'https://github.com/davidleen/LearningGLES'    // project homepage
+def gitUrl = 'https://github.com/davidleen/LearningGLES.git' // project git
 
 
 
@@ -51,7 +51,7 @@ install {
         pom {
             project {
                 packaging 'aar'
-                name 'CustumAdapter For Android'
+                name 'opengles framework For Android'
                 url siteUrl
                 licenses {
                     license {
@@ -127,7 +127,7 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = "maven"
-        name = "annotatableadapter"                // project name in jcenter
+        name = "openglesframework"                // project name in jcenter
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]
